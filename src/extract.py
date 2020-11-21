@@ -11,14 +11,14 @@ def extract(f): # f: filename of .slp file
     p3_istream = np.zeros((len(frames), 17))
     p4_istream = np.zeros((len(frames), 17))
 
-    for i, istream in enumerate([p1_istream, p2_istream, p3_istream, p4_istream]):
+    for j, istream in enumerate([p1_istream, p2_istream, p3_istream, p4_istream]):
         for i, frame in enumerate(frames):
             
-            port = frame.ports[j].leader.pre
-            
-            if port is None:
+            if frame.ports[j] is None:
                 istream = None
                 break
+            
+            port = frame.ports[j].leader.pre
 
             istream[i, 0] = port.joystick.x
             istream[i, 1] = port.joystick.y
@@ -62,5 +62,5 @@ def extract(f): # f: filename of .slp file
             istream[i, 15] = port.cstick.x
             istream[i, 16] = port.cstick.y
     
-    return tuple(p1_istream, p2_istream, p3_istream, p4_istream)
+    return (p1_istream, p2_istream, p3_istream, p4_istream)
 
