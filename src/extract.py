@@ -1,8 +1,7 @@
 from slippi import Game
 import numpy as np
 
-def extract(f): # f: filename of .slp file
-    game = Game(f)
+def get_istreams(game): # f: filename of .slp file
     frames = game.frames
 
     # get istream for each port
@@ -64,3 +63,18 @@ def extract(f): # f: filename of .slp file
     
     return (p1_istream, p2_istream, p3_istream, p4_istream)
 
+def get_characters(game):
+    pass
+
+def get_id(game):
+    pass
+
+def get_players(game):
+    pass
+
+def extract(f):
+    game = Game(f)
+    istreams = get_istreams(game)
+
+def export():
+    pass
