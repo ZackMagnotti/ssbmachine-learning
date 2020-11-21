@@ -64,7 +64,15 @@ def get_istreams(game): # f: filename of .slp file
     return (p1_istream, p2_istream, p3_istream, p4_istream)
 
 def get_characters(game):
-    pass
+    players = game.metadata.players
+
+    characters = [None for _ n range(4)]
+    for i, player in enumerate(players):
+        if player is not None:
+            character = player.characters
+            characters[i] = character.name
+
+    return characters
 
 def get_id(game):
     pass
