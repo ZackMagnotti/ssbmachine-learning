@@ -69,7 +69,7 @@ def get_characters(game):
     characters = [None for _ n range(4)]
     for i, player in enumerate(players):
         if player is not None:
-            character = player.characters
+            character = next(iter(player.characters))
             characters[i] = character.name
 
     return characters
@@ -78,7 +78,15 @@ def get_id(game):
     pass
 
 def get_players(game):
-    pass
+    players = game.metadata.players
+
+    names = [None for _ n range(4)]
+    for i, player in enumerate(players):
+        if player is not None:
+            name = player.characters
+            names[i] = character.name
+
+    return names
 
 def extract(f):
     game = Game(f)
