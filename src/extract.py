@@ -1,7 +1,10 @@
 from slippi import Game
 import numpy as np
 
-def get_istreams(game): # f: filename of .slp file
+def get_istreams(game):
+    '''
+    TODO: Docstrings
+    '''
 
     out = [] # list to store output
 
@@ -61,6 +64,10 @@ def get_istreams(game): # f: filename of .slp file
 
         out.append(istream)
     
+    # len(out) == 4
+    # each element represents istream
+    # for one of the four ports (player 1-4)
+    # empty ports give an 'istream' of None
     return tuple(out)
 
 def get_player_characters(game):
