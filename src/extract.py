@@ -2,17 +2,15 @@ from slippi import Game
 import numpy as np
 
 def get_istreams(game): # f: filename of .slp file
-    frames = game.frames
 
-    # get istream for each port
-    p1_istream = np.zeros((len(frames), 17)) # rows: frames, columns: buttons
-    p2_istream = np.zeros((len(frames), 17))
-    p3_istream = np.zeros((len(frames), 17))
-    p4_istream = np.zeros((len(frames), 17))
+    out = [] # list to store output
 
-    for j, istream in enumerate([p1_istream, p2_istream, p3_istream, p4_istream]):
-        for i, frame in enumerate(frames):
-            
+    for j in range(4):
+
+        # rows: frames, columns: buttons
+        istream = np.zeros((len(game.frames), 17)) 
+
+        for i, frame in enumerate(game.frames):
             if frame.ports[j] is None:
                 istream = None
                 break
@@ -60,37 +58,51 @@ def get_istreams(game): # f: filename of .slp file
             
             istream[i, 15] = port.cstick.x
             istream[i, 16] = port.cstick.y
-    
-    return (p1_istream, p2_istream, p3_istream, p4_istream)
 
-def get_characters(game):
+        out.append(istream)
+    
+    return tuple(out)
+
+def get_player_characters(game):
     players = game.metadata.players
 
-    characters = [None for _ n range(4)]
+    characters = [None]*4
     for i, player in enumerate(players):
         if player is not None:
             character = next(iter(player.characters))
             characters[i] = character.name
 
-    return characters
+    return tuple(characters)
+
+def get_player_names(game):
+    players = game.metadata.players
+
+    names = [None]*4
+    for i, player in enumerate(players):
+        if player is not None:
+            names[i] = player.netplay.name
+
+    return tuple(names)
 
 def get_id(game):
     pass
 
-def get_players(game):
-    players = game.metadata.players
-
-    names = [None for _ n range(4)]
-    for i, player in enumerate(players):
-        if player is not None:
-            name = player.characters
-            names[i] = character.name
-
-    return names
-
 def extract(f):
     game = Game(f)
-    istreams = get_istreams(game)
+    game_id = get_id(game)
+
+    out = [{
+        'game_id': game_id,
+        'istream': istream,
+        'character': character,
+        'name': name
+    } for istream, character, name 
+        in zip(get_istreams(game), 
+               get_player_characters(game),
+               get_player_names(game))
+        if character is not None]
+
+    return tuple(out)
 
 def export():
     pass
