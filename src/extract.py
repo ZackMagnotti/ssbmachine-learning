@@ -1,6 +1,9 @@
 from slippi import Game
 import numpy as np
 
+class GameAbortedError(AttributeError):
+    pass
+
 def get_istreams(game):
     '''
     TODO: Docstrings
@@ -97,17 +100,20 @@ def get_id(game):
 def extract(f):
     game = Game(f)
     game_id = get_id(game)
-
-    out = [{
-        'game_id': game_id,
-        'istream': istream,
-        'character': character,
-        'name': name
-    } for istream, character, name 
-        in zip(get_istreams(game), 
-               get_player_characters(game),
-               get_player_names(game))
-        if character is not None]
+    try:
+        out = [{
+            'game_id': game_id,
+            'istream': istream,
+            'character': character,
+            'name': name,
+        } for istream, character, name 
+            in zip(get_istreams(game), 
+                get_player_characters(game),
+                get_player_names(game))
+            if character is not None]
+    except AttributeError:
+        raise GameAbortedError("This game was aborted")
+        
 
     return tuple(out)
 
