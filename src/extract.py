@@ -14,7 +14,8 @@ def get_istreams(game):
     for j in range(4):
 
         # rows: frames, columns: buttons
-        istream = np.zeros((len(game.frames), 17)) 
+        # istream = np.zeros((len(game.frames), 17))
+        istream = np.zeros((len(game.frames), 13))
 
         for i, frame in enumerate(game.frames):
             if frame.ports[j] is None:
@@ -50,20 +51,20 @@ def get_istreams(game):
             if b.Physical.Z in b.physical.pressed():
                 istream[i, 10] = 1
             
-            if b.Physical.DPAD_UP in b.physical.pressed():
-                istream[i, 11] = 1
+            istream[i, 11] = port.cstick.x
+            istream[i, 12] = port.cstick.y
             
-            if b.Physical.DPAD_DOWN in b.physical.pressed():
-                istream[i, 12] = 1
+            # if b.Physical.DPAD_UP in b.physical.pressed():
+            #     istream[i, 13] = 1
             
-            if b.Physical.DPAD_RIGHT in b.physical.pressed():
-                istream[i, 13] = 1
+            # if b.Physical.DPAD_DOWN in b.physical.pressed():
+            #     istream[i, 14] = 1
             
-            if b.Physical.DPAD_LEFT in b.physical.pressed():
-                istream[i, 14] = 1
+            # if b.Physical.DPAD_RIGHT in b.physical.pressed():
+            #     istream[i, 15] = 1
             
-            istream[i, 15] = port.cstick.x
-            istream[i, 16] = port.cstick.y
+            # if b.Physical.DPAD_LEFT in b.physical.pressed():
+            #     istream[i, 16] = 1
 
         out.append(istream)
     
