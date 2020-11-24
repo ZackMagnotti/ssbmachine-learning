@@ -116,8 +116,8 @@ def extract(f):
             'name': name,
         } for istream, character, name 
             in zip(get_istreams(game), 
-                get_player_characters(game),
-                get_player_names(game))
+                   get_player_characters(game),
+                   get_player_names(game))
             if character is not None]
     except AttributeError:
         # if netplay information is missing
