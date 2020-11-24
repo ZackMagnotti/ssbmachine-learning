@@ -114,7 +114,6 @@ def extract(f):
     except AttributeError:
         raise GameAbortedError("This game was aborted")
         
-
     return tuple(out)
 
 def export():
