@@ -4,6 +4,9 @@ import numpy as np
 class GameAbortedError(AttributeError):
     pass
 
+class EmptyFilenameError(ValueError):
+    pass
+
 def get_istreams(game):
     '''
     TODO: Docstrings
@@ -96,11 +99,15 @@ def get_player_names(game):
     return tuple(names)
 
 def get_id(f):
-    return f
+    if f == '':
+        msg = 'path can not be empty string'
+        raise EmptyFilenameError(msg)
+        
+    return f.replace('\\', '/').split('/')[-1]
 
 def extract(f):
-    game = Game(f)
     game_id = get_id(f)
+    game = Game(f)
     try:
         out = [{
             'game_id': game_id,
