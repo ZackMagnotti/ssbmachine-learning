@@ -102,7 +102,7 @@ def get_id(f):
     if f == '':
         msg = 'path can not be empty string'
         raise EmptyFilenameError(msg)
-        
+
     return f.replace('\\', '/').split('/')[-1]
 
 def extract(f):
@@ -120,6 +120,9 @@ def extract(f):
                 get_player_names(game))
             if character is not None]
     except AttributeError:
+        # if netplay information is missing
+        # that means the game failed to connect
+        # and was aborted
         raise GameAbortedError("This game was aborted")
         
     return tuple(out)
