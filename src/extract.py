@@ -29,34 +29,33 @@ def get_istreams(game):
 
             istream[i, 0] = port.joystick.x
             istream[i, 1] = port.joystick.y
-            istream[i, 2] = port.triggers.physical.l
-            istream[i, 3] = port.triggers.physical.r
+            istream[i, 2] = port.cstick.x
+            istream[i, 3] = port.cstick.y
+            istream[i, 4] = port.triggers.physical.l
+            istream[i, 5] = port.triggers.physical.r
             
             b = port.buttons
             if b.Physical.Y in b.physical.pressed():
-                istream[i, 4] = 1
-            
-            if b.Physical.X in b.physical.pressed():
-                istream[i, 5] = 1
-            
-            if b.Physical.B in b.physical.pressed():
                 istream[i, 6] = 1
             
-            if b.Physical.A in b.physical.pressed():
+            if b.Physical.X in b.physical.pressed():
                 istream[i, 7] = 1
             
-            if b.Physical.L in b.physical.pressed():
+            if b.Physical.B in b.physical.pressed():
                 istream[i, 8] = 1
             
-            if b.Physical.R in b.physical.pressed():
+            if b.Physical.A in b.physical.pressed():
                 istream[i, 9] = 1
             
-            if b.Physical.Z in b.physical.pressed():
+            if b.Physical.L in b.physical.pressed():
                 istream[i, 10] = 1
             
-            istream[i, 11] = port.cstick.x
-            istream[i, 12] = port.cstick.y
+            if b.Physical.R in b.physical.pressed():
+                istream[i, 11] = 1
             
+            if b.Physical.Z in b.physical.pressed():
+                istream[i, 12] = 1
+                
             # if b.Physical.DPAD_UP in b.physical.pressed():
             #     istream[i, 13] = 1
             
