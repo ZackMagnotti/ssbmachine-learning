@@ -94,12 +94,12 @@ def get_player_names(game):
 
     return tuple(names)
 
-def get_id(game):
-    pass
+def get_id(f):
+    return f
 
 def extract(f):
     game = Game(f)
-    game_id = get_id(game)
+    game_id = get_id(f)
     try:
         out = [{
             'game_id': game_id,
