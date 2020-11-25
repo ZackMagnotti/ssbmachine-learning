@@ -101,6 +101,16 @@ def get_player_names(game):
 
     return tuple(names)
 
+def get_player_codes(game):
+    players = game.metadata.players
+
+    codes = [None]*4
+    for i, player in enumerate(players):
+        if player is not None:
+            codes[i] = player.netplay.code
+
+    return tuple(codes)
+
 def get_id(f):
     if f == '':
         msg = 'path can not be empty string'
@@ -116,10 +126,12 @@ def extract(f, as_sparse=False):
                 'istream': istream,
                 'character': character,
                 'name': name,
-        } for istream, character, name 
+                'code': code,
+        } for istream, character, name, code
             in zip(get_istreams(game, as_sparse=as_sparse), 
                    get_player_characters(game),
-                   get_player_names(game))
+                   get_player_names(game),
+                   get_player_codes(game))
             if character is not None]
     except AttributeError:
         # if netplay information is missing
