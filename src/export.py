@@ -1,10 +1,39 @@
 from pymongo import MongoClient
 from bson.binary import Binary
 from scipy import sparse
+from sys import stdout
 import os
 import pickle
 
 from .extract import extract
+
+# for convenience to see progress
+# when exporting large directories
+def display_progress(current_iter, total):
+
+    bar_length = 20
+
+    progress = (bar_length * current_iter) // total
+    progress_percent =  round(100 * current_iter / total, 2)
+
+    progress_bar = ('#' * progress) 
+    progress_bar += ('.' * (bar_length - progress))
+    progress_bar = '[' + progress_bar + ']'
+
+    # return progress_bar
+
+    stdout.write('\r' + progress_bar + ' ' + f'{current_iter} of {total}' + ' - ' + str(progress_percent) + '%')
+    stdout.flush()
+
+
+
+# class ProgressPrinter:
+# 	"""
+# 	Print progress to stdout on one line dynamically
+# 	"""
+# 	def __init__(self, current_iter, total):
+# 		stdout.write("\r"+str(data))
+# 		stdout.flush()
 
 class PathError(ValueError):
     pass
@@ -48,7 +77,10 @@ def export_dir(dir_path,
     if not os.path.isdir(dir_path):
         raise PathError('The input path is not a directory')
 
-    for f in os.listdir(dir_path):
+    file_list = os.listdir(dir_path)
+    N = len(file_list)
+    for i, f in enumerate(file_list):
+
         filepath = os.path.join(dir_path, f)
 
         if not os.path.splitext(filepath)[-1] == '.slp':
@@ -59,6 +91,10 @@ def export_dir(dir_path,
                collection_name = collection_name,
                host = host,
                port = port)
+        
+        # progress bar
+        display_progress(i, N)
+    display_progress(N,N)
 
 if __name__ == '__main__':
     """
