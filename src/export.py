@@ -3,7 +3,7 @@ from bson.binary import Binary
 from scipy import sparse
 import pickle
 
-from .extract import extract
+from extract import extract
 
 def export(f, 
            database_name, 
