@@ -25,16 +25,6 @@ def display_progress(current_iter, total):
     stdout.write('\r' + progress_bar + ' ' + f'{current_iter} of {total}' + ' - ' + str(progress_percent) + '%')
     stdout.flush()
 
-
-
-# class ProgressPrinter:
-# 	"""
-# 	Print progress to stdout on one line dynamically
-# 	"""
-# 	def __init__(self, current_iter, total):
-# 		stdout.write("\r"+str(data))
-# 		stdout.flush()
-
 class PathError(ValueError):
     pass
 
