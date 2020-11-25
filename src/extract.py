@@ -114,11 +114,10 @@ def extract(f, as_sparse=False):
     game_id = get_id(f)
     game = Game(f)
     try:
-        out = [{
-            'game_id': game_id,
-            'istream': istream,
-            'character': character,
-            'name': name,
+        out = [{'game_id': game_id,
+                'istream': istream,
+                'character': character,
+                'name': name,
         } for istream, character, name 
             in zip(get_istreams(game, as_sparse=as_sparse), 
                    get_player_characters(game),
