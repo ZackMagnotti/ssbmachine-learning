@@ -29,3 +29,13 @@ def export(f,
         # export data to mongodb
         mongo_output.append(sanitized)
     collection.insert_many(mongo_output)
+
+if __name__ == '__main__':
+    """
+        TODO
+        
+        If this file is run directly, 
+        take arguments using argparse
+        and run export() once
+    """
+    pass
