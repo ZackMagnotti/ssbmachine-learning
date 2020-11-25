@@ -1,13 +1,17 @@
 from slippi import Game
+from scipy import sparse
+from pymongo import MongoClient
+from bson.binary import Binary
+import pickle
 import numpy as np
 
-class GameAbortedError(AttributeError):
+class InvalidGameError(ValueError):
     pass
 
 class EmptyFilenameError(ValueError):
     pass
 
-def get_istreams(game):
+def get_istreams(game, as_sparse=False):
     '''
     TODO: Docstrings
     '''
@@ -55,7 +59,7 @@ def get_istreams(game):
             
             if b.Physical.Z in b.physical.pressed():
                 istream[i, 12] = 1
-                
+
             # if b.Physical.DPAD_UP in b.physical.pressed():
             #     istream[i, 13] = 1
             
@@ -68,6 +72,8 @@ def get_istreams(game):
             # if b.Physical.DPAD_LEFT in b.physical.pressed():
             #     istream[i, 16] = 1
 
+        if as_sparse and istream is not None:
+            istream = sparse.csr_matrix(istream)
         out.append(istream)
     
     # len(out) == 4
@@ -104,7 +110,7 @@ def get_id(f):
 
     return f.replace('\\', '/').split('/')[-1]
 
-def extract(f):
+def extract(f, as_sparse=False):
     game_id = get_id(f)
     game = Game(f)
     try:
@@ -114,7 +120,7 @@ def extract(f):
             'character': character,
             'name': name,
         } for istream, character, name 
-            in zip(get_istreams(game), 
+            in zip(get_istreams(game, as_sparse=as_sparse), 
                    get_player_characters(game),
                    get_player_names(game))
             if character is not None]
@@ -122,9 +128,31 @@ def extract(f):
         # if netplay information is missing
         # that means the game failed to connect
         # and was aborted
-        raise GameAbortedError("This game was aborted")
+        raise InvalidGameError("This game was aborted")
         
     return tuple(out)
 
-def export():
-    pass
+def export(f, 
+           database_name, 
+           collection_name,
+           host = 'localhost',
+           port = 27017):
+    # Connect to the hosted MongoDB instance
+    client = MongoClient(host, port)
+    db = client[database_name]
+    collection = db[collection_name]
+    
+    players = extract(f, as_sparse=True)
+    mongo_output = []
+    for player in players:
+        sanitized = {}
+        for k, v in player.items():
+            if isinstance(v, sparse.csr.csr_matrix):
+                # if value is a sparse matrix, convert to binary
+                sanitized[k] = Binary(pickle.dumps(v, protocol=2))
+            else:
+                sanitized[k] = v
+        
+        # export data to mongodb
+        mongo_output.append(sanitized)
+    collection.insert_many(mongo_output)
