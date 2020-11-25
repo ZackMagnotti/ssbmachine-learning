@@ -1,9 +1,10 @@
 from slippi import Game
 from scipy import sparse
-from pymongo import MongoClient
-from bson.binary import Binary
-import pickle
 import numpy as np
+
+'''
+    TODO: Docstrings
+'''
 
 class InvalidGameError(ValueError):
     pass
@@ -12,9 +13,6 @@ class EmptyFilenameError(ValueError):
     pass
 
 def get_istreams(game, as_sparse=False):
-    '''
-    TODO: Docstrings
-    '''
 
     out = [] # list to store output
 
@@ -130,28 +128,3 @@ def extract(f, as_sparse=False):
         raise InvalidGameError("This game was aborted")
         
     return tuple(out)
-
-def export(f, 
-           database_name, 
-           collection_name,
-           host = 'localhost',
-           port = 27017):
-    # Connect to the hosted MongoDB instance
-    client = MongoClient(host, port)
-    db = client[database_name]
-    collection = db[collection_name]
-    
-    players = extract(f, as_sparse=True)
-    mongo_output = []
-    for player in players:
-        sanitized = {}
-        for k, v in player.items():
-            if isinstance(v, sparse.csr.csr_matrix):
-                # if value is a sparse matrix, convert to binary
-                sanitized[k] = Binary(pickle.dumps(v, protocol=2))
-            else:
-                sanitized[k] = v
-        
-        # export data to mongodb
-        mongo_output.append(sanitized)
-    collection.insert_many(mongo_output)
