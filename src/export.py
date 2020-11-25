@@ -1,9 +1,13 @@
 from pymongo import MongoClient
 from bson.binary import Binary
 from scipy import sparse
+import os
 import pickle
 
-from extract import extract
+from .extract import extract
+
+class PathError(ValueError):
+    pass
 
 def export(f, 
            database_name, 
@@ -29,6 +33,32 @@ def export(f,
         # export data to mongodb
         mongo_output.append(sanitized)
     collection.insert_many(mongo_output)
+
+def export_dir(dir_path, 
+               database_name, 
+               collection_name,
+               host = 'localhost',
+               port = 27017):
+
+    dir_path = os.path.normpath(dir_path)
+    
+    if not os.path.exists(dir_path):
+        raise PathError('The input path does not exist')
+    
+    if not os.path.isdir(dir_path):
+        raise PathError('The input path is not a directory')
+
+    for f in os.listdir(dir_path):
+        filepath = os.path.join(dir_path, f)
+
+        if not os.path.splitext(filepath)[-1] == '.slp':
+            continue
+
+        export(f = filepath, 
+               database_name = database_name, 
+               collection_name = collection_name,
+               host = host,
+               port = port)
 
 if __name__ == '__main__':
     """
