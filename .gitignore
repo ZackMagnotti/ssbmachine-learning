@@ -1,7 +1,7 @@
 data
 
 *.ipynb
+*.ipynb_checkpoints
 test.*
 delme.*
 __pycache__
-
