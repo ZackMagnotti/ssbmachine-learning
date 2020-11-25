@@ -5,7 +5,7 @@ from bson.binary import Binary
 import pickle
 import numpy as np
 
-class GameAbortedError(AttributeError):
+class InvalidGameError(ValueError):
     pass
 
 class EmptyFilenameError(ValueError):
@@ -128,7 +128,7 @@ def extract(f, as_sparse=False):
         # if netplay information is missing
         # that means the game failed to connect
         # and was aborted
-        raise GameAbortedError("This game was aborted")
+        raise InvalidGameError("This game was aborted")
         
     return tuple(out)
 
