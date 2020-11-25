@@ -1,4 +1,5 @@
 from slippi import Game
+from scipy import sparse
 import numpy as np
 
 class GameAbortedError(AttributeError):
@@ -7,7 +8,7 @@ class GameAbortedError(AttributeError):
 class EmptyFilenameError(ValueError):
     pass
 
-def get_istreams(game):
+def get_istreams(game, as_sparse=False):
     '''
     TODO: Docstrings
     '''
@@ -55,7 +56,7 @@ def get_istreams(game):
             
             if b.Physical.Z in b.physical.pressed():
                 istream[i, 12] = 1
-                
+
             # if b.Physical.DPAD_UP in b.physical.pressed():
             #     istream[i, 13] = 1
             
@@ -68,6 +69,8 @@ def get_istreams(game):
             # if b.Physical.DPAD_LEFT in b.physical.pressed():
             #     istream[i, 16] = 1
 
+        if as_sparse and istream is not None:
+            istream = sparse.csr_matrix(istream)
         out.append(istream)
     
     # len(out) == 4
@@ -104,7 +107,7 @@ def get_id(f):
 
     return f.replace('\\', '/').split('/')[-1]
 
-def extract(f):
+def extract(f, as_sparse=False):
     game_id = get_id(f)
     game = Game(f)
     try:
@@ -114,7 +117,7 @@ def extract(f):
             'character': character,
             'name': name,
         } for istream, character, name 
-            in zip(get_istreams(game), 
+            in zip(get_istreams(game, as_sparse=as_sparse), 
                    get_player_characters(game),
                    get_player_names(game))
             if character is not None]
@@ -126,5 +129,5 @@ def extract(f):
         
     return tuple(out)
 
-def export():
+def export(f):
     pass
