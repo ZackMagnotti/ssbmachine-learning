@@ -7,6 +7,11 @@ import pickle
 
 from .extract import extract
 
+from slippi.parse import ParseError
+
+class PathError(ValueError):
+    pass
+
 # for convenience to see progress
 # when exporting large directories
 def display_progress(current_iter, total):
@@ -24,9 +29,6 @@ def display_progress(current_iter, total):
 
     stdout.write('\r' + progress_bar + ' ' + f'{current_iter} of {total}' + ' - ' + str(progress_percent) + '%')
     stdout.flush()
-
-class PathError(ValueError):
-    pass
 
 def export(f, 
            database_name, 
@@ -69,6 +71,7 @@ def export_dir(dir_path,
 
     file_list = os.listdir(dir_path)
     N = len(file_list)
+    num_failed_uploads = 0
     for i, f in enumerate(file_list):
 
         filepath = os.path.join(dir_path, f)
@@ -76,15 +79,19 @@ def export_dir(dir_path,
         if not os.path.splitext(filepath)[-1] == '.slp':
             continue
 
-        export(f = filepath, 
-               database_name = database_name, 
-               collection_name = collection_name,
-               host = host,
-               port = port)
+        try:
+            export(f = filepath, 
+                database_name = database_name, 
+                collection_name = collection_name,
+                host = host,
+                port = port)
+        except:
+            num_failed_uploads += 1
         
         # progress bar
         display_progress(i, N)
     display_progress(N,N)
+    print(f'\nFailed to upload {num_failed_uploads} files')
 
 if __name__ == '__main__':
     """
