@@ -9,6 +9,9 @@ from .extract import extract
 
 from slippi.parse import ParseError
 
+class PathError(ValueError):
+    pass
+
 # for convenience to see progress
 # when exporting large directories
 def display_progress(current_iter, total):
@@ -26,9 +29,6 @@ def display_progress(current_iter, total):
 
     stdout.write('\r' + progress_bar + ' ' + f'{current_iter} of {total}' + ' - ' + str(progress_percent) + '%')
     stdout.flush()
-
-class PathError(ValueError):
-    pass
 
 def export(f, 
            database_name, 
