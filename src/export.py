@@ -80,7 +80,7 @@ def export_dir(dir_path,
 
     file_list = os.listdir(dir_path)
     N = len(file_list) # for progress bar
-    for f in file_list:
+    for i, f in enumerate(file_list): #enumerate is for progress bar
 
         filepath = os.path.join(dir_path, f)
 
