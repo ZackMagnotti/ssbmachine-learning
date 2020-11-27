@@ -1,5 +1,6 @@
 from slippi import Game
 from scipy.sparse import lil_matrix, csr_matrix
+from os.path import basename
 import numpy as np
 
 '''
@@ -121,12 +122,12 @@ def get_player_codes(game):
     return tuple(codes)
 
 def get_id(f):
-    # game_id is just the filename of that game
-    # this has the advantage of being unique, as
+    # game_id is just the filename of that game.
+    # This has the advantage of being unique, as
     # long as each collection only contains
     # games from a single directory
 
-    return f.replace('\\', '/').split('/')[-1]
+    return basename(f)
 
 def extract(f, as_sparse=False):
     if f == '':
