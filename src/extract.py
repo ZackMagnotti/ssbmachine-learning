@@ -142,6 +142,7 @@ def extract(f, as_sparse=False):
     if len(game.frames)/3600 < 1:
         raise GameTooShortError('Game is too short')
 
+    # get outpt payload for each active controller port
     try:
         out = [
         {
@@ -158,11 +159,10 @@ def extract(f, as_sparse=False):
                    get_player_codes(game))
             if character is not None
         ]
-    # if we get a parse error, raise it
+
     except ParseError:
         raise
-    # if we get a different unexpected error,
-    # raise InvalidGameError
+    
     except:
         raise InvalidGameError
         
