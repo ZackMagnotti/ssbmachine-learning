@@ -1,3 +1,4 @@
+from slippi.parse import ParseError
 from bson.binary import Binary
 from pymongo import MongoClient
 from scipy import sparse

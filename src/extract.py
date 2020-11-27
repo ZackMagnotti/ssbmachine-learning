@@ -1,4 +1,5 @@
 from slippi import Game
+from slippi.parse import ParseError
 from scipy.sparse import lil_matrix, csr_matrix
 from os.path import basename
 import numpy as np
@@ -8,9 +9,6 @@ import numpy as np
 '''
 
 class InvalidGameError(ValueError):
-    pass
-
-class EmptyFilenameError(ValueError):
     pass
 
 class GameTooShortError(ValueError):
@@ -160,6 +158,11 @@ def extract(f, as_sparse=False):
                    get_player_codes(game))
             if character is not None
         ]
+    # if we get a parse error, raise it
+    except ParseError:
+        raise
+    # if we get a different unexpected error,
+    # raise InvalidGameError
     except:
         raise InvalidGameError
         
