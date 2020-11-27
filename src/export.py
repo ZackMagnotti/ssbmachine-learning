@@ -41,6 +41,7 @@ def export(f,
     collection = db[collection_name]
     
     players = extract(f, as_sparse=True)
+    
     mongo_output = []
     for player in players:
         sanitized = {}

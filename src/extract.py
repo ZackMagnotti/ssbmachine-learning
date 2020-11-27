@@ -98,7 +98,7 @@ def get_player_names(game):
 
     names = [None]*4
     for i, player in enumerate(players):
-        if player is not None:
+        if player and player.netplay:
             names[i] = player.netplay.name
 
     return tuple(names)
@@ -110,7 +110,7 @@ def get_player_codes(game):
 
     codes = [None]*4
     for i, player in enumerate(players):
-        if player is not None:
+        if player and player.netplay:
             codes[i] = player.netplay.code
 
     return tuple(codes)
@@ -120,13 +120,14 @@ def get_id(f):
     # this has the advantage of being unique, as
     # long as each collection only contains
     # games from a single directory
-    if f == '':
-        msg = 'path can not be empty string'
-        raise EmptyFilenameError(msg)
 
     return f.replace('\\', '/').split('/')[-1]
 
 def extract(f, as_sparse=False):
+    if f == '':
+        msg = 'path can not be empty string'
+        raise EmptyFilenameError(msg)
+
     game_id = get_id(f)
     game = Game(f)
 
