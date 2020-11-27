@@ -1,13 +1,14 @@
-from pymongo import MongoClient
 from bson.binary import Binary
+from pymongo import MongoClient
 from scipy import sparse
 from sys import stdout
-import os
+from os import path, listdir
 import pickle
-
 from .extract import extract, InvalidGameError, GameTooShortError
 
-from slippi.parse import ParseError
+'''
+    TODO: Docstrings
+'''
 
 class PathError(ValueError):
     pass
@@ -63,13 +64,13 @@ def export_dir(dir_path,
                host = 'localhost',
                port = 27017):
 
-    dir_path = os.path.normpath(dir_path)
+    dir_path = path.normpath(dir_path)
     
-    if not os.path.exists(dir_path):
-        raise PathError('The input path does not exist')
+    if not path.exists(dir_path):
+        raise PathError('input path does not exist')
     
-    if not os.path.isdir(dir_path):
-        raise PathError('The input path is not a directory')
+    if not path.isdir(dir_path):
+        raise PathError('input path is not a directory')
 
     # for error tracking
     num_parse_errors = 0
@@ -78,16 +79,16 @@ def export_dir(dir_path,
     num_failed_uploads = 0
     num_successful_uploads = 0
 
-    file_list = os.listdir(dir_path)
+    file_list = listdir(dir_path)
     N = len(file_list) # for progress bar
     for i, f in enumerate(file_list): #enumerate is for progress bar
 
-        filepath = os.path.join(dir_path, f)
+        filepath = path.join(dir_path, f)
 
         # if filepath is not a slippi file, skip it
-        if not os.path.isfile(filepath):
+        if not path.isfile(filepath):
             continue
-        if not os.path.splitext(filepath)[-1] == '.slp':
+        if not path.splitext(filepath)[-1] == '.slp':
             continue
 
         try:
@@ -115,13 +116,9 @@ def export_dir(dir_path,
         display_progress(i, N)
     display_progress(N,N)
 
-    msg = f'''
-Successfully uploaded {num_successful_uploads} games.
-Failed to upload {num_failed_uploads} games.
-
+    msg = f'''\nSuccessfully uploaded {num_successful_uploads} games.\nFailed to upload {num_failed_uploads} games.\n
     - {num_games_too_short} were too short.
-    - {num_parse_errors} failed to parse 
-'''
+    - {num_parse_errors} failed to parse.\n'''
     # if any games were rejected by extract function, display this
     if num_invalid_games > 0:
         msg += f'    - {num_invalid_games} were rejected by extract function\n'
