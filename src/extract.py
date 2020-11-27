@@ -1,5 +1,5 @@
 from slippi import Game
-from scipy import sparse
+from scipy.sparse import lil_matrix, csr_matrix
 import numpy as np
 
 '''
@@ -12,6 +12,9 @@ class InvalidGameError(ValueError):
 class EmptyFilenameError(ValueError):
     pass
 
+class GameTooShortError(ValueError):
+    pass
+
 def get_istreams(game, as_sparse=False):
 
     out = [] # list to store output
@@ -19,8 +22,10 @@ def get_istreams(game, as_sparse=False):
     for j in range(4):
 
         # rows: frames, columns: buttons
-        # istream = np.zeros((len(game.frames), 17))
-        istream = np.zeros((len(game.frames), 13))
+        if as_sparse:
+            istream = lil_matrix((len(game.frames), 13))
+        else:
+            istream = np.zeros((len(game.frames), 13))
 
         for i, frame in enumerate(game.frames):
             if frame.ports[j] is None:
@@ -71,7 +76,7 @@ def get_istreams(game, as_sparse=False):
             #     istream[i, 16] = 1
 
         if as_sparse and istream is not None:
-            istream = sparse.csr_matrix(istream)
+            istream = csr_matrix(istream)
         out.append(istream)
     
     # len(out) == 4
@@ -81,46 +86,59 @@ def get_istreams(game, as_sparse=False):
     return tuple(out)
 
 def get_player_characters(game):
-    players = game.metadata.players
+    players = game.start.players
 
     characters = [None]*4
     for i, player in enumerate(players):
         if player is not None:
-            character = next(iter(player.characters))
+            character = player.character
             characters[i] = character.name
 
     return tuple(characters)
 
 def get_player_names(game):
+    # player name relies on metadata that may not be there
+    # as a result dataset may have missing names
     players = game.metadata.players
 
     names = [None]*4
     for i, player in enumerate(players):
-        if player is not None:
+        if player and player.netplay:
             names[i] = player.netplay.name
 
     return tuple(names)
 
 def get_player_codes(game):
+    # player code relies on metadata that may not be there
+    # as a result dataset may have missing names
     players = game.metadata.players
 
     codes = [None]*4
     for i, player in enumerate(players):
-        if player is not None:
+        if player and player.netplay:
             codes[i] = player.netplay.code
 
     return tuple(codes)
 
 def get_id(f):
-    if f == '':
-        msg = 'path can not be empty string'
-        raise EmptyFilenameError(msg)
+    # game_id is just the filename of that game
+    # this has the advantage of being unique, as
+    # long as each collection only contains
+    # games from a single directory
 
     return f.replace('\\', '/').split('/')[-1]
 
 def extract(f, as_sparse=False):
+    if f == '':
+        msg = 'path can not be empty string'
+        raise EmptyFilenameError(msg)
+
     game_id = get_id(f)
     game = Game(f)
+
+    if len(game.frames)/3600 < 1:
+        raise GameTooShortError('Game is too short')
+
     try:
         out = [{'game_id': game_id,
                 'istream': istream,
@@ -133,10 +151,11 @@ def extract(f, as_sparse=False):
                    get_player_names(game),
                    get_player_codes(game))
             if character is not None]
-    except AttributeError:
-        # if netplay information is missing
-        # that means the game failed to connect
-        # and was aborted
-        raise InvalidGameError("This game was aborted")
+    except:
+        # raise
+        raise InvalidGameError
         
     return tuple(out)
+
+if __name__=='__main__':
+    pass
