@@ -145,17 +145,21 @@ def extract(f, as_sparse=False):
         raise GameTooShortError('Game is too short')
 
     try:
-        out = [{'game_id': game_id,
-                'istream': istream,
-                'character': character,
-                'name': name,
-                'code': code,
-        } for istream, character, name, code
+        out = [
+        {
+            'game_id': game_id,
+            'istream': istream,
+            'character': character,
+            'name': name,
+            'code': code,
+        } 
+        for istream, character, name, code
             in zip(get_istreams(game, as_sparse=as_sparse), 
                    get_player_characters(game),
                    get_player_names(game),
                    get_player_codes(game))
-            if character is not None]
+            if character is not None
+        ]
     except:
         raise InvalidGameError
         
