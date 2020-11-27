@@ -42,18 +42,19 @@ def export(f,
     
     players = extract(f, as_sparse=True)
 
+    # compress istream data before sending to mongo db
     mongo_output = []
     for player in players:
-        sanitized = {}
+        compressed = {}
         for k, v in player.items():
             if isinstance(v, sparse.csr.csr_matrix):
                 # if value is a sparse matrix, convert to binary
-                sanitized[k] = Binary(pickle.dumps(v, protocol=2))
+                compressed[k] = Binary(pickle.dumps(v, protocol=2))
             else:
-                sanitized[k] = v
+                compressed[k] = v
         
         # export data to mongodb
-        mongo_output.append(sanitized)
+        mongo_output.append(compressed)
     collection.insert_many(mongo_output)
 
 def export_dir(dir_path, 
@@ -83,9 +84,9 @@ def export_dir(dir_path,
 
         filepath = os.path.join(dir_path, f)
 
+        # if filepath is not a slippi file, skip it
         if not os.path.isfile(filepath):
             continue
-
         if not os.path.splitext(filepath)[-1] == '.slp':
             continue
 
@@ -120,16 +121,11 @@ Failed to upload {num_failed_uploads} games.
     - {num_games_too_short} were too short.
     - {num_parse_errors} failed to parse 
 '''
+    # if any games were rejected by extract function, display this
     if num_invalid_games > 0:
         msg += f'    - {num_invalid_games} were rejected by extract function\n'
+
     print(msg)
 
 if __name__ == '__main__':
-    """
-        TODO
-        
-        If this file is run directly, 
-        take arguments using argparse
-        and run export() once
-    """
     pass
