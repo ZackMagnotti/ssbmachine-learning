@@ -12,6 +12,9 @@ class InvalidGameError(ValueError):
 class EmptyFilenameError(ValueError):
     pass
 
+class GameTooShortError(ValueError):
+    pass
+
 def get_istreams(game, as_sparse=False):
 
     out = [] # list to store output
@@ -132,7 +135,7 @@ def extract(f, as_sparse=False):
     game = Game(f)
 
     if len(game.frames)/3600 < 1:
-        raise InvalidGameError('Game is too short')
+        raise GameTooShortError('Game is too short')
 
     try:
         out = [{'game_id': game_id,
@@ -147,6 +150,7 @@ def extract(f, as_sparse=False):
                    get_player_codes(game))
             if character is not None]
     except:
+        # raise
         raise InvalidGameError
         
     return tuple(out)

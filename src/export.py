@@ -5,7 +5,7 @@ from sys import stdout
 import os
 import pickle
 
-from .extract import extract
+from .extract import extract, InvalidGameError, GameTooShortError
 
 from slippi.parse import ParseError
 
@@ -41,7 +41,7 @@ def export(f,
     collection = db[collection_name]
     
     players = extract(f, as_sparse=True)
-    
+
     mongo_output = []
     for player in players:
         sanitized = {}
@@ -70,12 +70,21 @@ def export_dir(dir_path,
     if not os.path.isdir(dir_path):
         raise PathError('The input path is not a directory')
 
-    file_list = os.listdir(dir_path)
-    N = len(file_list)
+    # for error tracking
+    num_parse_errors = 0
+    num_games_too_short = 0
+    num_invalid_games = 0
     num_failed_uploads = 0
+    num_successful_uploads = 0
+
+    file_list = os.listdir(dir_path)
+    N = len(file_list) # for progress bar
     for i, f in enumerate(file_list):
 
         filepath = os.path.join(dir_path, f)
+
+        if not os.path.isfile(filepath):
+            continue
 
         if not os.path.splitext(filepath)[-1] == '.slp':
             continue
@@ -86,13 +95,34 @@ def export_dir(dir_path,
                    collection_name = collection_name,
                    host = host,
                    port = port)
-        except:
+
+            num_successful_uploads += 1
+
+        except GameTooShortError:
             num_failed_uploads += 1
+            num_games_too_short += 1
+
+        except ParseError:
+            num_failed_uploads += 1
+            num_parse_errors += 1
+
+        except InvalidGameError:
+            num_invalid_games += 1
         
         # progress bar
         display_progress(i, N)
     display_progress(N,N)
-    print(f'\nFailed to upload {num_failed_uploads} files')
+
+    msg = f'''
+Successfully uploaded {num_successful_uploads} games.
+Failed to upload {num_failed_uploads} games.
+
+    - {num_games_too_short} were too short.
+    - {num_parse_errors} failed to parse 
+'''
+    if num_invalid_games > 0:
+        msg += f'    - {num_invalid_games} were rejected by extract function\n'
+    print(msg)
 
 if __name__ == '__main__':
     """
