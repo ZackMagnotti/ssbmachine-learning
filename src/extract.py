@@ -1,5 +1,5 @@
 from slippi import Game
-from scipy import sparse
+from scipy.sparse import lil_matrix, csr_matrix
 import numpy as np
 
 '''
@@ -22,8 +22,10 @@ def get_istreams(game, as_sparse=False):
     for j in range(4):
 
         # rows: frames, columns: buttons
-        # istream = np.zeros((len(game.frames), 17))
-        istream = np.zeros((len(game.frames), 13))
+        if as_sparse:
+            istream = lil_matrix((len(game.frames), 13))
+        else:
+            istream = np.zeros((len(game.frames), 13))
 
         for i, frame in enumerate(game.frames):
             if frame.ports[j] is None:
@@ -74,7 +76,7 @@ def get_istreams(game, as_sparse=False):
             #     istream[i, 16] = 1
 
         if as_sparse and istream is not None:
-            istream = sparse.csr_matrix(istream)
+            istream = csr_matrix(istream)
         out.append(istream)
     
     # len(out) == 4
