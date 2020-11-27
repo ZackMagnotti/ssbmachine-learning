@@ -157,7 +157,6 @@ def extract(f, as_sparse=False):
                    get_player_codes(game))
             if character is not None]
     except:
-        # raise
         raise InvalidGameError
         
     return tuple(out)
