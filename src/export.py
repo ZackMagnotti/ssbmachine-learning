@@ -27,7 +27,7 @@ def display_progress(current_iter, total):
 
     # return progress_bar
 
-    stdout.write('\r' + progress_bar + ' ' + f'{current_iter} of {total}' + ' - ' + str(progress_percent) + '%')
+    stdout.write('\r' + progress_bar + ' ' + f'{current_iter} of {total}' + ' - ' + str(progress_percent) + '% ')
     stdout.flush()
 
 def export(f, 
@@ -81,10 +81,10 @@ def export_dir(dir_path,
 
         try:
             export(f = filepath, 
-                database_name = database_name, 
-                collection_name = collection_name,
-                host = host,
-                port = port)
+                   database_name = database_name, 
+                   collection_name = collection_name,
+                   host = host,
+                   port = port)
         except:
             num_failed_uploads += 1
         
