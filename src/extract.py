@@ -22,8 +22,11 @@ def get_istreams(game, as_sparse=False):
     for j in range(4):
 
         # using scipy.sparse.lil_matrix to be
-        # efficient filling in entries incrementally
+        # efficient incrementally filling in entries row by row
         istream = lil_matrix((len(game.frames), 13))
+
+        # Rows: frames (time)
+        # Cols: buttons/joysticks
 
         for i, frame in enumerate(game.frames):
 
@@ -34,7 +37,8 @@ def get_istreams(game, as_sparse=False):
             
             port = frame.ports[j].leader.pre
 
-            # each column represents a button
+            # for the analog inputs extract x and y pos
+            # (l and r for the triggers)
             istream[i, 0] = port.joystick.x
             istream[i, 1] = port.joystick.y
             istream[i, 2] = port.cstick.x
@@ -42,6 +46,8 @@ def get_istreams(game, as_sparse=False):
             istream[i, 4] = port.triggers.physical.l
             istream[i, 5] = port.triggers.physical.r
             
+            # for the digital inputs, fill in with 1
+            # if button is active (leave as 0 if not)
             b = port.buttons
             if b.Physical.Y in b.physical.pressed():
                 istream[i, 6] = 1
@@ -76,7 +82,7 @@ def get_istreams(game, as_sparse=False):
             # if b.Physical.DPAD_LEFT in b.physical.pressed():
             #     istream[i, 16] = 1
 
-        # if as_sparse is true,
+        # if as_sparse is true and port is active, 
         # convert to compressed sparse array
         if as_sparse and istream is not None:
             istream = csr_matrix(istream)
@@ -135,6 +141,8 @@ def get_id(f):
     return basename(f)
 
 def extract(f, as_sparse=False): 
+
+    # get game_id and game data using f (filename)
     game_id = get_id(f)
     game = Game(f)
 
@@ -160,9 +168,11 @@ def extract(f, as_sparse=False):
             if character is not None
         ]
 
+    # raise parsing errors
     except ParseError:
         raise
     
+    # if unexpected error, raise InvalidGameError
     except:
         raise InvalidGameError
         
