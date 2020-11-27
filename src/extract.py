@@ -160,6 +160,3 @@ def extract(f, as_sparse=False):
         raise InvalidGameError
         
     return tuple(out)
-
-if __name__=='__main__':
-    pass

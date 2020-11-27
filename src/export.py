@@ -124,6 +124,3 @@ def export_dir(dir_path,
         msg += f'    - {num_invalid_games} were rejected by extract function\n'
 
     print(msg)
-
-if __name__ == '__main__':
-    pass
