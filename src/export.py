@@ -108,6 +108,7 @@ def export_dir(dir_path,
             num_parse_errors += 1
 
         except InvalidGameError:
+            num_failed_uploads += 1
             num_invalid_games += 1
         
         # progress bar
