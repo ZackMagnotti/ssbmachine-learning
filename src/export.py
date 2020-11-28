@@ -1,3 +1,4 @@
+from slippi.parse import ParseError
 from bson.binary import Binary
 from pymongo import MongoClient
 from scipy import sparse
@@ -5,6 +6,8 @@ from sys import stdout
 from os import path, listdir
 import pickle
 from .extract import extract, InvalidGameError, GameTooShortError
+
+# I don't know why my imports look so amazing
 
 '''
     TODO: Docstrings
@@ -26,8 +29,6 @@ def display_progress(current_iter, total):
     progress_bar += ('.' * (bar_length - progress))
     progress_bar = '[' + progress_bar + ']'
 
-    # return progress_bar
-
     stdout.write('\r' + progress_bar + ' ' + f'{current_iter} of {total}' + ' - ' + str(progress_percent) + '% ')
     stdout.flush()
 
@@ -36,11 +37,13 @@ def export(f,
            collection_name,
            host = 'localhost',
            port = 27017):
+
     # Connect to the hosted MongoDB instance
     client = MongoClient(host, port)
     db = client[database_name]
     collection = db[collection_name]
     
+    # extract player data from file using extract.py
     players = extract(f, as_sparse=True)
 
     # compress istream data before sending to mongo db
@@ -48,8 +51,8 @@ def export(f,
     for player in players:
         compressed = {}
         for k, v in player.items():
+            # if value is a sparse matrix, convert to binary
             if isinstance(v, sparse.csr.csr_matrix):
-                # if value is a sparse matrix, convert to binary
                 compressed[k] = Binary(pickle.dumps(v, protocol=2))
             else:
                 compressed[k] = v
@@ -80,15 +83,15 @@ def export_dir(dir_path,
     num_successful_uploads = 0
 
     file_list = listdir(dir_path)
-    N = len(file_list) # for progress bar
-    for i, f in enumerate(file_list): #enumerate is for progress bar
+    N = len(file_list) # TODO remove this
+    for i, f in enumerate(file_list):
 
         filepath = path.join(dir_path, f)
 
         # if filepath is not a slippi file, skip it
         if not path.isfile(filepath):
             continue
-        if not path.splitext(filepath)[-1] == '.slp':
+        if not path.splitext(filepath)[-1] == '.slp': # TODO replace this -1 with a 1
             continue
 
         try:
@@ -116,6 +119,9 @@ def export_dir(dir_path,
         display_progress(i, N)
     display_progress(N,N)
 
+    # Display message after upload is complete
+    # detailing how many uploads succeeded/failed
+    # and what kinds of errors were encountered
     msg = f'''\nSuccessfully uploaded {num_successful_uploads} games.\nFailed to upload {num_failed_uploads} games.\n
     - {num_games_too_short} were too short.
     - {num_parse_errors} failed to parse.\n'''
