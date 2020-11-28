@@ -68,6 +68,8 @@ def export_dir(dir_path,
                port = 27017):
 
     dir_path = path.normpath(dir_path)
+    file_list = listdir(dir_path)
+    N = len(file_list)
     
     if not path.exists(dir_path):
         raise PathError('input path does not exist')
@@ -82,8 +84,6 @@ def export_dir(dir_path,
     num_failed_uploads = 0
     num_successful_uploads = 0
 
-    file_list = listdir(dir_path)
-    N = len(file_list) # TODO remove this
     for i, f in enumerate(file_list):
 
         filepath = path.join(dir_path, f)
@@ -91,7 +91,7 @@ def export_dir(dir_path,
         # if filepath is not a slippi file, skip it
         if not path.isfile(filepath):
             continue
-        if not path.splitext(filepath)[-1] == '.slp': # TODO replace this -1 with a 1
+        if not path.splitext(filepath)[1] == '.slp':
             continue
 
         try:
