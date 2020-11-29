@@ -98,6 +98,13 @@ def get_istreams(game, as_sparse=False):
     return tuple(istreams)
 
 def get_player_characters(game):
+    ''' 
+    Gets the player characters from a game
+
+    Parameters
+    -----------
+    game (slippi.Game) : game to get player characters from
+    '''
     players = game.start.players
 
     characters = [None]*4
