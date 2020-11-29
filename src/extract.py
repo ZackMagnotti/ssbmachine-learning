@@ -4,6 +4,10 @@ from scipy.sparse import lil_matrix, csr_matrix
 from os.path import basename
 import numpy as np
 
+"""
+    TODO fix docstrings
+"""
+
 class InvalidGameError(ValueError):
     pass
 
@@ -74,18 +78,6 @@ def get_istreams(game, as_sparse=False):
             
             if b.Physical.Z in b.physical.pressed():
                 istream[i, 12] = 1
-
-            # if b.Physical.DPAD_UP in b.physical.pressed():
-            #     istream[i, 13] = 1
-            
-            # if b.Physical.DPAD_DOWN in b.physical.pressed():
-            #     istream[i, 14] = 1
-            
-            # if b.Physical.DPAD_RIGHT in b.physical.pressed():
-            #     istream[i, 15] = 1
-            
-            # if b.Physical.DPAD_LEFT in b.physical.pressed():
-            #     istream[i, 16] = 1
 
         # if as_sparse is true and port is active, 
         # convert to compressed sparse array
