@@ -7,12 +7,6 @@ from os import path, listdir
 import pickle
 from .extract import extract, InvalidGameError, GameTooShortError
 
-# I don't know why my imports look so amazing
-
-'''
-    TODO: Docstrings
-'''
-
 class PathError(ValueError):
     pass
 
