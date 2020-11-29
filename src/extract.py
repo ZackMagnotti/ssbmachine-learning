@@ -176,4 +176,5 @@ def extract(f, as_sparse=False):
     except:
         raise InvalidGameError
         
-    return tuple(out)
+    else:
+        return tuple(out)
