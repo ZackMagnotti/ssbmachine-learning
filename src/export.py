@@ -16,14 +16,21 @@ from .extract import extract, InvalidGameError, GameTooShortError
 class PathError(ValueError):
     pass
 
-# for convenience to see progress
-# when exporting large directories
-def display_progress(current_iter, total):
+def display_progress(i, N):
+    ''' 
+    For convenience, to see progress
+    when exporting large directories.
+
+    Parameters
+    -----------
+    i (int) : current iteration
+    N (int) : total number of iterations in process
+    '''
 
     bar_length = 20
 
-    progress = (bar_length * current_iter) // total
-    progress_percent =  round(100 * current_iter / total, 2)
+    progress = (bar_length * i) // N
+    progress_percent =  round(100 * i / N, 2)
 
     progress_bar = ('#' * progress) 
     progress_bar += ('.' * (bar_length - progress))
