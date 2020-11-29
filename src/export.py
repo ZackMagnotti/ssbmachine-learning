@@ -101,8 +101,6 @@ def export_dir(dir_path,
                    host = host,
                    port = port)
 
-            num_successful_uploads += 1
-
         except GameTooShortError:
             num_failed_uploads += 1
             num_games_too_short += 1
@@ -114,9 +112,12 @@ def export_dir(dir_path,
         except InvalidGameError:
             num_failed_uploads += 1
             num_invalid_games += 1
-        
-        # progress bar
-        display_progress(i, N)
+
+        else:
+            num_successful_uploads += 1
+
+        finally:
+            display_progress(i, N)
     display_progress(N,N)
 
     # Display message after upload is complete
