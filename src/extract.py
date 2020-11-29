@@ -141,6 +141,15 @@ def get_id(f):
     return basename(f)
 
 def extract(f, as_sparse=False): 
+    ''' 
+    Extracts the istream payloads from a .slp file
+
+    Parameters
+    -----------
+    f (string) : Full path to game replay file
+    as_sparse (bool) : If true, return istream as a scipy csr matrix
+                        otherwise return as numpy array
+    '''
 
     # get game_id and game data using f (filename)
     game_id = get_id(f)
