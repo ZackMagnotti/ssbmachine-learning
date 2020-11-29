@@ -4,10 +4,6 @@ from scipy.sparse import lil_matrix, csr_matrix
 from os.path import basename
 import numpy as np
 
-'''
-    TODO: Docstrings
-'''
-
 class InvalidGameError(ValueError):
     pass
 
