@@ -85,6 +85,18 @@ def export_dir(dir_path,
                collection_name,
                host = 'localhost',
                port = 27017):
+    ''' 
+    Extracts the istream payloads from a directory of .slp files and
+    exports them to the specified mongoDB database.collection
+
+    Parameters
+    -----------
+    dir_path (string) : Full path to directory of replay files
+    database_name (string) : name of mongo database
+    collection_name (string) : name of collection in database
+    host : see py-mongo documentation
+    port (int) : port number on which to connect
+    '''
 
     dir_path = path.normpath(dir_path)
     file_list = listdir(dir_path)
