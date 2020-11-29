@@ -44,6 +44,18 @@ def export(f,
            collection_name,
            host = 'localhost',
            port = 27017):
+    ''' 
+    Extracts the istream payloads from a .slp file and
+    exports them to the specified mongoDB database.collection
+
+    Parameters
+    -----------
+    f (string) : Full path to game replay file
+    database_name (string) : name of mongo database
+    collection_name (string) : name of collection in database
+    host : see py-mongo documentation
+    port (int) : port number on which to connect
+    '''
 
     # Connect to the hosted MongoDB instance
     client = MongoClient(host, port)
