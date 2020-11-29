@@ -82,10 +82,11 @@ def get_istreams(game, as_sparse=False):
         # if as_sparse is true and port is active, 
         # convert to compressed sparse array
         # else convert to numpy array
-        if as_sparse and istream is not None:
-            istream = csr_matrix(istream)
-        elif istream is not None:
-            istream = istream.toarray()
+        else:
+            if as_sparse:
+                istream = csr_matrix(istream)
+            else:
+                istream = istream.toarray()
         istreams.append(istream)
     
     # len(istreams) == 4
