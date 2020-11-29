@@ -133,11 +133,18 @@ def get_player_codes(game):
     return tuple(codes)
 
 def get_id(f):
-    # game_id is just the filename of that game.
-    # This has the advantage of being unique, as
-    # long as each collection only contains
-    # games from a single directory
+    ''' 
+    Gets the game_id for a particular replay file.
 
+    The game_id is just the filename of that game.
+    This has the advantage of being unique, as
+    long as each collection only contains
+    games from a single directory
+
+    Parameters
+    -----------
+    f (string) : Full path to game replay file
+    '''
     return basename(f)
 
 def extract(f, as_sparse=False): 
