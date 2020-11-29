@@ -37,7 +37,8 @@ def export(f,
            database_name, 
            collection_name,
            host = 'localhost',
-           port = 27017):
+           port = 27017,
+           client = None):
     ''' 
     Extracts the istream payloads from a .slp file and
     exports them to the specified mongoDB database.collection
@@ -49,10 +50,12 @@ def export(f,
     collection_name (string) : name of collection in database
     host : see py-mongo documentation
     port (int) : port number on which to connect
+    client (optional) : to use existing client. If None, a new connection will be made.
     '''
 
     # Connect to the hosted MongoDB instance
-    client = MongoClient(host, port)
+    if client is None:
+        client = MongoClient(host, port)
     db = client[database_name]
     collection = db[collection_name]
     
@@ -78,7 +81,8 @@ def export_dir(dir_path,
                database_name, 
                collection_name,
                host = 'localhost',
-               port = 27017):
+               port = 27017,
+               client = None):
     ''' 
     Extracts the istream payloads from a directory of .slp files and
     exports them to the specified mongoDB database.collection
@@ -92,6 +96,8 @@ def export_dir(dir_path,
     port (int) : port number on which to connect
     '''
 
+    if client is None:
+        client = MongoClient(host, port)
     dir_path = path.normpath(dir_path)
     file_list = listdir(dir_path)
     N = len(file_list)
@@ -123,8 +129,7 @@ def export_dir(dir_path,
             export(f = filepath, 
                    database_name = database_name, 
                    collection_name = collection_name,
-                   host = host,
-                   port = port)
+                   client = client)
 
         except GameTooShortError:
             num_failed_uploads += 1
@@ -146,11 +151,10 @@ def export_dir(dir_path,
     display_progress(N,N)
 
     # Display message after upload is complete
-    # detailing how many uploads succeeded/failed
-    # and what kinds of errors were encountered
     msg = f'''\nSuccessfully uploaded {num_successful_uploads} games.\nFailed to upload {num_failed_uploads} games.\n
     - {num_games_too_short} were too short.
     - {num_parse_errors} failed to parse.\n'''
+
     # if any games were rejected by extract function, display this
     if num_invalid_games > 0:
         msg += f'    - {num_invalid_games} were rejected by extract function\n'
