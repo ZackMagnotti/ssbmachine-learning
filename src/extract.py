@@ -121,8 +121,17 @@ def get_player_names(game):
     return tuple(names)
 
 def get_player_codes(game):
-    # player code relies on metadata that may not be there
-    # as a result dataset may have many missing codes
+    ''' 
+    Gets the player netplay codes from a game
+
+    Player codes are provided by metadata that may not be 
+    present for games played on offline platforms. 
+    As a result dataset may have many missing codes.
+
+    Parameters
+    -----------
+    game (slippi.Game) : game to get player codes from
+    '''
     players = game.metadata.players
 
     codes = [None]*4
