@@ -89,9 +89,9 @@ def get_istreams(game, as_sparse=False):
 
         # if as_sparse is true and port is active, 
         # convert to compressed sparse array
+        # else convert to numpy array
         if as_sparse and istream is not None:
             istream = csr_matrix(istream)
-        # else convert to numpy array
         elif istream is not None:
             istream = istream.toarray()
         istreams.append(istream)
@@ -110,7 +110,7 @@ def get_player_characters(game):
     -----------
     game (slippi.Game) : game to get player characters from
     '''
-    
+
     players = game.start.players
 
     characters = [None]*4
