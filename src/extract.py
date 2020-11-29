@@ -15,6 +15,15 @@ class GameTooShortError(ValueError):
     pass
 
 def get_istreams(game, as_sparse=False):
+    ''' 
+    Gets the controller input streams from a game
+
+    Parameters
+    -----------
+    game (slippi.Game) : game to get istreams from
+    as_sparse (bool) : If true, return istream as a scipy csr matrix
+                        otherwise return as numpy array
+    '''
 
     istreams = []
 
