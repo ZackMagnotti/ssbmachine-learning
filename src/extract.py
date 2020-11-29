@@ -110,6 +110,7 @@ def get_player_characters(game):
     -----------
     game (slippi.Game) : game to get player characters from
     '''
+    
     players = game.start.players
 
     characters = [None]*4
@@ -131,6 +132,7 @@ def get_player_names(game):
     -----------
     game (slippi.Game) : game to get player names from
     '''
+
     players = game.metadata.players
 
     names = [None]*4
@@ -151,6 +153,7 @@ def get_player_codes(game):
     -----------
     game (slippi.Game) : game to get player codes from
     '''
+
     players = game.metadata.players
 
     codes = [None]*4
@@ -173,6 +176,7 @@ def get_id(f):
     -----------
     f (string) : Full path to game replay file
     '''
+
     return basename(f)
 
 def extract(f, as_sparse=False): 
