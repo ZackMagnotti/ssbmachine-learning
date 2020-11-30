@@ -30,7 +30,7 @@ def display_progress(i, N):
     progress_bar += ('.' * (bar_length - progress))
     progress_bar = '[' + progress_bar + ']'
 
-    stdout.write('\r' + progress_bar + ' ' + f'{current_iter} of {total}' + ' - ' + str(progress_percent) + '% ')
+    stdout.write('\r' + progress_bar + ' ' + f'{i} of {N}' + ' - ' + str(progress_percent) + '% ')
     stdout.flush()
 
 def export(f, 
