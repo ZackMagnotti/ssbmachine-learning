@@ -8,7 +8,7 @@ def get_data(database_name,
              port = 27017,
              client = None,
              max_results = None,
-             **kwargs):
+             query = {}):
     '''
     Gets data from the specified mongo collection
 
@@ -37,9 +37,8 @@ def get_data(database_name,
 
     characters = []
     istreams = []
-    for player in collection.find(kwargs):
+    for player in collection.find(query):
         istreams.append(player['istream'])
         characters.append(player['character'])
 
     return istreams, characters
-    
