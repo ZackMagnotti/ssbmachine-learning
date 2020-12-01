@@ -4,9 +4,9 @@ from scipy.sparse import lil_matrix, csr_matrix
 from os.path import basename
 import numpy as np
 
-'''
-    TODO: Docstrings
-'''
+"""
+    TODO fix docstrings
+"""
 
 class InvalidGameError(ValueError):
     pass
@@ -15,6 +15,15 @@ class GameTooShortError(ValueError):
     pass
 
 def get_istreams(game, as_sparse=False):
+    ''' 
+    Gets the controller input streams from a game
+
+    Parameters
+    -----------
+    game (slippi.Game) : game to get istreams from
+    as_sparse (bool) : If true, return istream as a scipy csr matrix
+                        otherwise return as numpy array
+    '''
 
     istreams = []
 
@@ -70,25 +79,14 @@ def get_istreams(game, as_sparse=False):
             if b.Physical.Z in b.physical.pressed():
                 istream[i, 12] = 1
 
-            # if b.Physical.DPAD_UP in b.physical.pressed():
-            #     istream[i, 13] = 1
-            
-            # if b.Physical.DPAD_DOWN in b.physical.pressed():
-            #     istream[i, 14] = 1
-            
-            # if b.Physical.DPAD_RIGHT in b.physical.pressed():
-            #     istream[i, 15] = 1
-            
-            # if b.Physical.DPAD_LEFT in b.physical.pressed():
-            #     istream[i, 16] = 1
-
         # if as_sparse is true and port is active, 
         # convert to compressed sparse array
-        if as_sparse and istream is not None:
-            istream = csr_matrix(istream)
         # else convert to numpy array
-        elif istream is not None:
-            istream = istream.toarray()
+        else:
+            if as_sparse:
+                istream = csr_matrix(istream)
+            else:
+                istream = istream.toarray()
         istreams.append(istream)
     
     # len(istreams) == 4
@@ -98,6 +96,14 @@ def get_istreams(game, as_sparse=False):
     return tuple(istreams)
 
 def get_player_characters(game):
+    ''' 
+    Gets the player characters from a game
+
+    Parameters
+    -----------
+    game (slippi.Game) : game to get player characters from
+    '''
+
     players = game.start.players
 
     characters = [None]*4
@@ -109,8 +115,17 @@ def get_player_characters(game):
     return tuple(characters)
 
 def get_player_names(game):
-    # player name relies on metadata that may not be there
-    # as a result dataset may have many missing names
+    ''' 
+    Gets the player names from a game
+
+    Player names are provided by metadata that may not be 
+    present for games played on offline platforms. 
+
+    Parameters
+    -----------
+    game (slippi.Game) : game to get player names from
+    '''
+
     players = game.metadata.players
 
     names = [None]*4
@@ -121,8 +136,17 @@ def get_player_names(game):
     return tuple(names)
 
 def get_player_codes(game):
-    # player code relies on metadata that may not be there
-    # as a result dataset may have many missing codes
+    ''' 
+    Gets the player netplay codes from a game
+
+    Player codes are provided by metadata that may not be 
+    present for games played on offline platforms. 
+
+    Parameters
+    -----------
+    game (slippi.Game) : game to get player codes from
+    '''
+
     players = game.metadata.players
 
     codes = [None]*4
@@ -133,14 +157,31 @@ def get_player_codes(game):
     return tuple(codes)
 
 def get_id(f):
-    # game_id is just the filename of that game.
-    # This has the advantage of being unique, as
-    # long as each collection only contains
-    # games from a single directory
+    ''' 
+    Gets the game_id for a particular replay file.
+
+    The game_id is just the filename of that game.
+    This has the advantage of being unique, as
+    long as each collection only contains
+    games from a single directory
+
+    Parameters
+    -----------
+    f (string) : Full path to game replay file
+    '''
 
     return basename(f)
 
 def extract(f, as_sparse=False): 
+    ''' 
+    Extracts the istream payloads from a .slp file
+
+    Parameters
+    -----------
+    f (string) : Full path to game replay file
+    as_sparse (bool) : If true, return istream as a scipy csr matrix
+                        otherwise return as numpy array
+    '''
 
     # get game_id and game data using f (filename)
     game_id = get_id(f)
@@ -176,4 +217,5 @@ def extract(f, as_sparse=False):
     except:
         raise InvalidGameError
         
-    return tuple(out)
+    else:
+        return tuple(out)

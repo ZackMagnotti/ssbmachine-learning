@@ -7,39 +7,55 @@ from os import path, listdir
 import pickle
 from .extract import extract, InvalidGameError, GameTooShortError
 
-# I don't know why my imports look so amazing
-
-'''
-    TODO: Docstrings
-'''
-
 class PathError(ValueError):
     pass
 
-# for convenience to see progress
-# when exporting large directories
-def display_progress(current_iter, total):
+def display_progress(i, N):
+    ''' 
+    For convenience, to see progress
+    when exporting large directories.
+
+    Parameters
+    -----------
+    i (int) : current iteration
+    N (int) : total number of iterations in process
+    '''
 
     bar_length = 20
 
-    progress = (bar_length * current_iter) // total
-    progress_percent =  round(100 * current_iter / total, 2)
+    progress = (bar_length * i) // N
+    progress_percent =  round(100 * i / N, 2)
 
     progress_bar = ('#' * progress) 
     progress_bar += ('.' * (bar_length - progress))
     progress_bar = '[' + progress_bar + ']'
 
-    stdout.write('\r' + progress_bar + ' ' + f'{current_iter} of {total}' + ' - ' + str(progress_percent) + '% ')
+    stdout.write(f'\r{progress_bar} {i} of {N} - {progress_percent}% ')
     stdout.flush()
 
 def export(f, 
            database_name, 
            collection_name,
            host = 'localhost',
-           port = 27017):
+           port = 27017,
+           client = None):
+    ''' 
+    Extracts the istream payloads from a .slp file and
+    exports them to the specified mongoDB database.collection
+
+    Parameters
+    -----------
+    f (string) : Full path to game replay file
+    database_name (string) : name of mongo database
+    collection_name (string) : name of collection in database
+    host : see py-mongo documentation
+    port (int) : port number on which to connect
+    client (optional) : to use existing client. If None, a new connection will be made.
+    '''
 
     # Connect to the hosted MongoDB instance
-    client = MongoClient(host, port)
+    if client is None:
+        client = MongoClient(host, port)
     db = client[database_name]
     collection = db[collection_name]
     
@@ -65,8 +81,23 @@ def export_dir(dir_path,
                database_name, 
                collection_name,
                host = 'localhost',
-               port = 27017):
+               port = 27017,
+               client = None):
+    ''' 
+    Extracts the istream payloads from a directory of .slp files and
+    exports them to the specified mongoDB database.collection
 
+    Parameters
+    -----------
+    dir_path (string) : Full path to directory of replay files
+    database_name (string) : name of mongo database
+    collection_name (string) : name of collection in database
+    host : see py-mongo documentation
+    port (int) : port number on which to connect
+    '''
+
+    if client is None:
+        client = MongoClient(host, port)
     dir_path = path.normpath(dir_path)
     file_list = listdir(dir_path)
     N = len(file_list)
@@ -98,10 +129,7 @@ def export_dir(dir_path,
             export(f = filepath, 
                    database_name = database_name, 
                    collection_name = collection_name,
-                   host = host,
-                   port = port)
-
-            num_successful_uploads += 1
+                   client = client)
 
         except GameTooShortError:
             num_failed_uploads += 1
@@ -114,17 +142,19 @@ def export_dir(dir_path,
         except InvalidGameError:
             num_failed_uploads += 1
             num_invalid_games += 1
-        
-        # progress bar
-        display_progress(i, N)
+
+        else:
+            num_successful_uploads += 1
+
+        finally:
+            display_progress(i, N)
     display_progress(N,N)
 
     # Display message after upload is complete
-    # detailing how many uploads succeeded/failed
-    # and what kinds of errors were encountered
     msg = f'''\nSuccessfully uploaded {num_successful_uploads} games.\nFailed to upload {num_failed_uploads} games.\n
     - {num_games_too_short} were too short.
     - {num_parse_errors} failed to parse.\n'''
+
     # if any games were rejected by extract function, display this
     if num_invalid_games > 0:
         msg += f'    - {num_invalid_games} were rejected by extract function\n'
