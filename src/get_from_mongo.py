@@ -1,6 +1,6 @@
 from pymongo import MongoClient
-import numpy as np
-import pickle
+# import numpy as np
+# import pickle
 
 def get_data(database_name, 
              collection_name,
@@ -19,11 +19,27 @@ def get_data(database_name,
     host (optional)
     port (int/optional)
     client (optional)
-    kwargs (keyword pairs) additional search requirements if applicable
+    kwargs (keyword pairs): additional search requirements if applicable
 
     Returns
     -------
-    X (tensor): the input data for each document
+    X (list of sparse matrices): the input data for each document
     y (array of strings): the character selection for each document
+
+    X, y = get_data(...)
     '''
-    pass
+
+    # Connect to the hosted MongoDB instance
+    if client is None:
+        client = MongoClient(host, port)
+    db = client[database_name]
+    collection = db[collection_name]
+
+    characters = []
+    istreams = []
+    for player in collection.find(kwargs):
+        istreams.append(player['istream'])
+        characters.append(player['character'])
+
+    return istreams, characters
+    
