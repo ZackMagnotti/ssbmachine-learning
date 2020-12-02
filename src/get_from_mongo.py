@@ -8,6 +8,7 @@ def get_data(database_name,
              port = 27017,
              client = None,
              max_results = None,
+             get = None,
              query = {}):
     '''
     Gets data from the specified mongo collection
@@ -19,7 +20,11 @@ def get_data(database_name,
     host (optional)
     port (int/optional)
     client (optional)
-    kwargs (keyword pairs): additional search requirements if applicable
+    get (int|float) : indicates how many results to fetch.
+                      If this is an int, get that many results.
+                      If this is a float between 0 and 1, return
+                      that proportion of the total results.
+    query (keyword pairs): additional search requirements if applicable
 
     Returns
     -------
