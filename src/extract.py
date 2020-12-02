@@ -4,9 +4,6 @@ from scipy.sparse import lil_matrix, csr_matrix
 from os.path import basename
 import numpy as np
 
-"""
-    TODO fix docstrings
-"""
 
 class InvalidGameError(ValueError):
     pass
@@ -23,6 +20,12 @@ def get_istreams(game, as_sparse=False):
     game (slippi.Game) : game to get istreams from
     as_sparse (bool) : If true, return istream as a scipy csr matrix
                         otherwise return as numpy array
+
+    Returns
+    --------
+    istreams (tuple) : 4-tuple representing the controller
+                       inputs from every controller port.
+                       Inactive ports return as None.
     '''
 
     istreams = []
@@ -102,6 +105,12 @@ def get_player_characters(game):
     Parameters
     -----------
     game (slippi.Game) : game to get player characters from
+
+    Returns
+    --------
+    characters (tuple) : 4-tuple representing character
+                         selections from every controller port.
+                         Inactive ports return as None.
     '''
 
     players = game.start.players
@@ -124,6 +133,12 @@ def get_player_names(game):
     Parameters
     -----------
     game (slippi.Game) : game to get player names from
+
+    Returns
+    --------
+    characters (tuple) : 4-tuple representing player names
+                         from every controller port.
+                         Inactive ports return as None.
     '''
 
     players = game.metadata.players
@@ -145,6 +160,12 @@ def get_player_codes(game):
     Parameters
     -----------
     game (slippi.Game) : game to get player codes from
+
+    Returns
+    --------
+    characters (tuple) : 4-tuple representing player codes
+                         from every controller port.
+                         Inactive ports return as None.
     '''
 
     players = game.metadata.players
@@ -168,6 +189,10 @@ def get_id(f):
     Parameters
     -----------
     f (string) : Full path to game replay file
+
+    Returns
+    -----------
+    game_id (string) : the (uniqe) filename of the input filepath
     '''
 
     return basename(f)
@@ -181,6 +206,13 @@ def extract(f, as_sparse=False):
     f (string) : Full path to game replay file
     as_sparse (bool) : If true, return istream as a scipy csr matrix
                         otherwise return as numpy array
+
+    Returns
+    -----------
+    payload (tuple of dicts) : returns the player data from the replay file
+                               for all players detected.
+                               Each of these dicts is essentially the json
+                               object that will be sent to mongodb in export.py
     '''
 
     # get game_id and game data using f (filename)
@@ -193,7 +225,7 @@ def extract(f, as_sparse=False):
 
     # get outpt payload for each active controller port
     try:
-        out = [
+        payload = [
         {
             'game_id': game_id,
             'istream': istream,
@@ -218,4 +250,4 @@ def extract(f, as_sparse=False):
         raise InvalidGameError
         
     else:
-        return tuple(out)
+        return tuple(payload)
