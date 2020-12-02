@@ -2,6 +2,10 @@ from pymongo import MongoClient
 # import numpy as np
 # import pickle
 
+"""
+    TODO: finish this or remove unused parameters
+"""
+
 def get_data(database_name, 
              collection_name,
              host = 'localhost',
