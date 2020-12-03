@@ -15,27 +15,27 @@ def get_data(database_name,
              get = None,
              query = {}):
     '''
-    Gets data from the specified mongo collection
+        Gets data from the specified mongo collection
 
-    Parameters
-    ----------
-    database_name (string)
-    collection_name (string)
-    host (optional)
-    port (int/optional)
-    client (optional)
-    get (int|float) : indicates how many results to fetch.
-                      If this is an int, get that many results.
-                      If this is a float between 0 and 1, return
-                      that proportion of the total results.
-    query (keyword pairs): additional search requirements if applicable
+        Parameters
+        ----------
+        database_name (string)
+        collection_name (string)
+        host (optional)
+        port (int/optional)
+        client (optional)
+        get (int|float) : indicates how many results to fetch.
+                        If this is an int, get that many results.
+                        If this is a float between 0 and 1, return
+                        that proportion of the total results.
+        query (keyword pairs): additional search requirements if applicable
 
-    Returns
-    -------
-    X (list of sparse matrices): the input data for each document
-    y (array of strings): the character selection for each document
+        Returns
+        -------
+        X (list of sparse matrices): the input data for each document
+        y (array of strings): the character selection for each document
 
-    X, y = get_data(...)
+        X, y = get_data(...)
     '''
 
     # Connect to the hosted MongoDB instance
