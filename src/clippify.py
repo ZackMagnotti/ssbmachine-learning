@@ -12,6 +12,8 @@ def clippify(input_collection,
 
     N = input_collection.estimated_document_count()
 
+    clip_count = 0 # each clip will get a number for indexing use
+
     cursor = input_collection.find()
     for i, doc in enumerate(cursor):
         
@@ -28,18 +30,22 @@ def clippify(input_collection,
             payload = [
                 {
                     'game_id': doc['game_id'],
-                    'clip_id' : clip_id, 
+                    'clip_id' : j + clip_count, 
                     'istream': Binary(pickle.dumps(istream, protocol=2)),
                     'character': doc['character'],
                     'name': doc['name'],
                     'code': doc['code'],
                 } 
-                for clip_id, istream in enumerate(clip_istreams)
+                for j, istream in enumerate(clip_istreams)
             ]
-            output_collection.insert_many(payload)
-            
+        
         except:
             pass
         
-        display_progress(i, N)
+        else:
+            output_collection.insert_many(payload)
+            clip_count += len(payload)
+        
+        finally:
+            display_progress(i, N)
     display_progress(N,N)
