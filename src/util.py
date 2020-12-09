@@ -1,3 +1,4 @@
+
 characters = (
     'CAPTAIN_FALCON',
     'DONKEY_KONG',
@@ -26,5 +27,7 @@ characters = (
     'PICHU',
     'GANONDORF',
 )
+
 id_from_char = {c:i for i, c in enumerate(characters, 1)}
+
 char_from_id = {i:c for i, c in enumerate(characters, 1)}
