@@ -5,6 +5,11 @@ import pickle
 
 from src.util import characters, id_from_char, char_from_id
 
+'''
+    TODO: 
+        split this up into data_generator, xgenerator, and ygenerator
+'''
+
 def data_generator(clip_collection,
                    batch_size = 100,
                    skip=None,
