@@ -10,7 +10,7 @@ from src.util import characters, id_from_char, char_from_id
         split this up into data_generator, xgenerator, and ygenerator
 '''
 
-def get_next_clip(cur, step, repeat):
+def get_next_clip(cur, step, repeat, skip, limit):
     '''
         get every step-th clip from cursor
 
@@ -25,7 +25,7 @@ def get_next_clip(cur, step, repeat):
         # reset cursor
         except StopIteration:
             if repeat:
-                cur = clip_collection.find()
+                cur.rewind()
                 if skip:  cur.skip(skip)
                 if limit: cur.limit(limit)
                 clip = next(cur)
@@ -59,7 +59,7 @@ def data_generator(clip_collection,
         for _ in range(batch_size):
             # get the next clip
             try:
-                clip = get_next_clip(cur, step, repeat)
+                clip = get_next_clip(cur, step, repeat, skip, limit)
             
             # abort loop and yield what there is so far
             # this will be the last yield
