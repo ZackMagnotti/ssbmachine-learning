@@ -1,4 +1,4 @@
-from tensorfow import keras
+from tensorflow import keras
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Flatten
 from tensorflow.keras.layers import Conv1D, SpatialDropout1D
@@ -7,7 +7,7 @@ from tensorflow.keras.activations import swish
 
 top_8_accuracy = keras.metrics.TopKCategoricalAccuracy(k=8, name='top 8 accuracy')
 
-import 
+import tensorflow_addons as tfa
 focal_loss = tfa.losses.SigmoidFocalCrossEntropy()
 
 def create_model(activation=swish,
