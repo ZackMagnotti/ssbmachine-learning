@@ -10,6 +10,30 @@ from src.util import characters, id_from_char, char_from_id
         split this up into data_generator, xgenerator, and ygenerator
 '''
 
+def get_next_clip(cur, step, repeat):
+    '''
+        get every step-th clip from cursor
+
+        if step is 2, get every other clip, etc
+    '''
+    for _ in range(step):
+        try:
+            clip = next(cur)
+
+        # if cur is empty but
+        # but repeat is true
+        # reset cursor
+        except StopIteration:
+            if repeat:
+                cur = clip_collection.find()
+                if skip:  cur.skip(skip)
+                if limit: cur.limit(limit)
+                clip = next(cur)
+            else:
+                raise
+    
+    return clip
+
 def data_generator(clip_collection,
                    batch_size = 100,
                    skip=None,
@@ -35,25 +59,15 @@ def data_generator(clip_collection,
         for _ in range(batch_size):
             # get the next clip
             try:
-                for _ in range(step):
-                    try:
-                        clip = next(cur)
-
-                    except StopIteration:
-                        if repeat:
-                            cur = clip_collection.find()
-                            if skip:  cur.skip(skip)
-                            if limit: cur.limit(limit)
-                            clip = next(cur)
-                        else:
-                            raise
+                clip = get_next_clip(cur, step, repeat)
             
-            # if StopIteration, abort loop and yield what there is so far
+            # abort loop and yield what there is so far
             # this will be the last yield
             except StopIteration:
                 break
 
-            # if next clip is fetched successfully append its info to the lists
+            # if next clip is fetched successfully 
+            # append its info to the lists
             else:
                 if mode != 'Y' and mode != 'y':
                     xi.append(pickle.loads(clip['istream']).toarray())
