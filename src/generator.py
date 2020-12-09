@@ -134,4 +134,48 @@ def clip_generator(clip_collection,
             raise StopIteration
         
         yield np.stack(xi, axis=0)
+
+def label_generator(clip_collection,
+                    batch_size = 100,
+                    skip=None,
+                    step=1,
+                    repeat=False,
+                    mode=None,
+                    limit=None,
+                    onehot=True):
+        
+    cur = clip_collection.find()
+    
+    if skip:
+        cur.skip(skip)
+    
+    if limit:
+        cur.limit(limit)
+        
+    while cur.alive:
+        
+        yi = []
+        
+        for _ in range(batch_size):
+            # get the next clip
+            try:
+                clip = get_next_clip(cur, step, repeat, skip, limit)
+            
+            # abort loop and yield what there is so far
+            # this will be the last yield
+            except StopIteration:
+                break
+
+            # if next clip is fetched successfully 
+            # append its info to the lists
+            else:
+                yi.append(id_from_char[clip['character']])
+
+        if yi == []:
+            raise StopIteration
+        
+        if onehot:
+            yield tf.one_hot(yi, 26)
+        else:
+            yield yi
             
