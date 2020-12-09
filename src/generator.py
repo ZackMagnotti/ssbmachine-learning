@@ -5,11 +5,6 @@ import pickle
 
 from src.util import characters, id_from_char, char_from_id
 
-'''
-    TODO: 
-        split this up into data_generator, xgenerator, and ygenerator
-'''
-
 def get_next_clip(cur, step, repeat, skip, limit):
     '''
         get every step-th clip from cursor
@@ -39,7 +34,6 @@ def data_generator(clip_collection,
                    skip=None,
                    step=1,
                    repeat=False,
-                   mode=None,
                    limit=None,
                    onehot=True):
         
@@ -56,6 +50,7 @@ def data_generator(clip_collection,
         xi = []
         yi = []
         
+        # get the ntext batch
         for _ in range(batch_size):
             # get the next clip
             try:
@@ -69,30 +64,18 @@ def data_generator(clip_collection,
             # if next clip is fetched successfully 
             # append its info to the lists
             else:
-                if mode != 'Y' and mode != 'y':
-                    xi.append(pickle.loads(clip['istream']).toarray())
+                xi.append(pickle.loads(clip['istream']).toarray())
                 yi.append(id_from_char[clip['character']])
 
-        if xi == [] and yi == []:
+        if xi == []:
             raise StopIteration
         
-        if mode != 'Y' and mode != 'y':
-            xi = np.stack(xi, axis=0)
+        xi = np.stack(xi, axis=0)
         
         if onehot:
             yi = tf.one_hot(yi, 26)
-        
-        if mode == 'X' or mode == 'x':
-            yield xi
-            
-        elif mode == 'Y' or mode == 'y':
-            yield yi
-            
-        elif mode:
-            raise ValueError("mode must be 'X' or 'Y' or None")
 
-        else:
-            yield xi, yi
+        yield xi, yi
 
 def clip_generator(clip_collection,
                    batch_size = 100,
@@ -115,6 +98,7 @@ def clip_generator(clip_collection,
         
         xi = []
         
+        # get the ntext batch
         for _ in range(batch_size):
             # get the next clip
             try:
@@ -156,6 +140,7 @@ def label_generator(clip_collection,
         
         yi = []
         
+        # get the ntext batch
         for _ in range(batch_size):
             # get the next clip
             try:
