@@ -9,7 +9,8 @@ from .export import display_progress
 def clippify(input_collection,
              output_collection,
              clip_length = 30,
-             max_clips=None):
+             max_clips=None,
+             name = None):
 
     if max_clips is None:
         N = input_collection.estimated_document_count()
@@ -18,7 +19,9 @@ def clippify(input_collection,
 
     cursor = input_collection.find()
     for i, doc in enumerate(cursor):
-        
+        if name and name != doc['name']:
+            continue
+            
         try:
             # chop every game up into clips
             full_game_istream = pickle.loads(doc['istream'])
