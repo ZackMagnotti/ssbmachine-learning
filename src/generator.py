@@ -7,9 +7,8 @@ from src.util import characters, id_from_char, char_from_id
 
 def get_next_clip(cur, step, repeat, skip, limit):
     '''
-        get every step-th clip from cursor
-
-        if step is 2, get every other clip, etc
+        advance the cursor step times and get
+        that clip
     '''
     for _ in range(step):
         try:
