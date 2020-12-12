@@ -5,24 +5,18 @@ import pickle
 
 from src.util import characters, id_from_char, char_from_id
 
-def get_next_clip(cur, step, repeat, skip, limit):
+def get_next_clip(cur, step, repeat):
     '''
-        get every step-th clip from cursor
-
-        if step is 2, get every other clip, etc
+        advance the cursor step times and get
+        that clip
     '''
     for _ in range(step):
         try:
             clip = next(cur)
 
-        # if cur is empty but
-        # but repeat is true
-        # reset cursor
         except StopIteration:
             if repeat:
                 cur.rewind()
-                if skip:  cur.skip(skip)
-                if limit: cur.limit(limit)
                 clip = next(cur)
             else:
                 raise
@@ -54,7 +48,7 @@ def data_generator(clip_collection,
         for _ in range(batch_size):
             # get the next clip
             try:
-                clip = get_next_clip(cur, step, repeat, skip, limit)
+                clip = get_next_clip(cur, step, repeat)
             
             # abort loop and yield what there is so far
             # this will be the last yield
@@ -102,7 +96,7 @@ def clip_generator(clip_collection,
         for _ in range(batch_size):
             # get the next clip
             try:
-                clip = get_next_clip(cur, step, repeat, skip, limit)
+                clip = get_next_clip(cur, step, repeat)
             
             # abort loop and yield what there is so far
             # this will be the last yield
@@ -144,7 +138,7 @@ def label_generator(clip_collection,
         for _ in range(batch_size):
             # get the next clip
             try:
-                clip = get_next_clip(cur, step, repeat, skip, limit)
+                clip = get_next_clip(cur, step, repeat)
             
             # abort loop and yield what there is so far
             # this will be the last yield
