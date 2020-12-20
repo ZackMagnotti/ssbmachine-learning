@@ -29,9 +29,10 @@ def data_generator(clip_collection,
                    step=1,
                    repeat=False,
                    limit=None,
-                   onehot=True):
+                   onehot=True,
+                   query={}):
         
-    cur = clip_collection.find()
+    cur = clip_collection.find(query)
     
     if skip:
         cur.skip(skip)
@@ -78,9 +79,10 @@ def clip_generator(clip_collection,
                    repeat=False,
                    mode=None,
                    limit=None,
-                   onehot=True):
+                   onehot=True,
+                   query={}):
         
-    cur = clip_collection.find()
+    cur = clip_collection.find(query)
     
     if skip:
         cur.skip(skip)
@@ -120,9 +122,10 @@ def label_generator(clip_collection,
                     repeat=False,
                     mode=None,
                     limit=None,
-                    onehot=True):
+                    onehot=True,
+                    query={}):
         
-    cur = clip_collection.find()
+    cur = clip_collection.find(query)
     
     if skip:
         cur.skip(skip)
