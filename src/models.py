@@ -58,3 +58,52 @@ def create_model(activation=swish,
                   metrics=['accuracy', top_8_accuracy])
     
     return model
+
+def create_beefy_model(activation=swish,
+                 loss=focal_loss,
+                 optimizer='adam'):
+
+    model = Sequential()
+
+    # first conv layer
+    # sees .5s
+    model.add(Conv1D(250, #num of features extracted from istream
+                     30, #number of frames filter can see at once
+                     activation=activation))
+
+    model.add(SpatialDropout1D(.2))
+    model.add(MaxPooling1D(pool_size=2))
+
+    # sees 1s
+    model.add(Conv1D(150,
+                     30,
+                     activation=activation))
+
+    model.add(SpatialDropout1D(.2))
+    model.add(MaxPooling1D(pool_size=2))
+
+    # sees 2s
+    model.add(Conv1D(150,
+                     30,
+                     activation=activation))
+
+    # sees whole 30s, takes max pool
+    model.add(GlobalAveragePooling1D())
+    model.add(Flatten())
+
+    model.add(Dense(120, activation=activation))
+
+    model.add(Dropout(.2))
+
+    model.add(Dense(120, activation=activation))
+
+    model.add(Dropout(.2))
+
+    # final output layer
+    model.add(Dense(26, activation='softmax'))
+
+    model.compile(loss=loss,
+                  optimizer=optimizer,
+                  metrics=['accuracy', top_8_accuracy])
+    
+    return model
