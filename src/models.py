@@ -160,6 +160,7 @@ def vgg_headless_type(activation=swish,
     # size of filters:   15
     # sees: 4s
     model.add(Conv1D(256, 15, activation=activation))
+    model.add(SpatialDropout1D(.5))
 
     # sees whole 30s, takes max pool
     model.add(GlobalAveragePooling1D())
