@@ -248,7 +248,7 @@ def vgg_type(activation=swish,
 
 def custom_type(activation=swish,
                 loss=focal_loss,
-                optimizer='nadam',
+                optimizer='adam',
                 name='custom'):
 
     model = Sequential(name=name)
@@ -260,8 +260,8 @@ def custom_type(activation=swish,
     # size of filters:   15
     # sees: .25s
 
-    model.add(Conv1D(128, 15, activation=activation, name='conv1.1'))
-    model.add(Conv1D(128, 15, activation=activation, name='conv1.2'))
+    model.add(Conv1D(64, 15, activation=activation, name='conv1.1'))
+    model.add(Conv1D(64, 15, activation=activation, name='conv1.2'))
     model.add(SpatialDropout1D(.2))
     model.add(MaxPooling1D(pool_size=2))
 
@@ -270,8 +270,8 @@ def custom_type(activation=swish,
     # size of filters:   15
     # sees: .5s
 
-    model.add(Conv1D(128, 15, activation=activation, name='conv2.1'))
-    model.add(Conv1D(128, 15, activation=activation, name='conv2.2'))
+    model.add(Conv1D(64, 15, activation=activation, name='conv2.1'))
+    model.add(Conv1D(64, 15, activation=activation, name='conv2.2'))
     model.add(SpatialDropout1D(.2))
     model.add(MaxPooling1D(pool_size=2))
 
