@@ -9,18 +9,16 @@ from .export import display_progress
 def clippify(input_collection,
              output_collection,
              clip_length = 30,
-             max_clips=None,
-             name = None):
+             max_clips = None,
+             query = {}):
 
     if max_clips is None:
         N = input_collection.estimated_document_count()
 
     clip_count = 0 # each clip will get a number for indexing use
 
-    cursor = input_collection.find()
+    cursor = input_collection.find(query)
     for i, doc in enumerate(cursor):
-        if name and name != doc['name']:
-            continue
             
         try:
             # chop every game up into clips
