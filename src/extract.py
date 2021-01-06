@@ -11,7 +11,7 @@ class InvalidGameError(ValueError):
 class GameTooShortError(ValueError):
     pass
 
-def get_istreams(game, as_sparse=False):
+def get_istreams(game, as_sparse=True):
     ''' 
     Gets the controller input streams from a game
 
