@@ -59,14 +59,14 @@ def export(f,
     db = client[database_name]
     collection = db[collection_name]
     
-    # extract player data from file using extract.py
-    players = extract(f, as_sparse=True)
+    # extract payload data from file using extract.py
+    payloads = extract(f, as_sparse=True)
 
     # compress istream data before sending to mongo db
     mongo_output = []
-    for player in players:
+    for payload in payloads:
         compressed = {}
-        for k, v in player.items():
+        for k, v in payload.items():
             # if value is a sparse matrix, convert to binary
             if isinstance(v, sparse.csr.csr_matrix):
                 compressed[k] = Binary(pickle.dumps(v, protocol=2))
