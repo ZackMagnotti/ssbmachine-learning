@@ -339,7 +339,7 @@ def custom_mk2(activation=swish,
     # size of filters:   15
     # sees: .5s
 
-    model.add(Conv1D(128, 15, activation=activation, name='conv2.1'))
+    model.add(Conv1D(128, 15, activation=activation, name='conv2'))
     model.add(MaxPooling1D(pool_size=2))
 
     # -----------------------------------------------
