@@ -10,6 +10,17 @@ def clippify(input_collection,
              output_collection,
              clip_length = 30,
              query = {}):
+    ''' 
+    Chops up all of the istreams in a collection into clips 
+    of a given length and deposits the clips into another collection.
+
+    Parameters
+    -----------
+    input_collection (string) : collection of istreams from which to make clips
+    output_collection (string) : collection to deposit clips
+    clip_length (int or float) : length of clips in seconds
+    query (dict) : optional query to filter which istreams from input_collection get clippified
+    '''
 
     cursor = input_collection.find(query)
     N = input_collection.estimated_document_count()
@@ -23,7 +34,7 @@ def clippify(input_collection,
             # chop every game up into clips
             full_game_istream = pickle.loads(doc['istream'])
             clip_istreams = []
-            F = clip_length * 60 # clip length in frames
+            F = int(clip_length * 60) # clip length in frames
             f = 0      # clip starting frame
             while f+F < full_game_istream.shape[0]:
                 clip_istreams.append(full_game_istream[f:f+F])
@@ -52,4 +63,4 @@ def clippify(input_collection,
     display_progress(N, N)
 
     if failures > 0:
-        print(f"\n{failures} games failed to clippify\n")
+        print(f"\n{failures} istreams failed to clippify\n")
