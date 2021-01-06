@@ -60,7 +60,7 @@ def export(f,
     collection = db[collection_name]
     
     # extract payload data from file using extract.py
-    payloads = extract(f, as_sparse=True)
+    payloads = extract(f)
 
     # compress istream data before sending to mongo db
     mongo_output = []
