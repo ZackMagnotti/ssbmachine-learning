@@ -9,15 +9,14 @@ from .export import display_progress
 def clippify(input_collection,
              output_collection,
              clip_length = 30,
-             max_clips = None,
              query = {}):
 
-    if max_clips is None:
-        N = input_collection.estimated_document_count()
-
-    clip_count = 0 # each clip will get a number for indexing use
-
     cursor = input_collection.find(query)
+    N = input_collection.estimated_document_count()
+    clip_count = 0 # used to index each clip
+
+    failures = 0
+
     for i, doc in enumerate(cursor):
             
         try:
@@ -43,22 +42,14 @@ def clippify(input_collection,
             ]
         
         except:
-            pass
+            failures += 1
         
         else:
             output_collection.insert_many(payload)
             clip_count += len(payload)
-        
-        finally:
-            if max_clips and clip_count > max_clips:
-                return
 
-        if max_clips is None:
-            display_progress(i, N)
-        else:
-            display_progress(clip_count, max_clips)
+        display_progress(i, N)
+    display_progress(N, N)
 
-    if max_clips is None:
-        display_progress(N, N)
-    else:
-        display_progress(max_clips, max_clips)
+    if failures > 0:
+        print(f"\n{failures} games failed to clippify\n")
