@@ -11,7 +11,7 @@ class InvalidGameError(ValueError):
 class GameTooShortError(ValueError):
     pass
 
-def get_istreams(game, as_sparse=False):
+def get_istreams(game, as_sparse=True):
     ''' 
     Gets the controller input streams from a game
 
@@ -85,11 +85,11 @@ def get_istreams(game, as_sparse=False):
         # if as_sparse is true and port is active, 
         # convert to compressed sparse array
         # else convert to numpy array
+        if as_sparse:
+            istream = csr_matrix(istream)
         else:
-            if as_sparse:
-                istream = csr_matrix(istream)
-            else:
-                istream = istream.toarray()
+            istream = istream.toarray()
+            
         istreams.append(istream)
     
     # len(istreams) == 4

@@ -1,8 +1,27 @@
 # SSBMachine Learning
 
-## Project Goals
+Use Deep Learning to analyse the variety and similarities between playstyles in Super Smash Bros Melee.
 
-Use a Convolutional Neural Network to detect which character
-a SSBM player is using, based only on the raw controller input stream.
+## Part 1: Character Detection
+  
+Use a Convolutional Neural Network to predict a player's character selection based on the raw inputs from that player's controller.
 
-TODO: finish readme
+### Model
+
+foo
+
+### Results
+
+bar
+
+## Part 2: Player Detection
+
+Use Transfer Learning to train a neural network to predict *who* is holding the controller, based only on the raw inputs from that controller.
+
+### Model
+
+foobar
+
+### Results
+
+barfoo

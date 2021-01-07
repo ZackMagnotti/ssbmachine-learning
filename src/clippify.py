@@ -9,24 +9,32 @@ from .export import display_progress
 def clippify(input_collection,
              output_collection,
              clip_length = 30,
-             max_clips=None,
-             name = None):
+             query = {}):
+    ''' 
+    Chops up all of the istreams in a collection into clips 
+    of a given length and deposits the clips into another collection.
 
-    if max_clips is None:
-        N = input_collection.estimated_document_count()
+    Parameters
+    -----------
+    input_collection (string) : collection of istreams from which to make clips
+    output_collection (string) : collection to deposit clips
+    clip_length (int or float) : length of clips in seconds
+    query (dict) : optional query to filter which istreams from input_collection get clippified
+    '''
 
-    clip_count = 0 # each clip will get a number for indexing use
+    cursor = input_collection.find(query)
+    N = input_collection.estimated_document_count()
+    clip_count = 0 # used to index each clip
 
-    cursor = input_collection.find()
+    failures = 0
+
     for i, doc in enumerate(cursor):
-        if name and name != doc['name']:
-            continue
             
         try:
             # chop every game up into clips
             full_game_istream = pickle.loads(doc['istream'])
             clip_istreams = []
-            F = clip_length * 60 # clip length in frames
+            F = int(clip_length * 60) # clip length in frames
             f = 0      # clip starting frame
             while f+F < full_game_istream.shape[0]:
                 clip_istreams.append(full_game_istream[f:f+F])
@@ -45,22 +53,14 @@ def clippify(input_collection,
             ]
         
         except:
-            pass
+            failures += 1
         
         else:
             output_collection.insert_many(payload)
             clip_count += len(payload)
-        
-        finally:
-            if max_clips and clip_count > max_clips:
-                return
 
-        if max_clips is None:
-            display_progress(i, N)
-        else:
-            display_progress(clip_count, max_clips)
+        display_progress(i, N)
+    display_progress(N, N)
 
-    if max_clips is None:
-        display_progress(N, N)
-    else:
-        display_progress(max_clips, max_clips)
+    if failures > 0:
+        print(f"\n{failures} istreams failed to clippify\n")
