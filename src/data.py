@@ -30,15 +30,16 @@ def data_generator ( input_directory,
     batch_istreams (ndarray)
     batch_labels (array | ndarray)
     '''
-    filenames = os.listdir(input_directory)
     
-    if shuffle:
-        import random.shuffle as shuff
-        shuff(filenames)
-        
+    filenames = os.listdir(input_directory)
     filenames_static_copy = filenames
     
     while True:
+    
+        if shuffle:
+            import random
+            random.shuffle(filenames)
+        
         for i in range(0, len(filenames), batch_size):
 
             # if num_batches specified
@@ -69,5 +70,5 @@ def data_generator ( input_directory,
 
         else:
             if not repeat:
-                break
+                return
                 
