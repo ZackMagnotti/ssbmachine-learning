@@ -4,6 +4,7 @@ from tensorflow.keras.layers import Input, Dense, Dropout, Flatten
 from tensorflow.keras.layers import Conv1D, SpatialDropout1D
 from tensorflow.keras.layers import MaxPooling1D, GlobalMaxPooling1D
 from tensorflow.keras.layers import GlobalAveragePooling1D
+from tensorflow.keras.layers import BatchNormalization, Activation
 from tensorflow.keras.activations import swish
 
 top_8_accuracy = keras.metrics.TopKCategoricalAccuracy(k=8, name='top 8 accuracy')
@@ -365,6 +366,89 @@ def custom_mk2(activation=swish,
 
     model.add(Dense(80, activation=activation, name='dense2'))
     model.add(Dropout(.2))
+
+    # final output layer
+    model.add(Dense(26, activation='softmax', name='final'))
+
+    model.compile(loss=loss,
+                  optimizer=optimizer,
+                  metrics=['accuracy', top_8_accuracy])
+    
+    return model
+
+def custom_mk3(activation=swish,
+               loss=focal_loss,
+               optimizer='adam',
+               name='custom_mk2'):
+
+    model = Sequential(name=name)
+
+    model.add(Input(shape=(None, 13)))
+
+    # -----------------------------------------------
+    # number of filters: 128
+    # size of filters:   30
+    # sees: .5s
+
+    model.add(Conv1D(150, 30, activation=activation, name='conv1'))
+    model.add(BatchNormalization())
+    model.add(MaxPooling1D(pool_size=2))
+
+    # -----------------------------------------------
+    # number of filters: 128
+    # size of filters:   15
+    # sees: .5s
+
+    model.add(Conv1D(128, 15, activation=activation, name='conv2.1'))
+    model.add(BatchNormalization())
+    model.add(Conv1D(128, 15, activation=activation, name='conv2.2'))
+    model.add(BatchNormalization())
+    model.add(MaxPooling1D(pool_size=2))
+    model.add(Dropout(.25))
+
+    # -----------------------------------------------
+    # number of filters: 256
+    # size of filters:   15
+    # sees: 1s
+    model.add(Conv1D(128, 15, activation=activation, name='conv3.1'))
+    model.add(BatchNormalization())
+    model.add(Conv1D(128, 15, activation=activation, name='conv3.2'))
+    model.add(BatchNormalization())
+    model.add(MaxPooling1D(pool_size=2))
+    model.add(Dropout(.25))
+
+    # -----------------------------------------------
+    # number of filters: 256
+    # size of filters:   15
+    # sees: 2s
+    model.add(Conv1D(256, 15, activation=activation, name='conv4.1'))
+    model.add(BatchNormalization())
+    model.add(Conv1D(256, 15, activation=activation, name='conv4.2'))
+    model.add(BatchNormalization())
+    model.add(MaxPooling1D(pool_size=4))
+    model.add(Dropout(.25))
+
+    # -----------------------------------------------
+    # number of filters: 256
+    # size of filters:   15
+    # sees: 8s
+    model.add(Conv1D(512, 5, activation=activation, name='conv5'))
+
+    # sees whole clip, takes pool
+    model.add(GlobalMaxPooling1D())
+    model.add(Flatten())
+    model.add(BatchNormalization())
+    model.add(Dropout(.25))
+
+    model.add(Dense(128, use_bias=False, name='dense1'))
+    model.add(BatchNormalization())
+    model.add(Activation(activation))
+    model.add(Dropout(.25))
+
+    model.add(Dense(128, use_bias=False, name='dense2'))
+    model.add(BatchNormalization())
+    model.add(Activation(activation))
+    model.add(Dropout(.25))
 
     # final output layer
     model.add(Dense(26, activation='softmax', name='final'))
