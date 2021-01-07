@@ -25,6 +25,11 @@ def data_generator ( input_directory,
     query (dict) : optional query to filter what data is fetched
     onehot (bool) : whether or not to return labels in onehot form
     shuffle (bool) : whether or not to shuffle data 
+    
+    Outputs (yield)
+    -----------
+    batch_istreams (ndarray)
+    batch_labels (array | ndarray)
     '''
     filenames = os.listdir(input_directory)
     
