@@ -52,6 +52,3 @@ def data_generator ( input_directory,
             batch_labels = one_hot(batch_labels, 26)
             
         yield batch_istreams, batch_labels
-    
-    
-    
