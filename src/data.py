@@ -5,10 +5,12 @@ from src.util import characters, id_from_char, char_from_id
 import os
 from os.path import join
 
+
+
 def data_generator ( input_directory, 
                      batch_size=25,
+                     num_batches=None,
                      repeat=False,
-                     limit=None,
                      onehot=True,
                      shuffle=False,
                      query=None ) :
@@ -32,23 +34,36 @@ def data_generator ( input_directory,
         
     filenames_static_copy = filenames
     
-    for i in range(0, len(filenames), batch_size):
-        # get batch data
-        try:
-            batch_filenames = filenames[i:i+batch_size]
-        except IndexError:
-            batch_filenames = filenames[i:]
-            
-        batch_abspaths = [join(input_directory, f) for f in batch_filenames]
-        batch = [pickle.load(open(abspath, 'rb')) for abspath in batch_abspaths]
-        
-        # extract istreams and labels
-        batch_istreams = [clip['istream'].toarray() for clip in batch]
-        batch_labels = [id_from_char[clip['character']] for clip in batch]
-        
-        batch_istreams = np.stack(batch_istreams, axis=0)
-        
-        if onehot:
-            batch_labels = one_hot(batch_labels, 26)
-            
-        yield batch_istreams, batch_labels
+    while True:
+        for i in range(0, len(filenames), batch_size):
+
+            # if num_batches specified
+            # stop generator once that many batches have been yielded
+            if num_batches and num_batches <= i//batch_size:
+                raise StopIteration
+
+            # get batch data
+            try:
+                batch_filenames = filenames[i:i+batch_size]
+            except IndexError:
+                batch_filenames = filenames[i:]
+
+            batch_abspaths = [join(input_directory, f) for f in batch_filenames]
+            batch = [pickle.load(open(abspath, 'rb')) for abspath in batch_abspaths]
+
+            # extract istreams and labels
+            batch_istreams = [clip['istream'].toarray() for clip in batch]
+            batch_labels = [id_from_char[clip['character']] for clip in batch]
+
+            # convert istreams to single array
+            batch_istreams = np.stack(batch_istreams, axis=0)
+
+            if onehot:
+                batch_labels = one_hot(batch_labels, 26)
+
+            yield batch_istreams, batch_labels
+
+        else:
+            if not repeat:
+                break
+                
