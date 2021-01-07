@@ -12,8 +12,7 @@ def data_generator ( input_directory,
                      num_batches=None,
                      repeat=False,
                      onehot=True,
-                     shuffle=False,
-                     query=None ) :
+                     shuffle=False ) :
     ''' 
     Fetches data from given directory in batches
 
