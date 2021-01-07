@@ -44,7 +44,7 @@ def data_generator ( input_directory,
             # if num_batches specified
             # stop generator once that many batches have been yielded
             if num_batches and num_batches <= i//batch_size:
-                raise StopIteration
+                return 
 
             # get batch data
             try:
