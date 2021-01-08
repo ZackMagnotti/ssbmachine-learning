@@ -459,3 +459,69 @@ def custom_mk3(activation=swish,
                   metrics=['accuracy', top_8_accuracy])
     
     return model
+
+def custom_mk4(activation=swish,
+               loss=focal_loss,
+               optimizer='adam',
+               name='custom_mk4'):
+
+    model = Sequential(name=name)
+
+    model.add(Input(shape=(None, 13)))
+
+    # -----------------------------------------------
+    # number of filters: 128
+    # size of filters:   30
+    # sees: .5s
+
+    model.add(Conv1D(150, 30, activation=activation, name='conv1'))
+    model.add(BatchNormalization())
+    model.add(MaxPooling1D(pool_size=4))
+
+    # -----------------------------------------------
+    # number of filters: 256
+    # size of filters:   15
+    # sees: 1s
+    model.add(Conv1D(256, 15, activation=activation, name='conv2'))
+    model.add(BatchNormalization())
+    model.add(MaxPooling1D(pool_size=4))
+
+    # -----------------------------------------------
+    # number of filters: 256
+    # size of filters:   15
+    # sees: 4s
+    model.add(Conv1D(512, 15, activation=activation, name='conv3'))
+    model.add(BatchNormalization())
+    model.add(MaxPooling1D(pool_size=2))
+    model.add(Dropout(.25))
+
+    # -----------------------------------------------
+    # number of filters: 256
+    # size of filters:   15
+    # sees: 8s
+    model.add(Conv1D(512, 15, activation=activation, name='conv4'))
+
+    # sees whole clip, takes max pool
+    model.add(GlobalMaxPooling1D())
+    model.add(Flatten())
+    model.add(BatchNormalization())
+    model.add(Dropout(.25))
+
+    model.add(Dense(128, use_bias=False, name='dense1'))
+    model.add(BatchNormalization())
+    model.add(Activation(activation))
+    model.add(Dropout(.25))
+
+    model.add(Dense(128, use_bias=False, name='dense2'))
+    model.add(BatchNormalization())
+    model.add(Activation(activation))
+    model.add(Dropout(.25))
+
+    # final output layer
+    model.add(Dense(26, activation='softmax', name='final'))
+
+    model.compile(loss=loss,
+                  optimizer=optimizer,
+                  metrics=['accuracy', top_8_accuracy])
+    
+    return model
