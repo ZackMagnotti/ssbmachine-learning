@@ -379,7 +379,7 @@ def custom_mk2(activation=swish,
 def custom_mk3(activation=swish,
                loss=focal_loss,
                optimizer='adam',
-               name='custom_mk2'):
+               name='custom_mk3'):
 
     model = Sequential(name=name)
 
