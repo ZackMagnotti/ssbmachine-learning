@@ -401,10 +401,7 @@ def custom_mk3(activation=swish,
 
     model.add(Conv1D(128, 15, activation=activation, name='conv2.1'))
     model.add(BatchNormalization())
-    model.add(Conv1D(128, 15, activation=activation, name='conv2.2'))
-    model.add(BatchNormalization())
     model.add(MaxPooling1D(pool_size=2))
-    model.add(Dropout(.25))
 
     # -----------------------------------------------
     # number of filters: 256
@@ -412,10 +409,7 @@ def custom_mk3(activation=swish,
     # sees: 1s
     model.add(Conv1D(128, 15, activation=activation, name='conv3.1'))
     model.add(BatchNormalization())
-    model.add(Conv1D(128, 15, activation=activation, name='conv3.2'))
-    model.add(BatchNormalization())
     model.add(MaxPooling1D(pool_size=2))
-    model.add(Dropout(.25))
 
     # -----------------------------------------------
     # number of filters: 256
@@ -423,18 +417,25 @@ def custom_mk3(activation=swish,
     # sees: 2s
     model.add(Conv1D(256, 15, activation=activation, name='conv4.1'))
     model.add(BatchNormalization())
-    model.add(Conv1D(256, 15, activation=activation, name='conv4.2'))
+    model.add(MaxPooling1D(pool_size=2))
+    model.add(Dropout(.25))
+
+    # -----------------------------------------------
+    # number of filters: 256
+    # size of filters:   15
+    # sees: 4s
+    model.add(Conv1D(512, 15, activation=activation, name='conv5.1'))
     model.add(BatchNormalization())
-    model.add(MaxPooling1D(pool_size=4))
+    model.add(MaxPooling1D(pool_size=2))
     model.add(Dropout(.25))
 
     # -----------------------------------------------
     # number of filters: 256
     # size of filters:   15
     # sees: 8s
-    model.add(Conv1D(512, 5, activation=activation, name='conv5'))
+    model.add(Conv1D(512, 15, activation=activation, name='conv6'))
 
-    # sees whole clip, takes pool
+    # sees whole clip, takes max pool
     model.add(GlobalMaxPooling1D())
     model.add(Flatten())
     model.add(BatchNormalization())
