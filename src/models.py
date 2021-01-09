@@ -460,6 +460,9 @@ def custom_mk3(activation=swish,
     
     return model
 
+# The Thickest Model
+# Computationally expensive,
+# but extracts lots of features
 def custom_mk4(activation=swish,
                loss=focal_loss,
                optimizer='adam',
@@ -513,6 +516,75 @@ def custom_mk4(activation=swish,
     model.add(Dropout(.25))
 
     model.add(Dense(128, use_bias=False, name='dense2'))
+    model.add(BatchNormalization())
+    model.add(Activation(activation))
+    model.add(Dropout(.25))
+
+    # final output layer
+    model.add(Dense(26, activation='softmax', name='final'))
+
+    model.compile(loss=loss,
+                  optimizer=optimizer,
+                  metrics=['accuracy', top_8_accuracy])
+    
+    return model
+
+# More slim than mk4
+def custom_mk5(activation=swish,
+               loss=focal_loss,
+               optimizer='adam',
+               name='custom_mk5'):
+
+    model = Sequential(name=name)
+
+    model.add(Input(shape=(None, 13)))
+
+    # -----------------------------------------------
+    # number of filters: 150
+    # size of filters:   30
+    # sees: .5s
+
+    model.add(Conv1D(150, 30, activation=activation, name='conv1'))
+    model.add(BatchNormalization())
+    model.add(MaxPooling1D(pool_size=2))
+
+    # -----------------------------------------------
+    # number of filters: 150
+    # size of filters:   15
+    # sees: .5s
+    model.add(Conv1D(150, 15, activation=activation, name='conv2'))
+    model.add(BatchNormalization())
+    model.add(MaxPooling1D(pool_size=4))
+
+    # -----------------------------------------------
+    # number of filters: 256
+    # size of filters:   15
+    # sees: 2s
+    model.add(Conv1D(256, 15, activation=activation, name='conv3'))
+    model.add(BatchNormalization())
+    model.add(MaxPooling1D(pool_size=4))
+    model.add(Dropout(.25))
+
+    # -----------------------------------------------
+    # number of filters: 256
+    # size of filters:   15
+    # sees: 8s
+    model.add(Conv1D(256, 15, activation=activation, name='conv4'))
+    model.add(BatchNormalization())
+    model.add(Dropout(.25))
+
+    # sees whole clip, takes max pool
+    model.add(GlobalAveragePooling1D())
+    model.add(Flatten())
+
+    # Dense Layer 1
+    model.add(Dense(80, use_bias=False, name='dense1'))
+    model.add(BatchNormalization())
+    model.add(Activation(activation))
+    model.add(Dropout(.25))
+
+    # Dense Layer 2
+    model.add(Dense(80, use_bias=False, name='dense2'))
     model.add(BatchNormalization())
     model.add(Activation(activation))
     model.add(Dropout(.25))
