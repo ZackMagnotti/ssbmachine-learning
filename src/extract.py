@@ -82,10 +82,7 @@ def get_istreams(game, as_sparse=True):
             if b.Physical.Z in b.physical.pressed():
                 istream[i, 12] = 1
 
-        # if as_sparse is true and port is active, 
-        # convert to compressed sparse array
-        # else convert to numpy array
-        else:
+        else: # if port is inactive, this block will not run.
             if as_sparse:
                 istream = csr_matrix(istream)
             else:
