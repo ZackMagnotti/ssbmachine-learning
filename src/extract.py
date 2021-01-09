@@ -197,7 +197,7 @@ def get_id(f):
 
     return basename(f)
 
-def extract(f, as_sparse=False): 
+def extract(f, as_sparse=True): 
     ''' 
     Extracts the istream payloads from a .slp file
 
