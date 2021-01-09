@@ -74,7 +74,7 @@ def clippify_game(input_filepath,
             # if there is a problem with this clip
             except: 
                 game_clip_failures += 1
-                raise
+                # raise
             
             # if clip is saved successfully
             else:
@@ -197,7 +197,7 @@ def clippify(input_directory,
         except:
             failed_uploads += 1
             unknown_errors += 1
-            raise
+            # raise
 
         else:
             successful_uploads += 1
