@@ -68,7 +68,7 @@ def clippify_game(input_filepath,
                     clip_filepath = path.join(output_directory, clip_filename)
 
                 # pickle whole document and save to disk
-                print(clip_filepath)
+                # print(clip_filepath)
                 pickle.dump(clip_payload, open(clip_filepath, 'wb'))
 
             # if there is a problem with this clip
