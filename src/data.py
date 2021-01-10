@@ -5,8 +5,6 @@ from src.util import characters, id_from_char, char_from_id
 import os
 from os.path import join
 
-
-
 def data_generator ( input_directory, 
                      batch_size=25,
                      num_batches=None,
