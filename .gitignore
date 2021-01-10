@@ -2,6 +2,7 @@ data
 archives
 backups
 replay_files
+data_recompiled
 
 *.ipynb_checkpoints
 delme.*
