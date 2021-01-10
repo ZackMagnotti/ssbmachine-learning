@@ -3,7 +3,7 @@ import pickle
 from tensorflow import one_hot
 from src.util import characters, id_from_char, char_from_id
 import os
-from os.path import join
+from os.path import join, splitext
 
 def data_generator ( input_directory, 
                      batch_size=25,
@@ -28,11 +28,19 @@ def data_generator ( input_directory,
     batch_istreams (ndarray)
     batch_labels (array | ndarray)
     '''
-    
-    filenames = os.listdir(input_directory)
-    filenames_static_copy = filenames
-    
-    while True:
+    first_run = True
+
+    while first_run or repeat:
+
+        first_run = False
+
+        filenames = os.listdir(input_directory)
+
+        # filter out files of wrong type
+        filenames = [ 
+            f for f in filenames 
+                if splitext(f)[1] == '.pkl'
+        ]
     
         if shuffle:
             import random
@@ -42,7 +50,7 @@ def data_generator ( input_directory,
 
             # if num_batches specified
             # stop generator once that many batches have been yielded
-            if num_batches and num_batches <= i//batch_size:
+            if num_batches and i//batch_size >= num_batches :
                 return 
 
             # get batch data
@@ -65,8 +73,4 @@ def data_generator ( input_directory,
                 batch_labels = one_hot(batch_labels, 26)
 
             yield batch_istreams, batch_labels
-
-        else:
-            if not repeat:
-                return
                 
