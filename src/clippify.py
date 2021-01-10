@@ -1,11 +1,15 @@
 import pickle
 from os import path, listdir, makedirs
+from random import random
 
 import errno
 from slippi.parse import ParseError
 
 from .util import display_progress
 from .extract import extract, InvalidGameError, GameTooShortError
+
+class ClippifyFailureError(ValueError):
+    pass
 
 def clippify_game(input_filepath,
                   output_directory,
@@ -60,9 +64,9 @@ def clippify_game(input_filepath,
                 # construct clip filepath
                 if train_test_split:
                     if random() < .1:
-                        clip_filepath = join(output_directory,'test', clip_filename)
+                        clip_filepath = path.join(output_directory,'test', clip_filename)
                     else:
-                        clip_filepath = join(output_directory, 'train', clip_filename)
+                        clip_filepath = path.join(output_directory, 'train', clip_filename)
                 
                 if not train_test_split:
                     clip_filepath = path.join(output_directory, clip_filename)
@@ -83,6 +87,9 @@ def clippify_game(input_filepath,
             # always executes
             finally:
                 f += step
+
+    if game_clip_total == 0:
+        raise ClippifyFailureError
 
     return game_clip_total, game_clip_failures
 
@@ -213,15 +220,19 @@ def clippify(input_directory,
 
     # if any games were rejected by extract function, display this
     if invalid_games > 0:
-        msg += f'    - {invalid_games} were rejected by extract function\n'
+        msg += f'    - {invalid_games} were rejected by extract function.\n'
 
     # if any clippify failures, display this
     if clippify_failures > 0:
-        msg += f'    - {clippify_failures} clippify failures\n'
+        msg += f'    - {clippify_failures} clippify failures.\n'
 
     # if any files had the wrong extension display this
     if wrong_filetype > 0:
-        msg += f'    - {wrong_filetype} paths were not .slp files\n'
+        msg += f'    - {wrong_filetype} paths were not .slp files.\n'
+
+    # if any files had the wrong extension display this
+    if unknown_errors > 0:
+        msg += f'    - {unknown_errors} unknown errors.\n'
 
     print(msg)
     
