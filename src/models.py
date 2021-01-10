@@ -505,17 +505,15 @@ def custom_mk4(activation=swish,
     model.add(Conv1D(512, 15, activation=activation, name='conv4'))
 
     # sees whole clip, takes max pool
-    model.add(GlobalMaxPooling1D())
+    model.add(GlobalAveragePooling1D())
     model.add(Flatten())
-    model.add(BatchNormalization())
-    model.add(Dropout(.25))
 
-    model.add(Dense(128, use_bias=False, name='dense1'))
+    model.add(Dense(128, use_bias=True, name='dense1'))
     model.add(BatchNormalization())
     model.add(Activation(activation))
     model.add(Dropout(.25))
 
-    model.add(Dense(128, use_bias=False, name='dense2'))
+    model.add(Dense(128, use_bias=True, name='dense2'))
     model.add(BatchNormalization())
     model.add(Activation(activation))
     model.add(Dropout(.25))
