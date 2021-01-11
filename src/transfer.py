@@ -52,4 +52,6 @@ def replace_head(model,
                  loss='binary_crossentropy',
                  metrics=['binary_accuracy']):
     
-    pass
+    remove_head(model, trainable=trainable_base)
+    add_new_head(model, head, optimizer, loss, metrics)
+    return model
