@@ -10,8 +10,8 @@ from os.path import join, splitext
 def valid_files(file_list):
     return [f for f in file_list if splitext(f)[1] == '.pkl']
 
-def get_batch(batch_filenames, input_directory):
-    batch_abspaths = [join(input_directory, f) for f in batch_filenames]
+def get_batch(batch_filenames, batch_dir):
+    batch_abspaths = [join(batch_dir, f) for f in batch_filenames]
     batch = [pickle.load(open(abspath, 'rb')) for abspath in batch_abspaths]
     return batch
 
@@ -121,7 +121,7 @@ def player_data(player_dir,
         
         pstart = player_current_index
         pend = pstart + player_batch_size
-        player_batch = get_batch(player_filenames[pstart:pend], input_directory)
+        player_batch = get_batch(player_filenames[pstart:pend], player_dir)
 
         # list of tuple(istream, label)
         # label for player is 1
@@ -138,7 +138,7 @@ def player_data(player_dir,
         
         npstart = nonplayer_current_index
         npend = npstart + nonplayer_batch_size
-        nonplayer_batch = get_batch(nonplayer_filenames[npstart:npend], input_directory)
+        nonplayer_batch = get_batch(nonplayer_filenames[npstart:npend], nonplayer_dir)
 
         # list of tuple(istream, label)
         # label for nonplayer is 0
