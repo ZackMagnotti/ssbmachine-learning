@@ -101,7 +101,7 @@ def player_data(player_dir,
     batch_labels (array | ndarray)
     '''
     player_filenames = valid_files(os.listdir(player_dir))
-    player_batch_size = int(ratio * batch_size // (ratio + 1))
+    player_batch_size = np.random.binomial(n = batch_size, p = ratio  / (ratio + 1))
     player_current_index = math.inf
 
     nonplayer_filenames = valid_files(os.listdir(nonplayer_dir))
