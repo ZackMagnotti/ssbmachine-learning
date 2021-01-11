@@ -474,7 +474,7 @@ def custom_mk4(activation=swish,
     # number of filters: 128
     # size of filters:   30
     # sees: .5s
-    model.add(Conv1D(150, 30, activation=activation, input_shape=(None, 13))
+    model.add(Conv1D(150, 30, activation=activation, input_shape=(None, 13)))
     model.add(BatchNormalization())
     model.add(MaxPooling1D(pool_size=4))
 
