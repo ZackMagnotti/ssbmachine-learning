@@ -40,9 +40,7 @@ def add_new_head(model,
                  metrics=['binary_accuracy']):
     
     model = Sequential([model, head])
-    model.compile(optimizer=optimizer,
-                  loss=loss,
-                  metrics=metrics)
+    model.compile(optimizer, loss, metrics)
     return model
 
 def replace_head(model,
