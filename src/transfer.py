@@ -1,4 +1,4 @@
-from tensorflow import keras
+from tensorflow.keras import Sequential
 
 def remove_head(base_model, trainable=False):
     # use flatten layer to 
@@ -10,13 +10,8 @@ def remove_head(base_model, trainable=False):
             break
     else:
         raise ValueError('base_model has no flatten layer')
-
-    base_layers = base_model.layers[:head_start]
-    
-    headless_base_model = keras.Sequential(base_layers)
-    headless_base_model.build(input_shape=(None, None, 13))
+    base_model = Sequential(base_model.layers[:head_start])
     headless_base_model.trainable = trainable
-
     return headless_base_model
 
 def add_new_head(base_layers):
