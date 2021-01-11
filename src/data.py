@@ -78,7 +78,7 @@ def character_data(input_directory,
 def player_data(player_dir,
                 nonplayer_dir,
                 batch_size = 32,
-                num_batches = None,
+                repeat = False,
                 shuffle = True,
                 ratio = 1):
     ''' 
@@ -90,7 +90,9 @@ def player_data(player_dir,
     player_dir (string) : directory containing the player's data
     nonplayer_dir (string) : directory containing random data that is not the player's
     batch_size (int) : number of documents per batch
-    repeat (bool) : if true, generator loops back after exhausting data, if false, generator stops when data runs out
+    repeat (bool | int) : if true generator loops back after exhausting data.
+                          if false generator stops when data runs out.
+                          if integer, repeat the given number of times
     onehot (bool) : whether or not to return labels in onehot form
     shuffle (bool) : whether or not to shuffle data 
     ratio (int | float) : ratio of player data to non-player data (player/non-player) 
@@ -100,13 +102,21 @@ def player_data(player_dir,
     batch_istreams (ndarray)
     batch_labels (array | ndarray)
     '''
+    if repeat is True:
+        repeat = np.inf
+    if repeat is False:
+        repeat = 0
+    if type(repeat) is int:
+        if repeat < 0:
+            raise ValueError
+
     player_filenames = valid_files(os.listdir(player_dir))
     player_batch_size = np.random.binomial(n = batch_size, p = ratio  / (ratio + 1))
-    player_current_index = math.inf
+    player_current_index = np.inf
 
     nonplayer_filenames = valid_files(os.listdir(nonplayer_dir))
     nonplayer_batch_size = batch_size - player_batch_size
-    nonplayer_current_index = math.inf
+    nonplayer_current_index = np.inf
 
     while True:
         
@@ -116,8 +126,12 @@ def player_data(player_dir,
 
         # if player data is exhausted or uninitialized
         if player_current_index + player_batch_size >= len(player_filenames):
-            player_current_index = 0
-            random.shuffle(player_filenames)
+            if repeat + 1 > 0:
+                player_current_index = 0
+                random.shuffle(player_filenames)
+                repeat -= 1
+            else:
+                return
         
         # indexing
         pstart = player_current_index
