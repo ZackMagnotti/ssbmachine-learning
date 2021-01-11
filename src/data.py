@@ -109,6 +109,9 @@ def player_data(player_dir,
     if type(repeat) is int:
         if repeat < 0:
             raise ValueError
+    
+    if not ratio > 0:
+        raise ValueError
 
     player_filenames = valid_files(os.listdir(player_dir))
     player_batch_size = np.random.binomial(n = batch_size, p = ratio  / (ratio + 1))
