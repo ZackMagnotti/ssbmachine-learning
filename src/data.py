@@ -119,8 +119,12 @@ def player_data(player_dir,
             player_current_index = 0
             random.shuffle(player_filenames)
         
+        # indexing
         pstart = player_current_index
         pend = pstart + player_batch_size
+        player_current_index += player_batch_size
+
+        # get data for player batch
         player_batch = get_batch(player_filenames[pstart:pend], player_dir)
 
         # list of tuple(istream, label)
@@ -136,8 +140,12 @@ def player_data(player_dir,
             nonplayer_current_index = 0
             random.shuffle(nonplayer_filenames)
         
+        # indexing
         npstart = nonplayer_current_index
         npend = npstart + nonplayer_batch_size
+        nonplayer_current_index += nonplayer_batch_size
+
+        # get nonplayer batch
         nonplayer_batch = get_batch(nonplayer_filenames[npstart:npend], nonplayer_dir)
 
         # list of tuple(istream, label)
