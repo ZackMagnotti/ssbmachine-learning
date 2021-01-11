@@ -14,8 +14,8 @@ def remove_head(base_model, trainable=False):
     headless_base_model.trainable = trainable
     return headless_base_model
 
-def add_new_head(base_layers):
-    pass
+def add_new_head(base_model, head):
+    return Sequential([base_model, head])
 
 def replace_head(base_model):
     pass
