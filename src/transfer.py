@@ -33,12 +33,23 @@ def remove_head(base_model, trainable=False):
     headless_base_model.trainable = trainable
     return headless_base_model
 
-def add_new_head(model, head=standard_head, optimizer='nadam'):
+def add_new_head(model,
+                 head=standard_head,
+                 optimizer='nadam',
+                 loss='binary_crossentropy',
+                 metrics=['binary_accuracy']):
+    
     model = Sequential([model, head])
-    model.compile(loss='binary_crossentropy',
-                  optimizer=optimizer,
-                  metrics=['binary_accuracy'])
+    model.compile(optimizer=optimizer,
+                  loss=loss,
+                  metrics=metrics)
     return model
 
-def replace_head(base_model):
+def replace_head(model,
+                 head=standard_head,
+                 trainable_base=False,
+                 optimizer='nadam',
+                 loss='binary_crossentropy',
+                 metrics=['binary_accuracy']):
+    
     pass
