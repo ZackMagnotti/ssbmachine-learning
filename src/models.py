@@ -470,14 +470,11 @@ def custom_mk4(activation=swish,
 
     model = Sequential(name=name)
 
-    model.add(Input(shape=(None, 13)))
-
     # -----------------------------------------------
     # number of filters: 128
     # size of filters:   30
     # sees: .5s
-
-    model.add(Conv1D(150, 30, activation=activation, name='conv1'))
+    model.add(Conv1D(150, 30, activation=activation, input_shape=(None, 13), name='conv1'))
     model.add(BatchNormalization())
     model.add(MaxPooling1D(pool_size=4))
 
