@@ -63,6 +63,10 @@ Non-trainable params: 2,348
 _________________________________________________________________
 ```
 
+### Training
+
+foo
+
 ### Results
 
 bar
@@ -87,6 +91,10 @@ Trainable params: 37,313
 Non-trainable params: 6,538,098
 _________________________________________________________________
 ```
+
+### Training
+
+foobar
 
 ### Results
 
