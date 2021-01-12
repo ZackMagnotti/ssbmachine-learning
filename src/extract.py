@@ -82,13 +82,11 @@ def get_istreams(game, as_sparse=True):
             if b.Physical.Z in b.physical.pressed():
                 istream[i, 12] = 1
 
-        # if as_sparse is true and port is active, 
-        # convert to compressed sparse array
-        # else convert to numpy array
-        if as_sparse:
-            istream = csr_matrix(istream)
-        else:
-            istream = istream.toarray()
+        else: # if port is inactive, this block will not run.
+            if as_sparse:
+                istream = csr_matrix(istream)
+            else:
+                istream = istream.toarray()
             
         istreams.append(istream)
     
@@ -197,7 +195,7 @@ def get_id(f):
 
     return basename(f)
 
-def extract(f, as_sparse=False): 
+def extract(f, as_sparse=True): 
     ''' 
     Extracts the istream payloads from a .slp file
 
