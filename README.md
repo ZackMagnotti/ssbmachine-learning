@@ -43,8 +43,6 @@ SSBML-Base-Model was trained on just under ***825,000*** examples of Melee gamep
 
 Each example is 1800 frames of input data; ***30 second clips of gameplay from one player.***
 
-[Some EDA type things, class balance etc.]
-
 ### Results
 
 ```
@@ -80,11 +78,81 @@ _________________________________________________________________
 ### Training Data
 
 Player detection models were trained on 30 second examples of gameplay from an individual player,
-mixed with random 30 second examples that were not from that player.
+mixed with random examples from the public anonymous dataset.
 
 While the character classification training dataset was close to 200G (before processing), 
 individual players' datasets were typically closer to 1G.
 
 ### Results
 
-pending
+#### Blynde
+---
+    
+<div align="center">
+Test accuracy: 88%
+</div>
+
+|	       |player	     | nonplayer |
+| -------  | ----------- | --------- |
+|player    |	0.461    |	0.059    |
+|nonplayer |	0.065    |	0.415    |
+
+#### gh0st
+---
+    
+<div align="center">
+Test accuracy: 87%
+</div>
+
+|	       |player	     | nonplayer |
+| -------  | ----------- | --------- |
+|player    |	0.510    |	0.050    |
+|nonplayer |	0.065    |	0.375    |
+
+#### CuckDaddy
+---
+
+<div align="center">
+Test accuracy: 90%
+</div>
+
+|	       |player	     | nonplayer |
+| -------  | ----------- | --------- |
+|player    |	0.407    |	0.033    |
+|nonplayer |	0.062    |	0.498    |
+
+#### ixwonkr
+---
+
+<div align="center">
+Test accuracy: 81%
+</div>
+
+|	       |player	     | nonplayer |
+| -------  | ----------- | --------- |
+|player    |	0.431    |	0.129    |
+|nonplayer |	0.079    |	0.361    |
+
+#### Lie0x
+---
+
+<div align="center">
+Test accuracy: 80%
+</div>
+
+|	       |player	     | nonplayer |
+| -------  | ----------- | --------- |
+|player    |	0.44    |	0.12    |
+|nonplayer |	0.06    |	0.38    |
+
+#### TCBL
+---
+
+<div align="center">
+Test accuracy: 81%
+</div>
+
+|	       |player	     | nonplayer |
+| -------  | ----------- | --------- |
+|player    |	0.291    |	0.069    |
+|nonplayer |	0.093    |	0.547    |
