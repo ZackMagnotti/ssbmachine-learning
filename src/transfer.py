@@ -17,6 +17,7 @@ standard_head = Sequential([
     
     # final output layer
     Dense(1, activation='sigmoid', name='output')
+    
 ], name='head_dense64x2')
 
 def remove_head(base_model, trainable=False):
