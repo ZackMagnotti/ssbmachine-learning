@@ -16,6 +16,11 @@ def clippify_game(input_filepath,
                   clip_length = 30,
                   train_test_split = False,
                   current_clip_total = 0):
+    '''
+    Clippifies a single game file and deposits clips in output_directory
+    
+    If train_test_split is true, clips will be deposited in output_directory/train and output_directory/test
+    '''
             
     # get data from game
     player_documents = extract(input_filepath)
