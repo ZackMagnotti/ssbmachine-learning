@@ -70,7 +70,11 @@ _________________________________________________________________
 
 ### Training Data
 
-foobar
+Player detection models were trained on 30 second examples of gameplay from an individual player,
+mixed with random 30 second examples that were not from that player.
+
+While the character classification training dataset was close to 200G (before processing), 
+individual players' datasets were typically closer to 1G.
 
 ### Results
 
