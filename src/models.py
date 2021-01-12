@@ -482,7 +482,7 @@ def custom_mk4(activation=swish,
     # number of filters: 256
     # size of filters:   15
     # sees: 1s
-    model.add(Conv1D(256, 15, activation=activation)
+    model.add(Conv1D(256, 15, activation=activation))
     model.add(BatchNormalization())
     model.add(MaxPooling1D(pool_size=4))
 
@@ -490,7 +490,7 @@ def custom_mk4(activation=swish,
     # number of filters: 256
     # size of filters:   15
     # sees: 4s
-    model.add(Conv1D(512, 15, activation=activation)
+    model.add(Conv1D(512, 15, activation=activation))
     model.add(BatchNormalization())
     model.add(MaxPooling1D(pool_size=2))
     model.add(Dropout(.25))
@@ -499,18 +499,18 @@ def custom_mk4(activation=swish,
     # number of filters: 256
     # size of filters:   15
     # sees: 8s
-    model.add(Conv1D(512, 15, activation=activation)
+    model.add(Conv1D(512, 15, activation=activation))
 
     # sees whole clip, takes max pool
     model.add(GlobalAveragePooling1D())
     model.add(Flatten())
 
-    model.add(Dense(128, use_bias=True)
+    model.add(Dense(128))
     model.add(BatchNormalization())
     model.add(Activation(activation))
     model.add(Dropout(.25))
 
-    model.add(Dense(128, use_bias=True)
+    model.add(Dense(128))
     model.add(BatchNormalization())
     model.add(Activation(activation))
     model.add(Dropout(.25))
