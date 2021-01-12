@@ -1,6 +1,7 @@
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Dense, BatchNormalization, Activation, Dropout
 from tensorflow.keras.activations import swish
+from tensorflow.keras.models import load_model
 
 standard_head = Sequential([
     # dense layer 1
@@ -44,6 +45,7 @@ def add_new_head(model,
     
     model = Sequential([model, head], name=name)
     model.compile(optimizer, loss, metrics)
+    model.build(input_shape=(None, None, 13))
     return model
 
 def replace_head(model,
@@ -57,3 +59,6 @@ def replace_head(model,
     model = remove_head(model, trainable_base)
     model = add_new_head(model, head, name, optimizer, loss, metrics)
     return model
+
+def transfer_model(name, base_model):
+    return replace_head(load_model(base_model), name=name)
