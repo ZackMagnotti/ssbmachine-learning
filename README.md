@@ -63,9 +63,11 @@ Non-trainable params: 2,348
 _________________________________________________________________
 ```
 
-### Training
+### Training Data
 
-foo
+SSBML-Base-Model was trained on just under ***825,000*** examples of Melee gameplay taken from the [Melee Public SLP Dataset](https://drive.google.com/file/d/1ab6ovA46tfiPZ2Y3a_yS1J3k3656yQ8f/view?usp=sharing). 
+
+Each example is 1800 frames of input data; ***30 second clips of gameplay from one player.***
 
 ### Results
 
@@ -92,7 +94,7 @@ Non-trainable params: 6,538,098
 _________________________________________________________________
 ```
 
-### Training
+### Training Data
 
 foobar
 
