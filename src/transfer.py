@@ -19,9 +19,7 @@ standard_head = Sequential([
     Dense(1, activation='sigmoid', name='output')
 ], name='head_dense64x2')
 
-def remove_head(base_model,
-                name='base',
-                trainable=False):
+def remove_head(base_model, trainable=False):
     # use flatten layer to 
     # determine where the head
     # starts and remove it
@@ -31,6 +29,7 @@ def remove_head(base_model,
             break
     else:
         raise ValueError('base_model has no flatten layer')
+    name = base_model.name
     base_model = Sequential(base_model.layers[:head_start], name=name)
     base_model.trainable = trainable
     return base_model
@@ -54,6 +53,6 @@ def replace_head(model,
                  loss='binary_crossentropy',
                  metrics=['binary_accuracy']):
     
-    model = remove_head(model, trainable=trainable_base)
+    model = remove_head(model, trainable_base)
     model = add_new_head(model, head, name, optimizer, loss, metrics)
     return model
