@@ -22,8 +22,6 @@ def clippify_game(input_filepath,
 
     # for counting how many clips came from this game
     game_clip_total = 0
-
-    # for counting how many clips came from this game
     game_clip_failures = 0
 
     # iterate over each player
@@ -54,8 +52,8 @@ def clippify_game(input_filepath,
                     'character': character,
                     'name': name,
                     'code': code,
-                    'game_id': game_id,
                     'clip_id' : clip_id,
+                    'game_id': game_id,
                 } 
 
                 # construct clip filename
@@ -72,19 +70,17 @@ def clippify_game(input_filepath,
                     clip_filepath = path.join(output_directory, clip_filename)
 
                 # pickle whole document and save to disk
-                # print(clip_filepath)
                 pickle.dump(clip_payload, open(clip_filepath, 'wb'))
 
             # if there is a problem with this clip
             except: 
                 game_clip_failures += 1
-                # raise
             
             # if clip is saved successfully
             else:
                 game_clip_total += 1
 
-            # always executes
+            # go to next clip
             finally:
                 f += step
 
@@ -108,11 +104,12 @@ def clippify(input_directory,
 
     Files are pickled dictionaries containing:
     {
-        clip_id,
-        istream,
+        clip_istream,
         character,
         name,
-        code
+        code,
+        clip_id,
+        game_id,
     }
 
     Parameters
@@ -123,7 +120,7 @@ def clippify(input_directory,
     '''
 
     # normalize paths, list and count files
-    input_directory = path.normpath(input_directory)
+    input_directory = path.abspath(input_directory)
     output_directory = path.abspath(output_directory)
     file_list = listdir(input_directory)
     N = len(file_list)
@@ -162,7 +159,7 @@ def clippify(input_directory,
     # keep track of how many clips are produced
     clip_total = 0
 
-    # i variable is used for progress bar
+    # iterate over replay files
     for i, f in enumerate(file_list):
 
         filepath = path.join(input_directory, f)
@@ -171,13 +168,12 @@ def clippify(input_directory,
         if not path.isfile(filepath):
             wrong_filetype += 1
             continue
-
         if not path.splitext(filepath)[1] == '.slp':
             wrong_filetype += 1
             continue
 
-        try:
-            new_clips, new_clippify_failures = clippify_game(
+        # create clips from replay file and save them to disk
+        try: new_clips, new_clippify_failures = clippify_game(
                 input_filepath = filepath,
                 output_directory = output_directory,
                 clip_length = clip_length,
@@ -185,10 +181,6 @@ def clippify(input_directory,
                 current_clip_total = clip_total
             )
             
-            clip_total += new_clips
-            clippify_failures += new_clippify_failures
-            
-
         except GameTooShortError:
             failed_uploads += 1
             games_too_short += 1
@@ -204,12 +196,13 @@ def clippify(input_directory,
         except:
             failed_uploads += 1
             unknown_errors += 1
-            # raise
 
         else:
             successful_uploads += 1
+            clip_total += new_clips
+            clippify_failures += new_clippify_failures
 
-        finally:
+        finally: # progress bar
             display_progress(i, N)
     display_progress(N,N)
 
@@ -235,69 +228,3 @@ def clippify(input_directory,
         msg += f'    - {unknown_errors} unknown errors.\n'
 
     print(msg)
-    
-# ==================================
-#             DEPRECIATED
-# ==================================    
-
-from pymongo import MongoClient
-from bson.binary import Binary
-    
-def mongo_clippify(input_collection,
-             output_collection,
-             clip_length = 30,
-             query = {}):
-    ''' 
-    Chops up all of the istreams in a collection into clips 
-    of a given length and deposits the clips into another collection.
-
-    Parameters
-    -----------
-    input_collection (string) : collection of istreams from which to make clips
-    output_collection (string) : collection to deposit clips
-    clip_length (int or float) : length of clips in seconds
-    query (dict) : optional query to filter which istreams from input_collection get clippified
-    '''
-
-    cursor = input_collection.find(query)
-    N = input_collection.estimated_document_count()
-    clip_count = 0 # used to index each clip
-
-    failures = 0
-
-    for i, doc in enumerate(cursor):
-            
-        try:
-            # chop every game up into clips
-            full_game_istream = pickle.loads(doc['istream'])
-            clip_istreams = []
-            F = int(clip_length * 60) # clip length in frames
-            f = 0      # clip starting frame
-            while f+F < full_game_istream.shape[0]:
-                clip_istreams.append(full_game_istream[f:f+F])
-                f += F
-
-            payload = [
-                {
-                    'game_id': doc['game_id'],
-                    'clip_id' : j + clip_count, 
-                    'istream': Binary(pickle.dumps(istream, protocol=2)),
-                    'character': doc['character'],
-                    'name': doc['name'],
-                    'code': doc['code'],
-                } 
-                for j, istream in enumerate(clip_istreams)
-            ]
-        
-        except:
-            failures += 1
-        
-        else:
-            output_collection.insert_many(payload)
-            clip_count += len(payload)
-
-        display_progress(i, N)
-    display_progress(N, N)
-
-    if failures > 0:
-        print(f"\n{failures} istreams failed to clippify\n")
