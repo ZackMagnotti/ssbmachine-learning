@@ -4,13 +4,14 @@ from tensorflow.keras.activations import swish
 from tensorflow.keras.models import load_model
 
 standard_head = Sequential([
-    # dense layer 1
+    
+    # dense cell 1
     Dense(64, name='head_dense_1'),
     BatchNormalization(name='head_batchnorm_1'),
     Activation(swish, name='head_activation_1'),
     Dropout(.5, name='head_dropout_1'),
     
-    # dense layer 2
+    # dense cell 2
     Dense(64, name='head_dense_2'),
     BatchNormalization(name='head_batchnorm_2'),
     Activation(swish, name='head_activation_2'),

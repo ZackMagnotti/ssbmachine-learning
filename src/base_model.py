@@ -6,12 +6,10 @@ from tensorflow.keras.layers import MaxPooling1D, GlobalMaxPooling1D
 from tensorflow.keras.layers import GlobalAveragePooling1D
 from tensorflow.keras.layers import BatchNormalization, Activation
 from tensorflow.keras.activations import swish
-
-top_8_accuracy = keras.metrics.TopKCategoricalAccuracy(k=8, name='top 8 accuracy')
-
 import tensorflow_addons as tfa
-focal_loss = tfa.losses.SigmoidFocalCrossEntropy()
 
+focal_loss = tfa.losses.SigmoidFocalCrossEntropy()
+top_8_accuracy = keras.metrics.TopKCategoricalAccuracy(k=8, name='top 8 accuracy')
 
 def base_model(activation=swish,
                loss=focal_loss,
@@ -55,15 +53,16 @@ def base_model(activation=swish,
     ],  name = 'ConvCell-3'))
 
     # -----------------------------------------------
+    
     # number of filters: 256
     # size of filters:   15
     # sees: 8s
     model.add(Sequential([
         Conv1D(512, 15, activation=activation)
     ],  name = 'ConvCell-4'))
+    
+    # ----------------------------------------------
 
-    # sees whole clip,
-    # takes average of each channel
     model.add(GlobalAveragePooling1D())
     model.add(Flatten())
 
@@ -78,6 +77,8 @@ def base_model(activation=swish,
         Activation(activation),
         Dropout(.25)
     ], name = 'DenseCell-1'))
+    
+    # ----------------------------------------------
 
     # Dense Cell 2
     model.add(Sequential([
@@ -86,9 +87,13 @@ def base_model(activation=swish,
         Activation(activation),
         Dropout(.25)
     ], name = 'DenseCell-2'))
+    
+    # ----------------------------------------------
 
     # final output layer
     model.add(Dense(26, activation='softmax', name='final'))
+    
+    # ----------------------------------------------
 
     model.compile(loss=loss,
                   optimizer=optimizer,
