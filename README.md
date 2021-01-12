@@ -43,9 +43,18 @@ SSBML-Base-Model was trained on just under ***825,000*** examples of Melee gamep
 
 Each example is 1800 frames of input data; ***30 second clips of gameplay from one player.***
 
+[Some EDA type things, class balance etc.]
+
 ### Results
 
-bar
+```
+Test accuracy: 95%
+Test test top 8 categorical accuracy: 99%
+```
+
+#### Confusion Matrix
+
+![SSBM-Base-Model confusion matrix](images/SSBML-Base-Model.png)
 
 ## Part 2: Player Detection
 
@@ -78,4 +87,4 @@ individual players' datasets were typically closer to 1G.
 
 ### Results
 
-barfoo
+pending
