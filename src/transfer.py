@@ -3,16 +3,18 @@ from tensorflow.keras.layers import Dense, BatchNormalization, Activation, Dropo
 from tensorflow.keras.activations import swish
 from tensorflow.keras.models import load_model
 
+default_optimizer_ = 'adam'
+
 standard_head = Sequential([
     
     # dense cell 1
-    Dense(64, name='head_dense_1'),
+    Dense(128, name='head_dense_1'),
     BatchNormalization(name='head_batchnorm_1'),
     Activation(swish, name='head_activation_1'),
     Dropout(.5, name='head_dropout_1'),
     
     # dense cell 2
-    Dense(64, name='head_dense_2'),
+    Dense(128, name='head_dense_2'),
     BatchNormalization(name='head_batchnorm_2'),
     Activation(swish, name='head_activation_2'),
     Dropout(.5, name='head_dropout_2'),
@@ -20,7 +22,7 @@ standard_head = Sequential([
     # final output layer
     Dense(1, activation='sigmoid', name='output')
     
-], name='head_dense64x2')
+], name='head_densex2')
 
 def remove_head(base_model, trainable=False):
     # use flatten layer to 
@@ -40,7 +42,7 @@ def remove_head(base_model, trainable=False):
 def add_new_head(model,
                  head=standard_head,
                  name='transfer_model',
-                 optimizer='nadam',
+                 optimizer=default_optimizer_,
                  loss='binary_crossentropy',
                  metrics=['binary_accuracy']):
     
@@ -53,7 +55,7 @@ def replace_head(model,
                  head=standard_head,
                  name='transfer_model',
                  trainable_base=False,
-                 optimizer='nadam',
+                 optimizer=default_optimizer_,
                  loss='binary_crossentropy',
                  metrics=['binary_accuracy']):
     
