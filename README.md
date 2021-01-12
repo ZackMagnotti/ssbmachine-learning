@@ -85,8 +85,8 @@ individual players' datasets were typically closer to 1G.
 
 ### Results
 
-#### Blynde
 ---
+#### Blynde
 
 Test accuracy: **88%**
 
@@ -95,8 +95,8 @@ Test accuracy: **88%**
 |player    |	0.461    |	0.059    |
 |nonplayer |	0.065    |	0.415    |
 
-#### gh0st
 ---
+#### gh0st
 
 Test accuracy: **87%**
 
@@ -105,8 +105,8 @@ Test accuracy: **87%**
 |player    |	0.510    |	0.050    |
 |nonplayer |	0.065    |	0.375    |
 
-#### CuckDaddy
 ---
+#### CuckDaddy
 
 Test accuracy: **90%**
 
@@ -115,8 +115,8 @@ Test accuracy: **90%**
 |player    |	0.407    |	0.033    |
 |nonplayer |	0.062    |	0.498    |
 
-#### ixwonkr
 ---
+#### ixwonkr
 
 Test accuracy: **81%**
 
@@ -125,8 +125,8 @@ Test accuracy: **81%**
 |player    |	0.431    |	0.129    |
 |nonplayer |	0.079    |	0.361    |
 
-#### Lie0x
 ---
+#### Lie0x
 
 Test accuracy: **80%**
 
@@ -135,8 +135,8 @@ Test accuracy: **80%**
 |player    |	0.44    |	0.12    |
 |nonplayer |	0.06    |	0.38    |
 
-#### TCBL
 ---
+#### TCBL
 
 Test accuracy: **81%**
 
