@@ -67,7 +67,7 @@ def clippify_game(input_filepath,
                 # construct clip filepath
                 if train_test_split:
                     if random() < .1:
-                        clip_filepath = path.join(output_directory,'test', clip_filename)
+                        clip_filepath = path.join(output_directory, 'test', clip_filename)
                     else:
                         clip_filepath = path.join(output_directory, 'train', clip_filename)
                 
