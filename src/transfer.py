@@ -24,7 +24,10 @@ standard_head = Sequential([
     
 ], name='head_densex2')
 
-def remove_head(base_model, trainable=False):
+def remove_head(
+        base_model, 
+        trainable = False
+    ):
     # use flatten layer to 
     # determine where the head
     # starts and remove it
@@ -40,27 +43,29 @@ def remove_head(base_model, trainable=False):
     return base_model
 
 def add_new_head(
-    model,
-    head = standard_head,
-    name = 'transfer_model',
-    optimizer = default_optimizer_,
-    loss = 'binary_crossentropy',
-    metrics = ['binary_accuracy']
-):
+        model,
+        head = standard_head,
+        name = 'transfer_model',
+        optimizer = default_optimizer_,
+        loss = 'binary_crossentropy',
+        metrics = ['binary_accuracy']
+    ):
+
     model = Sequential([model, head], name=name)
     model.compile(optimizer, loss, metrics)
     model.build(input_shape=(None, None, 13))
     return model
 
 def replace_head(
-    model,
-    head = standard_head,
-    name = 'transfer_model',
-    trainable_base = False,
-    optimizer = default_optimizer_,
-    loss = 'binary_crossentropy',
-    metrics = ['binary_accuracy']
-):
+        model,
+        head = standard_head,
+        name = 'transfer_model',
+        trainable_base = False,
+        optimizer = default_optimizer_,
+        loss = 'binary_crossentropy',
+        metrics = ['binary_accuracy']
+    ):
+
     model = remove_head(model, trainable_base)
     model = add_new_head(model, head, name, optimizer, loss, metrics)
     return model

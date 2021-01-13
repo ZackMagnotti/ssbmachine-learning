@@ -15,12 +15,15 @@ def get_batch(batch_filenames, batch_dir):
     batch = [pickle.load(open(abspath, 'rb')) for abspath in batch_abspaths]
     return batch
 
-def character_data(input_directory, 
-                   batch_size = 32,
-                   num_batches = None,
-                   repeat = False,
-                   onehot = True,
-                   shuffle = True):
+def character_data(
+        input_directory, 
+        batch_size = 32,
+        num_batches = None,
+        repeat = False,
+        onehot = True,
+        shuffle = True
+    ):
+
     ''' 
     Fetches data from given directory in batches
 
@@ -37,6 +40,7 @@ def character_data(input_directory,
     batch_istreams (ndarray)
     batch_labels (array | ndarray)
     '''
+
     while True:
 
         filenames = valid_files(os.listdir(input_directory))
@@ -75,12 +79,15 @@ def character_data(input_directory,
             if not repeat:
                 return 
 
-def player_data(player_dir,
-                nonplayer_dir,
-                batch_size = 32,
-                repeat = False,
-                shuffle = True,
-                ratio = 1):
+def player_data(
+        player_dir,
+        nonplayer_dir,
+        batch_size = 32,
+        repeat = False,
+        shuffle = True,
+        ratio = 1
+    ):
+    
     ''' 
     Fetches data from given directories, and yields a blend of both
     datasets specified by the ratio provided (default is 1, for 50/50 split) 

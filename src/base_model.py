@@ -11,10 +11,12 @@ import tensorflow_addons as tfa
 focal_loss = tfa.losses.SigmoidFocalCrossEntropy()
 top_8_accuracy = keras.metrics.TopKCategoricalAccuracy(k=8, name='top 8 accuracy')
 
-def base_model(activation=swish,
-               loss=focal_loss,
-               optimizer='adam',
-               name='SSBML-Base-Model'):
+def base_model(
+        activation=swish,
+        loss=focal_loss,
+        optimizer='adam',
+        name='SSBML-Base-Model'      
+    ):
 
     model = Sequential(name=name)
 
