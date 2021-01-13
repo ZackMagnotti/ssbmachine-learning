@@ -3,6 +3,7 @@ archives
 backups
 replay_files
 data_recompiled
+nohup.out
 
 *.ipynb_checkpoints
 delme.*
