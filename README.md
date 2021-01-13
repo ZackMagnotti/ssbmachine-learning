@@ -47,7 +47,7 @@ Each example is 1800 frames of input data; ***30 second clips of gameplay from o
 
 ```
 Test accuracy: 95%
-Test test top 8 categorical accuracy: 99%
+Test top 8 accuracy: 99%
 ```
 
 #### Confusion Matrix
