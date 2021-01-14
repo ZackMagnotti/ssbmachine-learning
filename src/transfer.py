@@ -43,7 +43,7 @@ def remove_head(
     return base_model
 
 def add_new_head(
-        model,
+        base_model,
         head = standard_head,
         name = 'transfer_model',
         optimizer = default_optimizer_,
@@ -51,13 +51,13 @@ def add_new_head(
         metrics = ['binary_accuracy']
     ):
 
-    model = Sequential([model, head], name=name)
-    model.compile(optimizer, loss, metrics)
-    model.build(input_shape=(None, None, 13))
-    return model
+    base_model = Sequential([base_model, head], name=name)
+    base_model.compile(optimizer, loss, metrics)
+    base_model.build(input_shape=(None, None, 13))
+    return base_model
 
 def replace_head(
-        model,
+        base_model,
         head = standard_head,
         name = 'transfer_model',
         trainable_base = False,
@@ -66,9 +66,17 @@ def replace_head(
         metrics = ['binary_accuracy']
     ):
 
-    model = remove_head(model, trainable_base)
-    model = add_new_head(model, head, name, optimizer, loss, metrics)
-    return model
+    base_model = remove_head(base_model, trainable_base)
+    base_model = add_new_head(base_model, head, name, optimizer, loss, metrics)
+    return base_model
 
-def transfer_model(name, base_model):
-    return replace_head(load_model(base_model), name=name)
+def ssbml_transfer_model(
+        base_model = 'models/SSBML-Base-Model',
+        head = standard_head,
+        name = 'SSBML-Transfer-Model',
+        trainable_base = False,
+        optimizer = default_optimizer_,
+        loss = 'binary_crossentropy',
+        metrics = ['binary_accuracy']
+    ):
+    return replace_head(load_model(base_model), head, name, trainable_base, optimizer, loss, metrics)
