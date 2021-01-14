@@ -32,7 +32,7 @@ def remove_head(
     # determine where the head
     # starts and remove it
     for i, layer in enumerate(base_model.layers):
-        if layer.name == 'flatten':
+        if 'flatten' in layer.name:
             head_start = i + 1
             break
     else:
