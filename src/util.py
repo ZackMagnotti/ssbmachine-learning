@@ -52,6 +52,6 @@ characters = (
     'GANONDORF',
 )
 
-id_from_char = {c:i for i, c in enumerate(characters, 1)}
+id_from_char = {c:i for i, c in enumerate(characters)}
 
-char_from_id = {i:c for i, c in enumerate(characters, 1)}
+char_from_id = {i:c for i, c in enumerate(characters)}

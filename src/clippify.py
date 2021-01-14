@@ -11,11 +11,13 @@ from .extract import extract, InvalidGameError, GameTooShortError
 class ClippifyFailureError(ValueError):
     pass
 
-def clippify_game(input_filepath,
-                  output_directory,
-                  clip_length = 30,
-                  train_test_split = False,
-                  current_clip_total = 0):
+def clippify_game(
+        input_filepath,
+        output_directory,
+        clip_length = 30,
+        train_test_split = False,
+        current_clip_total = 0
+    ):
     '''
     Clippifies a single game file and deposits clips in output_directory
     
@@ -94,10 +96,12 @@ def clippify_game(input_filepath,
 
     return game_clip_total, game_clip_failures
 
-def clippify(input_directory,
-             output_directory,
-             clip_length = 30,
-             train_test_split = False):
+def clippify(
+        input_directory,
+        output_directory,
+        clip_length = 30,
+        train_test_split = False
+    ):
     ''' 
     Chops up all of the istreams from all of the 
     slp files in input_directory and chops them into clips
