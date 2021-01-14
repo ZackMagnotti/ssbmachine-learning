@@ -12,16 +12,16 @@ focal_loss = tfa.losses.SigmoidFocalCrossEntropy()
 top_8_accuracy = keras.metrics.TopKCategoricalAccuracy(k=8, name='top 8 accuracy')
 
 def base_model(
-        activation=swish,
-        loss=focal_loss,
-        optimizer='adam',
-        name='SSBML-Base-Model'      
+        activation = swish,
+        loss = focal_loss,
+        optimizer = 'adam',
+        name = 'SSBML-Base-Model'      
     ):
 
-    model = Sequential(name=name)
+    model = Sequential(name = name)
 
     # -----------------------------------------------
-    
+    # ConvCell-1
     # number of filters: 128
     # size of filters:   30
     # sees: .5s
@@ -32,7 +32,7 @@ def base_model(
     ],  name = 'ConvCell-1'))
     
     # -----------------------------------------------
-    
+    # ConvCell-2
     # number of filters: 256
     # size of filters:   15
     # sees: 1s
@@ -43,7 +43,7 @@ def base_model(
     ],  name = 'ConvCell-2'))
 
     # -----------------------------------------------
-    
+    # ConvCell-3
     # number of filters: 256
     # size of filters:   15
     # sees: 4s
@@ -55,7 +55,7 @@ def base_model(
     ],  name = 'ConvCell-3'))
 
     # -----------------------------------------------
-    
+    # ConvCell-4
     # number of filters: 256
     # size of filters:   15
     # sees: 8s
@@ -72,6 +72,7 @@ def base_model(
     #             HEAD
     # ----------------------------------------------
     
+    # ----------------------------------------------
     # Dense Cell 1
     model.add(Sequential([
         Dense(128),
@@ -81,7 +82,6 @@ def base_model(
     ], name = 'DenseCell-1'))
     
     # ----------------------------------------------
-
     # Dense Cell 2
     model.add(Sequential([
         Dense(128),
@@ -91,14 +91,12 @@ def base_model(
     ], name = 'DenseCell-2'))
     
     # ----------------------------------------------
-
     # final output layer
     model.add(Dense(26, activation='softmax', name='final'))
-    
-    # ----------------------------------------------
-
-    model.compile(loss=loss,
-                  optimizer=optimizer,
-                  metrics=['accuracy', top_8_accuracy])
+    model.compile(
+        loss=loss,
+        optimizer=optimizer,
+        metrics=['accuracy', top_8_accuracy]
+    )
     
     return model
