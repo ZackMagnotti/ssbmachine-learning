@@ -106,7 +106,7 @@ Test accuracy: **87%**
 |nonplayer |	0.065    |	0.375    |
 
 ---
-#### CuckDaddy
+#### SmashMaster9000
 
 Test accuracy: **90%**
 
