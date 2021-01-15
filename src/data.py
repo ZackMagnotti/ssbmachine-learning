@@ -85,7 +85,8 @@ def player_data(
         batch_size = 32,
         repeat = False,
         shuffle = True,
-        ratio = 1
+        ratio = 1,
+        onehot = False,
     ):
     
     ''' 
@@ -152,8 +153,8 @@ def player_data(
         player_batch = get_batch(player_filenames[pstart:pend], player_dir)
 
         # list of tuple(istream, label)
-        # label for player is 1
-        player_batch_tuples = [(clip['istream'].toarray(), 1) for clip in player_batch]
+        # label for player is 0
+        player_batch_tuples = [(clip['istream'].toarray(), 0) for clip in player_batch]
         
         # ======================
         #  get nonplayer batch
@@ -173,8 +174,8 @@ def player_data(
         nonplayer_batch = get_batch(nonplayer_filenames[npstart:npend], nonplayer_dir)
 
         # list of tuple(istream, label)
-        # label for nonplayer is 0
-        nonplayer_batch_tuples = [(clip['istream'].toarray(), 0) for clip in nonplayer_batch]
+        # label for nonplayer is 1
+        nonplayer_batch_tuples = [(clip['istream'].toarray(), 1) for clip in nonplayer_batch]
         
         # ==============
         #  mix batches 
@@ -191,5 +192,8 @@ def player_data(
         batch_istreams = np.stack(batch_istreams, axis=0)
 
         batch_labels = np.array(batch_labels)
+        
+        if onehot:
+            batch_labels = one_hot(batch_labels, 2)
 
         yield batch_istreams, batch_labels

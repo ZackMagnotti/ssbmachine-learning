@@ -1,9 +1,24 @@
+from tensorflow import keras
+from tensorflow.keras import metrics
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Dense, BatchNormalization, Activation, Dropout
 from tensorflow.keras.activations import swish
 from tensorflow.keras.models import load_model
 
 default_optimizer_ = 'adam'
+default_metrics_ = [
+    metrics.BinaryAccuracy(name='accuracy'),
+    metrics.Precision(name='precision'),
+    metrics.Recall(name='recall'),
+]
+
+onehot_metrics = [
+    metrics.CategoricalAccuracy(name='accuracy'),
+    metrics.Precision(name='player_precision', class_id=0),
+    metrics.Recall(name='player_recall', class_id=0),
+    metrics.Precision(name='nonplayer_precision', class_id=1),
+    metrics.Recall(name='nonplayer_recall', class_id=1),
+]
 
 standard_head = Sequential([
     
@@ -22,7 +37,26 @@ standard_head = Sequential([
     # final output layer
     Dense(1, activation='sigmoid', name='output')
     
-], name='head_densex2')
+], name='sigmoid_binary_classifier')
+
+onehot_head = Sequential([
+    
+    # dense cell 1
+    Dense(128, name='head_dense_1'),
+    BatchNormalization(name='head_batchnorm_1'),
+    Activation(swish, name='head_activation_1'),
+    Dropout(.5, name='head_dropout_1'),
+    
+    # dense cell 2
+    Dense(128, name='head_dense_2'),
+    BatchNormalization(name='head_batchnorm_2'),
+    Activation(swish, name='head_activation_2'),
+    Dropout(.5, name='head_dropout_2'),
+    
+    # final output layer
+    Dense(2, activation='softmax', name='output')
+    
+], name='onehot_binary_classifier')
 
 def remove_head(
         base_model, 
@@ -48,7 +82,7 @@ def add_new_head(
         name = 'transfer_model',
         optimizer = default_optimizer_,
         loss = 'binary_crossentropy',
-        metrics = ['binary_accuracy']
+        metrics = default_metrics_
     ):
 
     base_model = Sequential([base_model, head], name=name)
@@ -63,7 +97,7 @@ def replace_head(
         trainable_base = False,
         optimizer = default_optimizer_,
         loss = 'binary_crossentropy',
-        metrics = ['binary_accuracy']
+        metrics = default_metrics_
     ):
 
     base_model = remove_head(base_model, trainable_base)
@@ -71,12 +105,12 @@ def replace_head(
     return base_model
 
 def ssbml_transfer_model(
-        base_model = 'models/SSBML-Base-Model',
         head = standard_head,
         name = 'SSBML-Transfer-Model',
+        base_model = 'models/SSBML-Base-Model',
         trainable_base = False,
         optimizer = default_optimizer_,
         loss = 'binary_crossentropy',
-        metrics = ['binary_accuracy']
+        metrics = default_metrics_
     ):
     return replace_head(load_model(base_model), head, name, trainable_base, optimizer, loss, metrics)
