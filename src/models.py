@@ -1,3 +1,9 @@
+'''
+    This file contains all of the rough drafts of different
+    base models I tried out in the early days of this project. 
+
+    custom_mk4 was what eventually ended up becoming SSBML-Base-Model
+'''
 from tensorflow import keras
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Input, Dense, Dropout, Flatten
