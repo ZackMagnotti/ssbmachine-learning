@@ -1,9 +1,16 @@
+from tensorflow import keras
+from tensorflow.keras import metrics
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Dense, BatchNormalization, Activation, Dropout
 from tensorflow.keras.activations import swish
 from tensorflow.keras.models import load_model
 
 default_optimizer_ = 'adam'
+default_metrics_ = [
+    metrics.BinaryAccuracy(name='accuracy'),
+    metrics.Precision(name='precision'),
+    metrics.Recall(name='recall'),
+]
 
 standard_head = Sequential([
     
@@ -48,7 +55,7 @@ def add_new_head(
         name = 'transfer_model',
         optimizer = default_optimizer_,
         loss = 'binary_crossentropy',
-        metrics = ['binary_accuracy']
+        metrics = default_metrics_
     ):
 
     base_model = Sequential([base_model, head], name=name)
@@ -63,7 +70,7 @@ def replace_head(
         trainable_base = False,
         optimizer = default_optimizer_,
         loss = 'binary_crossentropy',
-        metrics = ['binary_accuracy']
+        metrics = default_metrics_
     ):
 
     base_model = remove_head(base_model, trainable_base)
@@ -71,12 +78,12 @@ def replace_head(
     return base_model
 
 def ssbml_transfer_model(
-        base_model = 'models/SSBML-Base-Model',
         head = standard_head,
         name = 'SSBML-Transfer-Model',
+        base_model = 'models/SSBML-Base-Model',
         trainable_base = False,
         optimizer = default_optimizer_,
         loss = 'binary_crossentropy',
-        metrics = ['binary_accuracy']
+        metrics = default_metrics_
     ):
     return replace_head(load_model(base_model), head, name, trainable_base, optimizer, loss, metrics)
