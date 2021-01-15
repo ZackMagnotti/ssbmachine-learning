@@ -12,6 +12,14 @@ default_metrics_ = [
     metrics.Recall(name='recall'),
 ]
 
+onehot_metrics = [
+    metrics.CategoricalAccuracy(name='accuracy'),
+    metrics.Precision(name='player_precision', class_id=0),
+    metrics.Recall(name='player_recall', class_id=0),
+    metrics.Precision(name='nonplayer_precision', class_id=1),
+    metrics.Recall(name='nonplayer_recall', class_id=1),
+]
+
 standard_head = Sequential([
     
     # dense cell 1
@@ -29,7 +37,26 @@ standard_head = Sequential([
     # final output layer
     Dense(1, activation='sigmoid', name='output')
     
-], name='head_densex2')
+], name='sigmoid_binary_classifier')
+
+onehot_head = Sequential([
+    
+    # dense cell 1
+    Dense(128, name='head_dense_1'),
+    BatchNormalization(name='head_batchnorm_1'),
+    Activation(swish, name='head_activation_1'),
+    Dropout(.5, name='head_dropout_1'),
+    
+    # dense cell 2
+    Dense(128, name='head_dense_2'),
+    BatchNormalization(name='head_batchnorm_2'),
+    Activation(swish, name='head_activation_2'),
+    Dropout(.5, name='head_dropout_2'),
+    
+    # final output layer
+    Dense(2, activation='softmax', name='output')
+    
+], name='onehot_binary_classifier')
 
 def remove_head(
         base_model, 

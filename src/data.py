@@ -85,7 +85,8 @@ def player_data(
         batch_size = 32,
         repeat = False,
         shuffle = True,
-        ratio = 1
+        ratio = 1,
+        onehot = False,
     ):
     
     ''' 
@@ -191,5 +192,8 @@ def player_data(
         batch_istreams = np.stack(batch_istreams, axis=0)
 
         batch_labels = np.array(batch_labels)
+        
+        if onehot:
+            batch_labels = one_hot(batch_labels, 2)
 
         yield batch_istreams, batch_labels
