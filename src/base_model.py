@@ -1,8 +1,8 @@
 from tensorflow import keras
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Conv1D, Dense, Activation
-from tensorflow.keras.layers import BatchNormalization, Dropout
+from tensorflow.keras.layers import Conv1D, BatchNormalization, MaxPooling1D
 from tensorflow.keras.layers import GlobalAveragePooling1D, Flatten
+from tensorflow.keras.layers import Dense, Activation, Dropout
 from tensorflow.keras.activations import swish
 import tensorflow_addons as tfa
 
