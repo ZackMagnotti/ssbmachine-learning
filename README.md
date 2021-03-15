@@ -1,7 +1,7 @@
 # SSBMachine Learning
 
 ***Super Smash Bros Machine Learning*** is a *Deep Learning* project
-with the goal of detecting playstyle signatures in a controller input signal.
+with the goal of detecting playstyle signatures in controller input signals.
 
 The project was done in two parts:
 
