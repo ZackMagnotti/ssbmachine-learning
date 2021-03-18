@@ -23,7 +23,6 @@ def character_data(
         onehot = True,
         shuffle = True
     ):
-
     ''' 
     Fetches data from given directory in batches
 
@@ -88,7 +87,6 @@ def player_data(
         ratio = 1,
         onehot = True,
     ):
-    
     ''' 
     Fetches data from given directories, and yields a blend of both
     datasets specified by the ratio provided (default is 1, for 50/50 split) 
