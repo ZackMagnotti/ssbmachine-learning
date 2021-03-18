@@ -86,7 +86,7 @@ def player_data(
         repeat = False,
         shuffle = True,
         ratio = 1,
-        onehot = False,
+        onehot = True,
     ):
     
     ''' 
