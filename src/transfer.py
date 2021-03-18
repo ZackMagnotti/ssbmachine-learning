@@ -6,9 +6,38 @@ from tensorflow.keras.activations import swish
 from tensorflow.keras.models import load_model
 from tensorflow_addons.losses import SigmoidFocalCrossEntropy as Focal
 
+# ===========================
+#         Defaults
+# ===========================
+
+HEAD = Sequential([
+    
+    # dense cell 1
+    Sequential([
+        Dense(128),
+        BatchNormalization(),
+        Activation(swish),
+        Dropout(.5),
+    ],  name = 'DenseCell-1'),
+    
+    # dense cell 2
+    Sequential([
+        Dense(128),
+        BatchNormalization(),
+        Activation(swish),
+        Dropout(.5),
+    ],  name = 'DenseCell-2'),
+    
+    # final output layer
+    Dense(2, activation='softmax', name='output'),
+    
+], name='Binary-Classifier')
+
+NAME = 'SSBML-Transfer-Model'
+
 OPTIMIZER = 'adam'
 
-LOSS = Focal()
+LOSS = 'binary_crossentropy'
 
 METRICS = [
     metrics.CategoricalAccuracy(name='accuracy'),
@@ -18,34 +47,28 @@ METRICS = [
     metrics.Recall(name='nonplayer_recall', class_id=1),
 ]
 
-HEAD = Sequential([
-    
-    # dense cell 1
-    Dense(128, name='head_dense_1'),
-    BatchNormalization(name='head_batchnorm_1'),
-    Activation(swish, name='head_activation_1'),
-    Dropout(.5, name='head_dropout_1'),
-    
-    # dense cell 2
-    Dense(128, name='head_dense_2'),
-    BatchNormalization(name='head_batchnorm_2'),
-    Activation(swish, name='head_activation_2'),
-    Dropout(.5, name='head_dropout_2'),
-    
-    # final output layer
-    Dense(2, activation='softmax', name='output')
-    
-], name='Binary-Classifier')
+# ===========================
 
 def remove_head(
         base_model, 
         trainable = False
     ):
-    # use flatten layer to 
-    # determine where the head
-    # starts and remove it
+    ''' 
+    Returns a copy of the base model with the head removed.
+
+    Where the head starts is determined by the location of a "flatten" layer
+
+    Parameters
+    -----------
+    base_model (Sequential) : base model to be decapitated
+    
+    Outputs (yield)
+    -----------
+    model (Sequential) : headless copy of base_model
+    '''
+
     for i, layer in enumerate(base_model.layers):
-        if 'flatten' in layer.name:
+        if isinstance(layer, keras.layers.Flatten):
             head_start = i + 1
             break
     else:
@@ -57,29 +80,63 @@ def remove_head(
     return model
 
 def add_new_head(
-        base_model,
-        name = 'transfer_model',
+        headless_base_model,
         head = HEAD,
+        name = NAME,
         optimizer = OPTIMIZER,
         loss = LOSS,
         metrics = METRICS
     ):
+    ''' 
+    Adds a new head to headless_base_model
 
-    model = Sequential([base_model, head], name=name)
+    Parameters
+    -----------
+    headless_base_model (Sequential) : base model to be re-headed
+    name (string) : name of new model
+    head (Sequential) : keras sequential model to act as new head
+    optimizer : optimizer for output model
+    loss : loss function for output model
+    metrics : metrics for output model
+    
+    Outputs (yield)
+    -----------
+    model (Sequential) : full model with new head
+    '''
+
+    model = Sequential([headless_base_model, head], name=name)
     model.compile(optimizer, loss, metrics)
     model.build(input_shape=(None, None, 13))
     return model
 
 def replace_head(
         base_model,
-        name = 'transfer_model',
         head = HEAD,
+        name = NAME,
         optimizer = OPTIMIZER,
         loss = LOSS,
         metrics = METRICS,
         trainable_base = False
     ):
+    ''' 
+    Returns a copy of the base model with the head replaced.
+
+    Where the head starts is determined by the location of a "flatten" layer
+
+    Parameters
+    -----------
+    base_model (Sequential) : base model to be re-headed
+    name (string) : name of new model
+    head (Sequential) : keras sequential model to act as new head
+    optimizer : optimizer for output model
+    loss : loss function for output model
+    metrics : metrics for output model
+    
+    Outputs (yield)
+    -----------
+    model (Sequential) : full model with new head
+    '''
 
     model = remove_head(base_model, trainable_base)
-    model = add_new_head(model, name, head, optimizer, loss, metrics)
+    model = add_new_head(model, head, name, optimizer, loss, metrics)
     return model
