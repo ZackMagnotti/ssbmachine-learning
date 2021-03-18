@@ -108,6 +108,7 @@ def player_data(
     batch_istreams (ndarray)
     batch_labels (array | ndarray)
     '''
+    
     if repeat is True:
         repeat = np.inf
     if repeat is False:
@@ -129,6 +130,12 @@ def player_data(
 
     while True:
         
+        player_batch_size = np.random.binomial(
+            n = batch_size, 
+            p = ratio  / (ratio + 1)
+        )
+        nonplayer_batch_size = batch_size - player_batch_size
+
         # =====================
         #   get player batch
         # =====================
