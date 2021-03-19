@@ -16,9 +16,15 @@ import numpy as np
 
 
 class InvalidGameError(ValueError):
+    '''
+    Error class for invalid or corrupted games
+    '''
     pass
 
 class GameTooShortError(ValueError):
+    '''
+    Error class for games that are too short
+    '''
     pass
 
 def get_istreams(game, as_sparse=True):
