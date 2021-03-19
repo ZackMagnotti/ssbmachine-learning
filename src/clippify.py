@@ -150,7 +150,7 @@ def clippify(
     input_directory (string) : directory of .slp files from which to make clips
     output_directory (string) : directory to deposit clips
     clip_length (int or float) : length of clips in seconds
-    train_test_split (bool) : whether or not to perform train/test split during process
+    train_test_split (bool) : whether or not to perform train/test split
     '''
 
     # normalize paths, list and count files
