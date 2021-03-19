@@ -6,6 +6,8 @@ data_recompiled
 nohup.out
 ssbml-data
 ssbml-data.zip
+old-data
+.vscode
 
 *.ipynb_checkpoints
 delme.*
