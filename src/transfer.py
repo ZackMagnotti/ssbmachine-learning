@@ -16,12 +16,8 @@ from tensorflow.keras.activations import swish
 from tensorflow.keras.models import load_model
 from tensorflow_addons.losses import SigmoidFocalCrossEntropy as Focal
 
-# ===========================
-#         Defaults
-# ===========================
-
 HEAD = Sequential([
-    
+
     # dense cell 1
     Sequential([
         Dense(128),
@@ -29,7 +25,7 @@ HEAD = Sequential([
         Activation(swish),
         Dropout(.5),
     ],  name = 'DenseCell-1'),
-    
+
     # dense cell 2
     Sequential([
         Dense(128),
@@ -37,10 +33,10 @@ HEAD = Sequential([
         Activation(swish),
         Dropout(.5),
     ],  name = 'DenseCell-2'),
-    
+
     # final output layer
     Dense(2, activation = 'softmax', name = 'output'),
-    
+
 ], name = 'Binary-Classifier')
 
 NAME = 'SSBML-Transfer-Model'
@@ -57,8 +53,6 @@ METRICS = [
     metrics.Recall(name='nonplayer_recall', class_id=1),
 ]
 
-# ===========================
-
 def remove_head(
         base_model, 
         trainable = False
@@ -71,7 +65,7 @@ def remove_head(
     Parameters
     -----------
     base_model (Sequential) : base model to be decapitated
-    
+
     Outputs (yield)
     -----------
     model (Sequential) : headless copy of base_model
@@ -83,7 +77,7 @@ def remove_head(
             break
     else:
         raise ValueError('base_model has no flatten layer')
-    
+
     name = base_model.name
     model = Sequential(base_model.layers[:head_start], name=name)
     model.trainable = trainable
@@ -108,7 +102,7 @@ def add_new_head(
     optimizer : optimizer for output model
     loss : loss function for output model
     metrics : metrics for output model
-    
+
     Outputs (yield)
     -----------
     model (Sequential) : full model with new head
@@ -141,7 +135,7 @@ def replace_head(
     optimizer : optimizer for output model
     loss : loss function for output model
     metrics : metrics for output model
-    
+
     Outputs (yield)
     -----------
     model (Sequential) : full model with new head
