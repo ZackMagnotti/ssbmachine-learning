@@ -10,6 +10,8 @@ from sys import stdout
 
 def display_progress(i, N):
     ''' 
+    Displays a "progress bar".
+
     For convenience, to see progress
     when exporting large directories.
 
@@ -31,6 +33,7 @@ def display_progress(i, N):
     stdout.write(f'\r{progress_bar} {i} of {N} - {progress_percent}% ')
     stdout.flush()
 
+# list of all character names, ordered by id
 characters = (
     'CAPTAIN_FALCON',
     'DONKEY_KONG',
@@ -60,6 +63,8 @@ characters = (
     'GANONDORF',
 )
 
+# given character name, output character_id
 id_from_char = {c:i for i, c in enumerate(characters)}
 
+# given character_id, output character's name
 char_from_id = {i:c for i, c in enumerate(characters)}
