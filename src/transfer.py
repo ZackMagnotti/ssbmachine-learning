@@ -29,15 +29,15 @@ HEAD = Sequential([
     ],  name = 'DenseCell-2'),
     
     # final output layer
-    Dense(2, activation='softmax', name='output'),
+    Dense(2, activation = 'softmax', name = 'output'),
     
-], name='Binary-Classifier')
+], name = 'Binary-Classifier')
 
 NAME = 'SSBML-Transfer-Model'
 
 OPTIMIZER = 'adam'
 
-LOSS = 'binary_crossentropy'
+LOSS = Focal()
 
 METRICS = [
     metrics.CategoricalAccuracy(name='accuracy'),
