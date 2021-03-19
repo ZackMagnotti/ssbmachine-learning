@@ -101,7 +101,7 @@ def player_data(
                           if integer, repeat the given number of times
     onehot (bool) : whether or not to return labels in onehot form
     shuffle (bool) : whether or not to shuffle data 
-    ratio (int | float) : ratio of player data to non-player data (player/non-player) 
+    ratio (int | float) : ratio of Anonymous games with given player's games (Anonymous / Player) 
     
     Outputs (yield)
     -----------
@@ -132,7 +132,7 @@ def player_data(
         
         player_batch_size = np.random.binomial(
             n = batch_size, 
-            p = ratio  / (ratio + 1)
+            p = 1 / (ratio + 1)
         )
         nonplayer_batch_size = batch_size - player_batch_size
 
