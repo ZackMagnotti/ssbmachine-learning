@@ -13,10 +13,10 @@ def display_progress(i, N):
 
     bar_length = 20
 
-    progress = (bar_length * i) // N
+    progress = int((bar_length * i) // N)
     progress_percent =  round(100 * i / N, 2)
 
-    progress_bar = ('#' * progress) 
+    progress_bar = ('#' * progress)
     progress_bar += ('.' * (bar_length - progress))
     progress_bar = '[' + progress_bar + ']'
 
