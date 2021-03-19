@@ -1,3 +1,14 @@
+'''
+Author : Zack Magnotti
+Email : zack@magnotti.net
+Date : 3/19/2021
+
+Python module containing generator functions
+to feed the "clips" dataset (created with clippify.py)
+into the training loops for SSBML-Base-Model
+and SSBML-Transfer-Model.
+'''
+
 import numpy as np
 import pickle
 import random

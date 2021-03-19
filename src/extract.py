@@ -1,3 +1,13 @@
+'''
+Author : Zack Magnotti
+Email : zack@magnotti.net
+Date : 3/19/2021
+
+Python module to extract the input signals
+and other metadata from a slippi replay file,
+and store/return it as a python dictionary.
+'''
+
 from slippi import Game
 from slippi.parse import ParseError
 from scipy.sparse import lil_matrix, csr_matrix

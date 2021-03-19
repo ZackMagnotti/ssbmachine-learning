@@ -1,3 +1,12 @@
+'''
+Author : Zack Magnotti
+Email : zack@magnotti.net
+Date : 3/19/2021
+
+Python module containing the Keras code
+for the creation of SSBML-Base-Model
+'''
+
 from tensorflow import keras
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv1D, BatchNormalization, MaxPooling1D

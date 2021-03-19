@@ -1,3 +1,13 @@
+'''
+Author : Zack Magnotti
+Email : zack@magnotti.net
+Date : 3/19/2021
+
+Python containing the Keras code to
+create SSBML-Transfer-Model by removing
+and replacing the head of SSBML-Base-Model.
+'''
+
 from tensorflow import keras
 from tensorflow.keras import metrics
 from tensorflow.keras import Sequential

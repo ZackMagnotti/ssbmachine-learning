@@ -1,3 +1,14 @@
+'''
+Author : Zack Magnotti
+Email : zack@magnotti.net
+Date : 3/19/2021
+
+Python module to create a dataset of "clips" -
+labeled examples of controller signals of a
+specified length saved as pickle files -
+from a directory of slippi replay files.
+'''
+
 import pickle
 from os import path, listdir, makedirs
 from random import random
