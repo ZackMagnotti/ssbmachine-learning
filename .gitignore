@@ -4,6 +4,8 @@ backups
 replay_files
 data_recompiled
 nohup.out
+ssbml-data
+ssbml-data.zip
 
 *.ipynb_checkpoints
 delme.*
