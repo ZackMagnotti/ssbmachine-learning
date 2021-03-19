@@ -19,9 +19,24 @@ import os
 from os.path import join, splitext
 
 def valid_files(file_list):
+    '''Given a list of filenames, return a list of only .pkl filenames'''
     return [f for f in file_list if splitext(f)[1] == '.pkl']
 
 def get_batch(batch_filenames, batch_dir):
+    '''
+    Unpickles and returns the contents of the files
+    listed in batch_filenames, which are located in 
+    the directory batch_dir
+
+    Parameters
+    -----------
+    batch_filenames (list) : filenames of datapoints for this batch
+    batch_dir (string) : path to directory to fetch batch from
+    
+    Outputs (yield)
+    -----------
+    batch (list) : datapoints (dictionaries) for this batch
+    '''
     batch_abspaths = [join(batch_dir, f) for f in batch_filenames]
     batch = [pickle.load(open(abspath, 'rb')) for abspath in batch_abspaths]
     return batch
