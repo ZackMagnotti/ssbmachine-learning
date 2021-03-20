@@ -35,7 +35,7 @@ HEAD = Sequential([
     ],  name = 'DenseCell-2'),
 
     # final output layer
-    Dense(2, activation = 'softmax', name = 'output'),
+    Dense(1, activation = 'sigmoid', name = 'output'),
 
 ], name = 'Binary-Classifier')
 
@@ -46,11 +46,9 @@ OPTIMIZER = 'adam'
 LOSS = Focal()
 
 METRICS = [
-    metrics.CategoricalAccuracy(name='accuracy'),
-    metrics.Precision(name='player_precision', class_id=0),
-    metrics.Recall(name='player_recall', class_id=0),
-    metrics.Precision(name='nonplayer_precision', class_id=1),
-    metrics.Recall(name='nonplayer_recall', class_id=1),
+    metrics.BinaryAccuracy(name='accuracy'),
+    metrics.Precision(),
+    metrics.Recall(),
 ]
 
 def remove_head(

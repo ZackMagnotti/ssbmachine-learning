@@ -111,7 +111,7 @@ def player_data(
         repeat = False,
         shuffle = True,
         ratio = 1,
-        onehot = True,
+        onehot = False,
     ):
     ''' 
     Fetches data from given directories, and yields a blend of both
@@ -185,7 +185,7 @@ def player_data(
 
         # list of tuple(istream, label)
         # label for player is 0
-        player_batch_tuples = [(clip['istream'].toarray(), 0) for clip in player_batch]
+        player_batch_tuples = [(clip['istream'].toarray(), 1.0) for clip in player_batch]
         
         # ======================
         #  get nonplayer batch
@@ -206,7 +206,7 @@ def player_data(
 
         # list of tuple(istream, label)
         # label for nonplayer is 1
-        nonplayer_batch_tuples = [(clip['istream'].toarray(), 1) for clip in nonplayer_batch]
+        nonplayer_batch_tuples = [(clip['istream'].toarray(), 0.0) for clip in nonplayer_batch]
         
         # ==============
         #  mix batches 
