@@ -1,3 +1,14 @@
+'''
+Author : Zack Magnotti
+Email : zack@magnotti.net
+Date : 3/19/2021
+
+Python module containing generator functions
+to feed the "clips" dataset (created with clippify.py)
+into the training loops for SSBML-Base-Model
+and SSBML-Transfer-Model.
+'''
+
 import numpy as np
 import pickle
 import random
@@ -8,9 +19,24 @@ import os
 from os.path import join, splitext
 
 def valid_files(file_list):
+    '''Given a list of filenames, return a list of only .pkl filenames'''
     return [f for f in file_list if splitext(f)[1] == '.pkl']
 
 def get_batch(batch_filenames, batch_dir):
+    '''
+    Unpickles and returns the contents of the files
+    listed in batch_filenames, which are located in 
+    the directory batch_dir
+
+    Parameters
+    -----------
+    batch_filenames (list) : filenames of datapoints for this batch
+    batch_dir (string) : path to directory to fetch batch from
+    
+    Outputs (yield)
+    -----------
+    batch (list) : datapoints (dictionaries) for this batch
+    '''
     batch_abspaths = [join(batch_dir, f) for f in batch_filenames]
     batch = [pickle.load(open(abspath, 'rb')) for abspath in batch_abspaths]
     return batch
@@ -23,7 +49,6 @@ def character_data(
         onehot = True,
         shuffle = True
     ):
-
     ''' 
     Fetches data from given directory in batches
 
@@ -88,7 +113,6 @@ def player_data(
         ratio = 1,
         onehot = False,
     ):
-    
     ''' 
     Fetches data from given directories, and yields a blend of both
     datasets specified by the ratio provided (default is 1, for 50/50 split) 
@@ -103,13 +127,14 @@ def player_data(
                           if integer, repeat the given number of times
     onehot (bool) : whether or not to return labels in onehot form
     shuffle (bool) : whether or not to shuffle data 
-    ratio (int | float) : ratio of player data to non-player data (player/non-player) 
+    ratio (int | float) : ratio of Anonymous games with given player's games (Anonymous / Player) 
     
     Outputs (yield)
     -----------
     batch_istreams (ndarray)
     batch_labels (array | ndarray)
     '''
+    
     if repeat is True:
         repeat = np.inf
     if repeat is False:
@@ -131,6 +156,12 @@ def player_data(
 
     while True:
         
+        player_batch_size = np.random.binomial(
+            n = batch_size, 
+            p = 1 / (ratio + 1)
+        )
+        nonplayer_batch_size = batch_size - player_batch_size
+
         # =====================
         #   get player batch
         # =====================
@@ -154,7 +185,7 @@ def player_data(
 
         # list of tuple(istream, label)
         # label for player is 0
-        player_batch_tuples = [(clip['istream'].toarray(), 0) for clip in player_batch]
+        player_batch_tuples = [(clip['istream'].toarray(), 1.0) for clip in player_batch]
         
         # ======================
         #  get nonplayer batch
@@ -175,7 +206,7 @@ def player_data(
 
         # list of tuple(istream, label)
         # label for nonplayer is 1
-        nonplayer_batch_tuples = [(clip['istream'].toarray(), 1) for clip in nonplayer_batch]
+        nonplayer_batch_tuples = [(clip['istream'].toarray(), 0.0) for clip in nonplayer_batch]
         
         # ==============
         #  mix batches 

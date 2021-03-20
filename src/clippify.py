@@ -1,3 +1,14 @@
+'''
+Author : Zack Magnotti
+Email : zack@magnotti.net
+Date : 3/19/2021
+
+Python module to create a dataset of "clips" -
+labeled examples of controller signals of a
+specified length saved as pickle files -
+from a directory of slippi replay files.
+'''
+
 import pickle
 from os import path, listdir, makedirs
 from random import random
@@ -9,6 +20,9 @@ from .util import display_progress
 from .extract import extract, InvalidGameError, GameTooShortError
 
 class ClippifyFailureError(ValueError):
+    '''
+    Error class for unknown errors in the clippify process
+    '''
     pass
 
 def clippify_game(
@@ -19,9 +33,19 @@ def clippify_game(
         current_clip_total = 0
     ):
     '''
-    Clippifies a single game file and deposits clips in output_directory
+    Clippifies a single game file and 
+    deposits clips in output_directory.
     
-    If train_test_split is true, clips will be deposited in output_directory/train and output_directory/test
+    If train_test_split is true, clips 
+    will be randomly split between
+    output_directory/train and output_directory/test.
+
+    Parameters
+    -----------
+    input_filepath (string) : filepath of .slp file
+    output_directory (string) : directory to deposit clips
+    clip_length (int or float) : length of clips in seconds
+    train_test_split (bool) : whether or not to perform train/test split during process
     '''
             
     # get data from game
@@ -124,8 +148,9 @@ def clippify(
     Parameters
     -----------
     input_directory (string) : directory of .slp files from which to make clips
+    output_directory (string) : directory to deposit clips
     clip_length (int or float) : length of clips in seconds
-    train_test_split (bool) : whether or not to perform train/test split during process
+    train_test_split (bool) : whether or not to perform train/test split
     '''
 
     # normalize paths, list and count files

@@ -1,3 +1,13 @@
+'''
+Author : Zack Magnotti
+Email : zack@magnotti.net
+Date : 3/19/2021
+
+Python module to extract the input signals
+and other metadata from a slippi replay file,
+and store/return it as a python dictionary.
+'''
+
 from slippi import Game
 from slippi.parse import ParseError
 from scipy.sparse import lil_matrix, csr_matrix
@@ -6,9 +16,15 @@ import numpy as np
 
 
 class InvalidGameError(ValueError):
+    '''
+    Error class for invalid or corrupted games
+    '''
     pass
 
 class GameTooShortError(ValueError):
+    '''
+    Error class for games that are too short
+    '''
     pass
 
 def get_istreams(game, as_sparse=True):

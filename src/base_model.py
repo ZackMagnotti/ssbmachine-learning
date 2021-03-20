@@ -1,24 +1,63 @@
+'''
+Author : Zack Magnotti
+Email : zack@magnotti.net
+Date : 3/19/2021
+
+Python module containing the Keras code
+for the creation of SSBML-Base-Model
+'''
+
 from tensorflow import keras
+from tensorflow.keras import metrics
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv1D, BatchNormalization, MaxPooling1D
 from tensorflow.keras.layers import GlobalAveragePooling1D, Flatten
 from tensorflow.keras.layers import Dense, Activation, Dropout
 from tensorflow.keras.activations import swish
-import tensorflow_addons as tfa
+from tensorflow_addons.losses import SigmoidFocalCrossEntropy as Focal
 
-focal_loss = tfa.losses.SigmoidFocalCrossEntropy()
-top_8_accuracy = keras.metrics.TopKCategoricalAccuracy(k=8, name='top 8 accuracy')
+NAME = 'SSBML-Base-Model'
+
+ACTIVATION = swish
+
+OPTIMIZER = keras.optimizers.Adam()
+
+LOSS = Focal()
+
+METRICS = [
+    metrics.CategoricalAccuracy(name='accuracy'),
+    metrics.TopKCategoricalAccuracy(k=8, name='top 8 accuracy'),
+]
 
 def base_model(
-        activation = swish,
-        loss = focal_loss,
-        optimizer = 'adam',
-        name = 'SSBML-Base-Model'      
+        name = NAME,
+        activation = ACTIVATION,
+        optimizer = OPTIMIZER,
+        loss = LOSS,
+        metrics = METRICS,
     ):
+    '''
+    Creates SSBML-Base-Model architecture 
+    and compiles the model with the given 
+    optimizer, loss, and metrics.
+
+    Parameters
+    -----------
+    name (string) : name of output model
+    activation : activation function for output model
+    optimizer : optimizer for output model
+    loss : loss function for output model
+    metrics : metrics for output model
+    
+    Outputs (yield)
+    -----------
+    model (Sequential) : model with SSBML-Base-Model architecture
+    '''
 
     model = Sequential(name = name)
 
     # -----------------------------------------------
+
     # ConvCell-1
     # number of filters: 128
     # size of filters:   30
@@ -28,8 +67,9 @@ def base_model(
         BatchNormalization(),
         MaxPooling1D(pool_size=4),
     ],  name = 'ConvCell-1'))
-    
+
     # -----------------------------------------------
+
     # ConvCell-2
     # number of filters: 256
     # size of filters:   15
@@ -41,6 +81,7 @@ def base_model(
     ],  name = 'ConvCell-2'))
 
     # -----------------------------------------------
+
     # ConvCell-3
     # number of filters: 256
     # size of filters:   15
@@ -53,6 +94,7 @@ def base_model(
     ],  name = 'ConvCell-3'))
 
     # -----------------------------------------------
+
     # ConvCell-4
     # number of filters: 256
     # size of filters:   15
@@ -60,7 +102,7 @@ def base_model(
     model.add(Sequential([
         Conv1D(512, 15, activation=activation)
     ],  name = 'ConvCell-4'))
-    
+
     # ----------------------------------------------
 
     model.add(GlobalAveragePooling1D())
@@ -69,8 +111,7 @@ def base_model(
     # ----------------------------------------------
     #             HEAD
     # ----------------------------------------------
-    
-    # ----------------------------------------------
+
     # Dense Cell 1
     model.add(Sequential([
         Dense(128),
@@ -78,8 +119,9 @@ def base_model(
         Activation(activation),
         Dropout(.25)
     ], name = 'DenseCell-1'))
-    
+
     # ----------------------------------------------
+
     # Dense Cell 2
     model.add(Sequential([
         Dense(128),
@@ -87,14 +129,15 @@ def base_model(
         Activation(activation),
         Dropout(.25)
     ], name = 'DenseCell-2'))
-    
+
     # ----------------------------------------------
+
     # final output layer
     model.add(Dense(26, activation='softmax', name='final'))
     model.compile(
-        loss=loss,
-        optimizer=optimizer,
-        metrics=['accuracy', top_8_accuracy]
+        loss = loss,
+        optimizer = optimizer,
+        metrics = metrics
     )
-    
+
     return model
