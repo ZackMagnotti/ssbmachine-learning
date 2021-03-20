@@ -49,6 +49,14 @@ METRICS = [
     metrics.BinaryAccuracy(name='accuracy'),
     metrics.Precision(),
     metrics.Recall(),
+    
+    # this is an ugly hack but it is neccessary as
+    # keras does not have simply a "specificity" metric
+    metrics.SpecificityAtSensitivity(
+        sensitivity = .01, # this doesn't matter
+        num_thresholds = 1, # so we only get score at threshold = .5
+        name = 'specificity'
+    )
 ]
 
 def remove_head(
