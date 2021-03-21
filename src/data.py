@@ -106,7 +106,7 @@ def character_data(
 
 def player_data(
         player_dir,
-        nonplayer_dir,
+        anonymous_dir,
         batch_size = 32,
         repeat = False,
         shuffle = True,
@@ -120,7 +120,7 @@ def player_data(
     Parameters
     -----------
     player_dir (string) : directory containing the player's data
-    nonplayer_dir (string) : directory containing random data that is not the player's
+    anonymous_dir (string) : directory containing random data that is not the player's
     batch_size (int) : number of documents per batch
     repeat (bool | int) : if true generator loops back after exhausting data.
                           if false generator stops when data runs out.
@@ -150,9 +150,9 @@ def player_data(
     player_batch_size = np.random.binomial(n = batch_size, p = ratio  / (ratio + 1))
     player_current_index = np.inf
 
-    nonplayer_filenames = valid_files(os.listdir(nonplayer_dir))
-    nonplayer_batch_size = batch_size - player_batch_size
-    nonplayer_current_index = np.inf
+    anonymous_filenames = valid_files(os.listdir(anonymous_dir))
+    anonymous_batch_size = batch_size - player_batch_size
+    anonymous_current_index = np.inf
 
     while True:
         
@@ -160,7 +160,7 @@ def player_data(
             n = batch_size, 
             p = 1 / (ratio + 1)
         )
-        nonplayer_batch_size = batch_size - player_batch_size
+        anonymous_batch_size = batch_size - player_batch_size
 
         # =====================
         #   get player batch
@@ -188,31 +188,31 @@ def player_data(
         player_batch_tuples = [(clip['istream'].toarray(), 1.0) for clip in player_batch]
         
         # ======================
-        #  get nonplayer batch
+        #  get anonymous batch
         # ======================
 
-        # if nonplayer data is exhausted or uninitialized
-        if nonplayer_current_index + nonplayer_batch_size >= len(nonplayer_filenames):
-            nonplayer_current_index = 0
-            random.shuffle(nonplayer_filenames)
+        # if anonymous data is exhausted or uninitialized
+        if anonymous_current_index + anonymous_batch_size >= len(anonymous_filenames):
+            anonymous_current_index = 0
+            random.shuffle(anonymous_filenames)
         
         # indexing
-        npstart = nonplayer_current_index
-        npend = npstart + nonplayer_batch_size
-        nonplayer_current_index += nonplayer_batch_size
+        npstart = anonymous_current_index
+        npend = npstart + anonymous_batch_size
+        anonymous_current_index += anonymous_batch_size
 
-        # get nonplayer batch
-        nonplayer_batch = get_batch(nonplayer_filenames[npstart:npend], nonplayer_dir)
+        # get anonymous batch
+        anonymous_batch = get_batch(anonymous_filenames[npstart:npend], anonymous_dir)
 
         # list of tuple(istream, label)
-        # label for nonplayer is 1
-        nonplayer_batch_tuples = [(clip['istream'].toarray(), 0.0) for clip in nonplayer_batch]
+        # label for anonymous is 1
+        anonymous_batch_tuples = [(clip['istream'].toarray(), 0.0) for clip in anonymous_batch]
         
         # ==============
         #  mix batches 
         # ==============
 
-        batch_tuples = player_batch_tuples + nonplayer_batch_tuples
+        batch_tuples = player_batch_tuples + anonymous_batch_tuples
         random.shuffle(batch_tuples)
 
         # get istreams and labels from tuples
