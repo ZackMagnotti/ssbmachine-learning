@@ -37,6 +37,20 @@ by verifying that the competitors are who they say they are. However, what if we
 verification accurately with only the raw signal straight from a player's controller?
 *Could we mitigate the negative impact of cheating and fraud in online games?*
 
+## The Model
+
+SSBML-Base-Model and SSBML-Transfer-Model both implement a ***Convolutional Neural Network*** to learn the patterns of muscle
+memory that define each player's unique playstyle - similar to a fingerprint. 
+
+Games, such as chess, are often analysed with Recurrent Neural Networks such as *LSTM's*; 
+the idea being that if one move flows into the next, and each moment is a reaction to the moment before, 
+then the *sequence* of moves is what matters, and therefore an RNN based model would be best.
+
+What I am interested in though is not necessarily the gameplay elements or the decision making -
+I'm more interested in the raw muscle memory that drives a player's relationship with the controller.
+I suspected that since this was essentially a pattern recognition problem,
+that a *CNN* would be the best choice.
+
 ## The Data
 
 As a proof of concept, I decided to test the idea on *Super Smash Bros Melee* replay data.
