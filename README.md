@@ -139,12 +139,12 @@ individual players' datasets were typically closer to 1G.
 ---
 #### Blynde
 
-Test accuracy: **88%**
+Test accuracy: **89%**
 
 |	             | detected	      | not detected |
 | -------      | -----------    | ---------    |
-| present      |	0.461         |	0.059        |
-| not present  |	0.065         |	0.415        |
+| present      |	0.391         |	0.068        |
+| not present  |	0.041         |	0.500        |
 
 ---
 #### gh0st
