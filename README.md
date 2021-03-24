@@ -30,26 +30,25 @@ The project was done in two parts:
 
 In Esports and competitive online gaming, controller inputs are everything.
 The best players in the world are the best because of the signals they can produce
-with their hands and a small peice of plastic, and every player's unique playstyle ultimately
-comes from a unique signature in that player's controller signal.
+with their hands and a small peice of plastic. Every player's unique playstyle ultimately
+comes from a unique pattern of controller signals.
 
-In a world where competition happens through a screen, it can be difficult to ensure fair play
-by verifying that the competitors are who they say they are. However, what if we could make that
-verification accurately with only the raw signal straight from a player's controller?
+When competition happens through a screen, it can be difficult to ensure fair play
+by verifying that the identities of the competitors. However, what if we could accurately make that
+verification using the raw signal straight from a player's controller?
 *Could we mitigate the negative impact of cheating and fraud in online games?*
 
 ## The Model
 
-SSBML-Base-Model and SSBML-Transfer-Model both implement a ***Convolutional Neural Network*** to learn the patterns of muscle
-memory that define each player's unique playstyle - similar to a fingerprint. 
+SSBML-Base-Model and SSBML-Transfer-Model both implement a ***Convolutional Neural Network***. 
 
-Games, such as chess, are often analysed with Recurrent Neural Networks such as *LSTM's*; 
+Games, such as chess, are often analysed with Recurrent Neural Networks such as *LSTM's* - 
 the idea being that if one move flows into the next, and each moment is a reaction to the moment before, 
 then the *sequence* of moves is what matters, and therefore an RNN based model would be best.
 
 What I am interested in though is not necessarily the gameplay elements or the decision making -
 I'm more interested in the raw muscle memory that drives a player's relationship with the controller.
-I suspected that since this was essentially a pattern recognition problem,
+I suspected that since this is essentially a pattern recognition problem,
 that a *CNN* would be the best choice.
 
 ## The Data
@@ -60,6 +59,11 @@ managable class balance, as well as my own familiarity with the game.
 
 ![Mango vs Zain](images/ssbm-gameplay.gif)
 
+The replays are on average 5 minutes long and provide exactly two controller signals - one for each player.
+Both contoller signals are then chopped up into 30 second segments and labelled with the character being played
+and the person playing them (if available).
+These *30 second "clips"* were then randomly split between a training set (90%) and a testing set (10%).
+
 ### Datasets
 
 For ***Part 1: Character Classification*** the [Melee Public SLP Dataset](https://drive.google.com/file/d/1ab6ovA46tfiPZ2Y3a_yS1J3k3656yQ8f/view?usp=sharing) was used. This dataset is nearly 200G, includes just under ***100,000 full game replay files***, and is somewhat cleaned to ensure each game is an example of competitive tournament play.
@@ -68,7 +72,7 @@ For ***Part 2: Player Detection*** data was much more scarce. A handful of indiv
 
 ## Part 1: Character Detection
   
-Use a Convolutional Neural Network to predict a player's character selection based on the raw input signal from that player's controller.
+Use a Convolutional Neural Network to predict a player's character selection using the raw input signal from that player's controller.
 
 ### Model
 
