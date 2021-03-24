@@ -23,7 +23,8 @@ The project was done in two parts:
     *Transfer Model*, which will predict the *identity of a player* using only the raw
     input signal from that player's controller.
     
-  - **Results in Part Two** 
+  - **Results:**
+    - Between 80 and 90 percent accurate. More detailed results can be found below.
     
 ## Context
 
