@@ -158,7 +158,9 @@ individual players' datasets were typically closer to 1G.
 ---
 #### Blynde
 
-Test accuracy: **89%**
+Accuracy: **89%**
+Precision: **92%**
+Recall: **85%**
 
 |	             | detected	      | not detected |
 | -------      | -----------    | ---------    |
@@ -168,7 +170,7 @@ Test accuracy: **89%**
 ---
 #### gh0st
 
-Test accuracy: **87%**
+Accuracy: **87%**
  
 |	             | detected	     | not detected |
 | -------      | -----------   | ---------    |
@@ -178,17 +180,19 @@ Test accuracy: **87%**
 ---
 #### SmashMaster9000
 
-Test accuracy: **90%**
+Accuracy: **90%**
+Precision: **95%**
+Recall: **85%**
 
 |	              | detected	    | not detected |
 | -------       | -----------   | ---------    |
-| present       |	0.407         |	0.033        |
-| not present   |	0.062         |	0.498        |
+| present       |	0.418         |	0.083        |
+| not present   |	0.016         |	0.483        |
 
 ---
 #### ixwonkr
 
-Test accuracy: **81%**
+Accuracy: **81%**
 
 |	              | detected	    | not detected |
 | -------       | -----------   | ---------    |
@@ -198,7 +202,7 @@ Test accuracy: **81%**
 ---
 #### Lie0x
 
-Test accuracy: **80%**
+Accuracy: **80%**
 
 |	              | detected	    | not detected |
 | -------       | -----------   | ---------    |
@@ -208,7 +212,7 @@ Test accuracy: **80%**
 ---
 #### TCBL
 
-Test accuracy: **81%**
+Accuracy: **81%**
 
 |	              | detected	    | not detected |
 | -------       | -----------   | ---------    |
