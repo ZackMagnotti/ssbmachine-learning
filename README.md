@@ -171,11 +171,13 @@ Recall: **85%**
 #### gh0st
 
 Accuracy: **87%**
+Precision: **96%**
+Recall: **81%**
  
 |	             | detected	     | not detected |
 | -------      | -----------   | ---------    |
-| present      |	0.510        |	0.050       |
-| not present  |	0.065        |	0.375       |
+| present      |	0.402        |	0.089       |
+| not present  |	0.031        |	0.478       |
 
 ---
 #### SmashMaster9000
