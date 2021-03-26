@@ -206,12 +206,14 @@ Recall: **89%**
 ---
 #### Lie0x
 
-Accuracy: **80%**
+Accuracy: **91%**
+Precision: **94%**
+Recall: **88%**
 
 |	              | detected	    | not detected |
 | -------       | -----------   | ---------    |
-| present       |	0.44          |	0.12         |
-| not present   |	0.06          |	0.38         |
+| present       |	0.413         |	0.053        |
+| not present   |	0.024         |	0.510        |
 
 ---
 #### TCBL
