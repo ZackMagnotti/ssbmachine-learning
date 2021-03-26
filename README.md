@@ -158,9 +158,9 @@ individual players' datasets were typically closer to 1G.
 ---
 #### Blynde
 
-Accuracy: **89%**
-Precision: **92%**
-Recall: **85%**
+- Accuracy: **89%**
+- Precision: **92%**
+- Recall: **85%**
 
 |	             | detected	      | not detected |
 | -------      | -----------    | ---------    |
@@ -170,9 +170,9 @@ Recall: **85%**
 ---
 #### gh0st
 
-Accuracy: **87%**
-Precision: **96%**
-Recall: **81%**
+- Accuracy: **87%**
+- Precision: **96%**
+- Recall: **81%**
  
 |	             | detected	     | not detected |
 | -------      | -----------   | ---------    |
@@ -182,9 +182,9 @@ Recall: **81%**
 ---
 #### SmashMaster9000
 
-Accuracy: **90%**
-Precision: **95%**
-Recall: **85%**
+- Accuracy: **90%**
+- Precision: **95%**
+- Recall: **85%**
 
 |	              | detected	    | not detected |
 | -------       | -----------   | ---------    |
@@ -194,9 +194,9 @@ Recall: **85%**
 ---
 #### ixwonkr
 
-Accuracy: **94%**
-Precision: **99%**
-Recall: **89%**
+- Accuracy: **94%**
+- Precision: **99%**
+- Recall: **89%**
 
 |	              | detected	    | not detected |
 | -------       | -----------   | ---------    |
@@ -206,9 +206,9 @@ Recall: **89%**
 ---
 #### Lie0x
 
-Accuracy: **91%**
-Precision: **94%**
-Recall: **88%**
+- Accuracy: **91%**
+- Precision: **94%**
+- Recall: **88%**
 
 |	              | detected	    | not detected |
 | -------       | -----------   | ---------    |
@@ -218,9 +218,9 @@ Recall: **88%**
 ---
 #### TCBL
 
-Accuracy: **96%**
-Precision: **97%**
-Recall: **94%**
+- Accuracy: **96%**
+- Precision: **97%**
+- Recall: **94%**
 
 |	              | detected	    | not detected |
 | -------       | -----------   | ---------    |
