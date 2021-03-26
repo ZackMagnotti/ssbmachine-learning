@@ -194,12 +194,14 @@ Recall: **85%**
 ---
 #### ixwonkr
 
-Accuracy: **81%**
+Accuracy: **94%**
+Precision: **99%**
+Recall: **89%**
 
 |	              | detected	    | not detected |
 | -------       | -----------   | ---------    |
-| present       |	0.431         |	0.129        |
-| not present   |	0.079         |	0.361        |
+| present       |	0.440         |	0.057        |
+| not present   |	0.006         |	0.497        |
 
 ---
 #### Lie0x
