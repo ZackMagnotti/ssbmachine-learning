@@ -218,9 +218,11 @@ Recall: **88%**
 ---
 #### TCBL
 
-Accuracy: **81%**
+Accuracy: **96%**
+Precision: **97%**
+Recall: **94%**
 
 |	              | detected	    | not detected |
 | -------       | -----------   | ---------    |
-| present       |	0.291         |	0.069        |
-| not present   |	0.093         |	0.547        |
+| present       |	0.490         |	0.031        |
+| not present   |	0.026         |	0.452        |
