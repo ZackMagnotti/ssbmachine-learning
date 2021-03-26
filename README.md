@@ -158,7 +158,9 @@ individual players' datasets were typically closer to 1G.
 ---
 #### Blynde
 
-Test accuracy: **89%**
+Accuracy: **89%**
+Precision: **92%**
+Recall: **85%**
 
 |	             | detected	      | not detected |
 | -------      | -----------    | ---------    |
@@ -168,49 +170,59 @@ Test accuracy: **89%**
 ---
 #### gh0st
 
-Test accuracy: **87%**
+Accuracy: **87%**
+Precision: **96%**
+Recall: **81%**
  
 |	             | detected	     | not detected |
 | -------      | -----------   | ---------    |
-| present      |	0.510        |	0.050       |
-| not present  |	0.065        |	0.375       |
+| present      |	0.402        |	0.089       |
+| not present  |	0.031        |	0.478       |
 
 ---
 #### SmashMaster9000
 
-Test accuracy: **90%**
+Accuracy: **90%**
+Precision: **95%**
+Recall: **85%**
 
 |	              | detected	    | not detected |
 | -------       | -----------   | ---------    |
-| present       |	0.407         |	0.033        |
-| not present   |	0.062         |	0.498        |
+| present       |	0.418         |	0.083        |
+| not present   |	0.016         |	0.483        |
 
 ---
 #### ixwonkr
 
-Test accuracy: **81%**
+Accuracy: **94%**
+Precision: **99%**
+Recall: **89%**
 
 |	              | detected	    | not detected |
 | -------       | -----------   | ---------    |
-| present       |	0.431         |	0.129        |
-| not present   |	0.079         |	0.361        |
+| present       |	0.440         |	0.057        |
+| not present   |	0.006         |	0.497        |
 
 ---
 #### Lie0x
 
-Test accuracy: **80%**
+Accuracy: **91%**
+Precision: **94%**
+Recall: **88%**
 
 |	              | detected	    | not detected |
 | -------       | -----------   | ---------    |
-| present       |	0.44          |	0.12         |
-| not present   |	0.06          |	0.38         |
+| present       |	0.413         |	0.053        |
+| not present   |	0.024         |	0.510        |
 
 ---
 #### TCBL
 
-Test accuracy: **81%**
+Accuracy: **96%**
+Precision: **97%**
+Recall: **94%**
 
 |	              | detected	    | not detected |
 | -------       | -----------   | ---------    |
-| present       |	0.291         |	0.069        |
-| not present   |	0.093         |	0.547        |
+| present       |	0.490         |	0.031        |
+| not present   |	0.026         |	0.452        |
