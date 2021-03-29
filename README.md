@@ -60,7 +60,7 @@ managable class balance, as well as my own familiarity with the game.
 ![Mango vs Zain](images/ssbm-gameplay.gif)
 
 The replays are on average 5 minutes long and provide exactly two controller signals - one for each player.
-Both contoller signals are then chopped up into 30 second segments and labelled with the character being played
+Both contoller signals are then chopped up into 30 second segments and labeled with the character being played
 and the person playing them (if available).
 These *30 second "clips"* were then randomly split between a training set (90%) and a testing set (10%).
 
