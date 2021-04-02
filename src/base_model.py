@@ -59,7 +59,7 @@ def base_model(
     # -----------------------------------------------
 
     # ConvCell-1
-    # number of filters: 128
+    # number of filters: 150
     # size of filters:   30
     # sees: .5s
     model.add(Sequential([
