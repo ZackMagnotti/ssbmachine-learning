@@ -83,7 +83,7 @@ def base_model(
     # -----------------------------------------------
 
     # ConvCell-3
-    # number of filters: 256
+    # number of filters: 512
     # size of filters:   15
     # sees: 4s
     model.add(Sequential([
@@ -96,7 +96,7 @@ def base_model(
     # -----------------------------------------------
 
     # ConvCell-4
-    # number of filters: 256
+    # number of filters: 512
     # size of filters:   15
     # sees: 8s
     model.add(Sequential([
