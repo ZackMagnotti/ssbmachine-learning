@@ -135,7 +135,7 @@ def player_data(
     batch_labels (array | ndarray)
     '''
     
-    if not repeat:
+    if repeat is False:
         repeat = 1
     if repeat is True:
         repeat = np.inf
@@ -149,8 +149,8 @@ def player_data(
     anonymous_filenames = valid_files(os.listdir(anonymous_dir))
 
     # represents uninitialized data
-    player_current_index = np.inf
-    anonymous_current_index = np.inf
+    player_current_index = 0
+    anonymous_current_index = 0
 
     while True:
         player_batch_size = np.random.binomial(
@@ -163,64 +163,55 @@ def player_data(
         #   get player batch
         # =====================
 
-        # if player data is exhausted or uninitialized
-        if player_current_index + player_batch_size >= len(player_filenames):
-            if repeat > 0:
-                repeat -= 1
-                player_current_index = 0
-                random.shuffle(player_filenames)
-            else:
-                return
-        
         # indexing
         pstart = player_current_index
         pend = pstart + player_batch_size
         player_current_index += player_batch_size
 
-        # get data for player batch
-        player_batch = get_batch(player_filenames[pstart:pend], player_dir)
+        try:
+            player_batch = get_batch(player_filenames[pstart:pend], player_dir)
+        # If data is exhausted and repeat counter is not at 0, 
+        # decrement repeat counter, reset current index, and shuffle clips
+        except IndexError:
+            if not repeat > 0:
+                return
+            repeat -= 1
+            player_current_index = 0
+            random.shuffle(player_filenames)
+            player_batch = get_batch(player_filenames[pstart:pend], player_dir)
 
         # list of tuple(istream, label)
-        # label for player is 0
         player_batch_tuples = [(clip['istream'].toarray(), 1.0) for clip in player_batch]
-        
+
         # ======================
         #  get anonymous batch
         # ======================
 
-        # if anonymous data is exhausted or uninitialized
-        if anonymous_current_index + anonymous_batch_size >= len(anonymous_filenames):
-            anonymous_current_index = 0
-            random.shuffle(anonymous_filenames)
-        
         # indexing
         npstart = anonymous_current_index
         npend = npstart + anonymous_batch_size
         anonymous_current_index += anonymous_batch_size
 
-        # get anonymous batch
-        anonymous_batch = get_batch(anonymous_filenames[npstart:npend], anonymous_dir)
+        try:
+            anonymous_batch = get_batch(anonymous_filenames[npstart:npend], anonymous_dir)
+        except IndexError:
+            anonymous_current_index = 0
+            random.shuffle(anonymous_filenames)
+            anonymous_batch = get_batch(anonymous_filenames[npstart:npend], anonymous_dir)
 
         # list of tuple(istream, label)
-        # label for anonymous is 1
         anonymous_batch_tuples = [(clip['istream'].toarray(), 0.0) for clip in anonymous_batch]
-        
+
         # ==============
         #  mix batches 
         # ==============
 
+        # Mix batchs, separate istreams from labels, and convert both into ndarrays
         batch_tuples = player_batch_tuples + anonymous_batch_tuples
         random.shuffle(batch_tuples)
+        batch_istreams = np.stack([istream for istream, _ in batch_tuples], axis=0)
+        batch_labels = np.array([label for _, label in batch_tuples])
 
-        # get istreams and labels from tuples
-        batch_istreams = [istream for istream, _ in batch_tuples]
-        batch_labels = [label for _, label in batch_tuples]
-
-        # convert istreams to single ndarray
-        batch_istreams = np.stack(batch_istreams, axis=0)
-
-        batch_labels = np.array(batch_labels)
-        
         if onehot:
             batch_labels = one_hot(batch_labels, 2)
 
