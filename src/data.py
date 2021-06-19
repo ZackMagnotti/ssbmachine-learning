@@ -127,7 +127,7 @@ def player_data(
                           if integer, repeat the given number of times
     onehot (bool) : whether or not to return labels in onehot form
     shuffle (bool) : whether or not to shuffle data 
-    ratio (int | float) : ratio of Anonymous games with given player's games (Anonymous / Player) 
+    ratio (int | float) : ratio of Anonymous games against given player's games (Anonymous / Player) 
     
     Outputs (yield)
     -----------
@@ -139,19 +139,23 @@ def player_data(
         repeat = np.inf
     if repeat is False:
         repeat = 0
-    if type(repeat) is int:
-        if repeat < 0:
-            raise ValueError
-    
+
+    if repeat < 0:
+        raise ValueError
     if not ratio > 0:
         raise ValueError
 
     player_filenames = valid_files(os.listdir(player_dir))
-    player_batch_size = np.random.binomial(n = batch_size, p = ratio  / (ratio + 1))
-    player_current_index = np.inf
+    player_batch_size = np.random.binomial(
+        n = batch_size, 
+        p = 1  / (ratio + 1)
+    )
 
     anonymous_filenames = valid_files(os.listdir(anonymous_dir))
     anonymous_batch_size = batch_size - player_batch_size
+
+    # represents uninitialized data
+    player_current_index = np.inf
     anonymous_current_index = np.inf
 
     while True:

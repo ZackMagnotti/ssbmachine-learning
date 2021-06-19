@@ -96,8 +96,7 @@ def clippify_game(
                         clip_filepath = path.join(output_directory, 'test', clip_filename)
                     else:
                         clip_filepath = path.join(output_directory, 'train', clip_filename)
-                
-                if not train_test_split:
+                else:
                     clip_filepath = path.join(output_directory, clip_filename)
 
                 # pickle whole document and save to disk
@@ -207,7 +206,8 @@ def clippify(
             continue
 
         # create clips from replay file and save them to disk
-        try: new_clips, new_clippify_failures = clippify_game(
+        try: 
+            new_clips, new_clippify_failures = clippify_game(
                 input_filepath = filepath,
                 output_directory = output_directory,
                 clip_length = clip_length,
@@ -241,9 +241,11 @@ def clippify(
     display_progress(N,N)
 
     # Display message after upload is complete
-    msg = f'''\nSuccessfully converted {successful_uploads} games into {clip_total} clips.\nFailed to convert {failed_uploads} games.\n
+    msg = f'''
+Successfully converted {successful_uploads} games into {clip_total} clips.\nFailed to convert {failed_uploads} games.\n
     - {games_too_short} were too short.
-    - {parse_errors} failed to parse.\n'''
+    - {parse_errors} failed to parse.
+'''
 
     # if any games were rejected by extract function, display this
     if invalid_games > 0:
