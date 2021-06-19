@@ -124,7 +124,7 @@ def player_data(
     batch_size (int) : number of documents per batch
     repeat (bool | int) : if true generator loops back after exhausting data.
                           if false generator stops when data runs out.
-                          if integer, repeat the given number of times
+                          if integer, loop the given number of times
     onehot (bool) : whether or not to return labels in onehot form
     shuffle (bool) : whether or not to shuffle data 
     ratio (int | float) : ratio of Anonymous games against given player's games (Anonymous / Player) 
@@ -135,10 +135,10 @@ def player_data(
     batch_labels (array | ndarray)
     '''
     
+    if not repeat:
+        repeat = 1
     if repeat is True:
         repeat = np.inf
-    if repeat is False:
-        repeat = 0
 
     if repeat < 0:
         raise ValueError
@@ -146,20 +146,13 @@ def player_data(
         raise ValueError
 
     player_filenames = valid_files(os.listdir(player_dir))
-    player_batch_size = np.random.binomial(
-        n = batch_size, 
-        p = 1  / (ratio + 1)
-    )
-
     anonymous_filenames = valid_files(os.listdir(anonymous_dir))
-    anonymous_batch_size = batch_size - player_batch_size
 
     # represents uninitialized data
     player_current_index = np.inf
     anonymous_current_index = np.inf
 
     while True:
-        
         player_batch_size = np.random.binomial(
             n = batch_size, 
             p = 1 / (ratio + 1)
@@ -172,10 +165,10 @@ def player_data(
 
         # if player data is exhausted or uninitialized
         if player_current_index + player_batch_size >= len(player_filenames):
-            if repeat + 1 > 0:
+            if repeat > 0:
+                repeat -= 1
                 player_current_index = 0
                 random.shuffle(player_filenames)
-                repeat -= 1
             else:
                 return
         
