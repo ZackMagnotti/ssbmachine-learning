@@ -16,20 +16,15 @@ import numpy as np
 
 
 class InvalidGameError(ValueError):
-    '''
-    Error class for invalid or corrupted games
-    '''
+    '''Error class for invalid or corrupted games'''
     pass
 
 class GameTooShortError(ValueError):
-    '''
-    Error class for games that are too short
-    '''
+    '''Error class for games that are too short'''
     pass
 
 def get_istreams(game, as_sparse=True):
-    ''' 
-    Gets the controller input streams from a game
+    '''Gets the controller input streams from a game
 
     Parameters
     -----------
@@ -113,8 +108,7 @@ def get_istreams(game, as_sparse=True):
     return tuple(istreams)
 
 def get_player_characters(game):
-    ''' 
-    Gets the player characters from a game
+    '''Gets the player characters from a game
 
     Parameters
     -----------
@@ -138,8 +132,7 @@ def get_player_characters(game):
     return tuple(characters)
 
 def get_player_names(game):
-    ''' 
-    Gets the player names from a game
+    '''Gets the player names from a game
 
     Player names are provided by metadata that may not be 
     present for games played on offline platforms. 
@@ -165,8 +158,7 @@ def get_player_names(game):
     return tuple(names)
 
 def get_player_codes(game):
-    ''' 
-    Gets the player netplay codes from a game
+    '''Gets the player netplay codes from a game
 
     Player codes are provided by metadata that may not be 
     present for games played on offline platforms. 
@@ -192,8 +184,7 @@ def get_player_codes(game):
     return tuple(codes)
 
 def get_id(f):
-    ''' 
-    Gets the game_id for a particular replay file.
+    '''Gets the game_id for a particular replay file.
 
     The game_id is just the filename of that game.
     This has the advantage of being unique, as
@@ -212,8 +203,7 @@ def get_id(f):
     return basename(f)
 
 def extract(f, as_sparse=True): 
-    ''' 
-    Extracts the istream payloads from a .slp file
+    '''Extracts the istream payloads from a .slp file
 
     Parameters
     -----------

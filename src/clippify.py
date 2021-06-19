@@ -20,9 +20,7 @@ from .util import display_progress
 from .extract import extract, InvalidGameError, GameTooShortError
 
 class ClippifyFailureError(ValueError):
-    '''
-    Error class for unknown errors in the clippify process
-    '''
+    '''Error class for unknown errors in the clippify process'''
     pass
 
 def clippify_game(
@@ -32,9 +30,7 @@ def clippify_game(
         train_test_split = False,
         current_clip_total = 0
     ):
-    '''
-    Clippifies a single game file and 
-    deposits clips in output_directory.
+    '''Clippifies a single game file and deposits clips in output_directory.
     
     If train_test_split is true, clips 
     will be randomly split between

@@ -9,8 +9,7 @@ Python module containg miscellaneous functions and objects
 from sys import stdout
 
 def display_progress(i, N):
-    ''' 
-    Displays a "progress bar".
+    '''Displays a "progress bar".
 
     For convenience, to see progress
     when exporting large directories.

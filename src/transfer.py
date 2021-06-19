@@ -63,8 +63,7 @@ def remove_head(
         base_model, 
         trainable = False
     ):
-    ''' 
-    Returns a copy of the base model with the head removed.
+    '''Returns a copy of the base model with the head removed.
 
     Where the head starts is determined by the location of a "flatten" layer
 
@@ -97,8 +96,7 @@ def add_new_head(
         loss = LOSS,
         metrics = METRICS
     ):
-    ''' 
-    Adds a new head to headless_base_model
+    '''Adds a new head to headless_base_model
 
     Parameters
     -----------
@@ -128,8 +126,7 @@ def replace_head(
         metrics = METRICS,
         trainable_base = False
     ):
-    ''' 
-    Returns a copy of the base model with the head replaced.
+    '''Returns a copy of the base model with the head replaced.
 
     Where the head starts is determined by the location of a "flatten" layer
 
