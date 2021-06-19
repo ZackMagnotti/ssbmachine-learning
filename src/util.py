@@ -63,7 +63,7 @@ characters = (
 )
 
 # given character name, output character_id
-id_from_char = {c:i for i, c in enumerate(characters)}
+id_from_char = {c: i for i, c in enumerate(characters)}
 
 # given character_id, output character's name
-char_from_id = {i:c for i, c in enumerate(characters)}
+char_from_id = {i: c for i, c in enumerate(characters)}
