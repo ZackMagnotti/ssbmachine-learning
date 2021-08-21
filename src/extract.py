@@ -39,19 +39,16 @@ def get_istreams(game, as_sparse=True):
                        Inactive ports return as None.
     '''
 
-    istreams = []
+    # using scipy.sparse.lil_matrix to be
+    # efficient incrementally filling in entries row by row
+    istreams = [lil_matrix((len(game.frames), 13))] * 4
 
-    # loop over all 4 controller ports
-    for j in range(4):
+    # Rows: frames (time)
+    # Cols: buttons/joysticks
+    for i, frame in enumerate(game.frames):
 
-        # using scipy.sparse.lil_matrix to be
-        # efficient incrementally filling in entries row by row
-        istream = lil_matrix((len(game.frames), 13))
-
-        # Rows: frames (time)
-        # Cols: buttons/joysticks
-
-        for i, frame in enumerate(game.frames):
+        # loop over all 4 controller ports
+        for j, istream in enumerate(istreams):
 
             # if this port is empty (no controller plugged in)
             if frame.ports[j] is None:
