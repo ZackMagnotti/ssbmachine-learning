@@ -229,8 +229,7 @@ def extract(f, as_sparse=True):
 
     # get outpt payload for each active controller port
     try:
-        payload = [
-        {
+        payload = [{
             'game_id': game_id,
             'istream': istream,
             'character': character,
@@ -238,10 +237,12 @@ def extract(f, as_sparse=True):
             'code': code,
         } 
         for istream, character, name, code
-            in zip(get_istreams(game, as_sparse=as_sparse), 
-                   get_player_characters(game),
-                   get_player_names(game),
-                   get_player_codes(game))
+            in zip(
+                get_istreams(game, as_sparse=as_sparse), 
+                get_player_characters(game),
+                get_player_names(game),
+                get_player_codes(game)
+            )
             if character is not None
         ]
 
