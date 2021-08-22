@@ -238,25 +238,27 @@ def clippify(
 
     # Display message after upload is complete
     msg = f'''
-Successfully converted {successful_uploads} games into {clip_total} clips.\nFailed to convert {failed_uploads} games.\n
+Successfully converted {successful_uploads} games into {clip_total} clips.
+Failed to convert {failed_uploads} games.
+
     - {games_too_short} were too short.
     - {parse_errors} failed to parse.
 '''
 
     # if any games were rejected by extract function, display this
-    if invalid_games > 0:
+    if invalid_games:
         msg += f'    - {invalid_games} were rejected by extract function.\n'
 
     # if any clippify failures, display this
-    if clippify_failures > 0:
+    if clippify_failures:
         msg += f'    - {clippify_failures} clippify failures.\n'
 
     # if any files had the wrong extension display this
-    if wrong_filetype > 0:
+    if wrong_filetype:
         msg += f'    - {wrong_filetype} paths were not .slp files.\n'
 
     # if any files had the wrong extension display this
-    if unknown_errors > 0:
+    if unknown_errors:
         msg += f'    - {unknown_errors} unknown errors.\n'
 
     print(msg)
