@@ -120,11 +120,10 @@ def get_player_characters(game):
 
     players = game.start.players
 
-    characters = [None]*4
+    characters = [None] * 4
     for i, player in enumerate(players):
         if player is not None:
-            character = player.character
-            characters[i] = character.name
+            characters[i] = player.character.name
 
     return tuple(characters)
 
@@ -147,7 +146,7 @@ def get_player_names(game):
 
     players = game.metadata.players
 
-    names = [None]*4
+    names = [None] * 4
     for i, player in enumerate(players):
         if player and player.netplay:
             names[i] = player.netplay.name
@@ -173,7 +172,7 @@ def get_player_codes(game):
 
     players = game.metadata.players
 
-    codes = [None]*4
+    codes = [None] * 4
     for i, player in enumerate(players):
         if player and player.netplay:
             codes[i] = player.netplay.code
