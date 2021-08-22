@@ -56,7 +56,9 @@ def base_model(
 
     model = Sequential(name = name)
 
-    # -----------------------------------------------
+    #######
+    # Base
+    #######
 
     # ConvCell-1
     # number of filters: 150
@@ -68,8 +70,6 @@ def base_model(
         MaxPooling1D(pool_size=4),
     ],  name = 'ConvCell-1'))
 
-    # -----------------------------------------------
-
     # ConvCell-2
     # number of filters: 256
     # size of filters:   15
@@ -79,8 +79,6 @@ def base_model(
         BatchNormalization(),
         MaxPooling1D(pool_size=4),
     ],  name = 'ConvCell-2'))
-
-    # -----------------------------------------------
 
     # ConvCell-3
     # number of filters: 512
@@ -93,8 +91,6 @@ def base_model(
         Dropout(.25)
     ],  name = 'ConvCell-3'))
 
-    # -----------------------------------------------
-
     # ConvCell-4
     # number of filters: 512
     # size of filters:   15
@@ -103,14 +99,13 @@ def base_model(
         Conv1D(512, 15, activation=activation)
     ],  name = 'ConvCell-4'))
 
-    # ----------------------------------------------
-
+    # end of convolutional layers
     model.add(GlobalAveragePooling1D())
     model.add(Flatten())
 
-    # ----------------------------------------------
-    #             HEAD
-    # ----------------------------------------------
+    #######
+    # Head
+    #######
 
     # Dense Cell 1
     model.add(Sequential([
@@ -120,8 +115,6 @@ def base_model(
         Dropout(.25)
     ], name = 'DenseCell-1'))
 
-    # ----------------------------------------------
-
     # Dense Cell 2
     model.add(Sequential([
         Dense(128),
@@ -129,8 +122,6 @@ def base_model(
         Activation(activation),
         Dropout(.25)
     ], name = 'DenseCell-2'))
-
-    # ----------------------------------------------
 
     # final output layer
     model.add(Dense(26, activation='softmax', name='final'))
