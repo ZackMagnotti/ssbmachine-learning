@@ -54,7 +54,7 @@ def get_istreams(game, as_sparse=True):
             if frame.ports[j] is None:
                 istream = None
                 break
-            
+
             port = frame.ports[j].leader.pre
 
             # for the analog inputs extract x and y pos
@@ -65,28 +65,28 @@ def get_istreams(game, as_sparse=True):
             istream[i, 3] = port.cstick.y
             istream[i, 4] = port.triggers.physical.l
             istream[i, 5] = port.triggers.physical.r
-            
+
             # for the digital inputs, fill in with 1
             # if button is active (leave as 0 if not)
             b = port.buttons
             if b.Physical.Y in b.physical.pressed():
                 istream[i, 6] = 1
-            
+
             if b.Physical.X in b.physical.pressed():
                 istream[i, 7] = 1
-            
+
             if b.Physical.B in b.physical.pressed():
                 istream[i, 8] = 1
-            
+
             if b.Physical.A in b.physical.pressed():
                 istream[i, 9] = 1
-            
+
             if b.Physical.L in b.physical.pressed():
                 istream[i, 10] = 1
-            
+
             if b.Physical.R in b.physical.pressed():
                 istream[i, 11] = 1
-            
+
             if b.Physical.Z in b.physical.pressed():
                 istream[i, 12] = 1
 
@@ -95,9 +95,9 @@ def get_istreams(game, as_sparse=True):
                 istream = csr_matrix(istream)
             else:
                 istream = istream.toarray()
-            
+
         istreams.append(istream)
-    
+
     # len(istreams) == 4
     # each element represents istream for 
     # one of the four controller ports (players 1-4)
@@ -246,10 +246,10 @@ def extract(f, as_sparse=True):
     # raise parsing errors
     except ParseError:
         raise
-    
+
     # if unexpected error, raise InvalidGameError
     except:
         raise InvalidGameError
-        
+
     else:
         return tuple(payload)
