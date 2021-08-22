@@ -43,7 +43,7 @@ def clippify_game(
     clip_length (int or float) : length of clips in seconds
     train_test_split (bool) : whether or not to perform train/test split during process
     '''
-            
+
     # get data from game
     player_documents = extract(input_filepath)
 
@@ -60,12 +60,12 @@ def clippify_game(
         code = doc['code']
         name = doc['name']
         game_id = doc['game_id']
-        
+
         # clip starting frame (first clip starts at frame 0)
-        f = 0              
+        f = 0
 
         # clip length in frames
-        step = int(clip_length * 60)          
+        step = int(clip_length * 60)
 
         while f+step < full_game_istream.shape[0]:
             try:
@@ -81,7 +81,7 @@ def clippify_game(
                     'code': code,
                     'clip_id' : clip_id,
                     'game_id': game_id,
-                } 
+                }
 
                 # construct clip filename
                 clip_filename = f'{character}-{code}-{clip_id}.pkl'
@@ -101,7 +101,7 @@ def clippify_game(
             # if there is a problem with this clip
             except: 
                 game_clip_failures += 1
-            
+
             # if clip is saved successfully
             else:
                 game_clip_total += 1
@@ -210,7 +210,7 @@ def clippify(
                 train_test_split = train_test_split,
                 current_clip_total = clip_total
             )
-            
+
         except GameTooShortError:
             failed_uploads += 1
             games_too_short += 1
@@ -222,7 +222,7 @@ def clippify(
         except InvalidGameError:
             failed_uploads += 1
             invalid_games += 1
-        
+
         except:
             failed_uploads += 1
             unknown_errors += 1
