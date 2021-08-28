@@ -9,6 +9,7 @@ ssbml-data.zip
 old-data
 .vscode
 
+.venv
 *.ipynb_checkpoints
 delme.*
 __pycache__
